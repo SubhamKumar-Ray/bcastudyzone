@@ -349,38 +349,39 @@
 					<ul id="noticeList">
 
 						<!-- Notice 1 -->
-					<!--	<li class="important new" data-date="2026-05-03">
+						<li class="important new" data-date="2026-05-03">
 							<span>📢 BCA Semester-V Exam Form Fillup Extented date Session- 2023-2026 </span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice2042.pdf" class="notice-link">Coming Soon</a>
-						</li>-->
+						</li>
 					
 						<!-- Notice 2 -->
-						<li class="important new" data-date="2026-05-03">
+						<li class="important new" data-date="2026-05-13">
 							<span>📢 BCA Semester-I Exam Routine Session- 2025-2028</span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice9450.pdf" class="notice-link">View</a>
 						</li>
 				
 						<!-- Notice 3 -->
-						<li class="important new" data-date="2026-05-03">
+						<li class="important new" data-date="2026-05-13">
 							<span>📢 BCA Semester-I Admit Card Session- 2025-2028</span>
 							<a href="https://www.vbuuniv.in/login" class="notice-link">Coming Soon</a>
 						</li>
 						
-					<!--	<li class="important new" data-date="2026-04-25">
+						<!-- Notice 4 -->
+						<li class="important new" data-date="2026-04-25">
 							<span>📢 BCA Semester-II Result Published Session- 2024-2027</span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/result/result9963.pdf" class="notice-link">Coming Soon</a>
-						</li>-->
+						</li>
 
-						<!-- Notice 4 -->
+						<!-- Notice 5 -->
 						<li class="important new" data-date="2026-05-15">
 							<span>📢 BCA Semester-V Exam Routine Session- 2023-2026</span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice6003.pdf" class="notice-link">View</a>
 						</li>
 						
 						
-						<!-- Notice 5 -->
-						<li><li class="important new" data-date="2026-05-15">
-							<span>📢 BCA Semester-V Admit Card Session- 2023-2026</span>
+						<!-- Notice 6 -->
+						<li class="important new" data-date="2026-05-15">
+							<span>📢 BCA Semester-V Admit Card Link- 2023-2026</span>
 							<a href="https://www.vbuuniv.in/login" class="notice-link">Coming Soon</a>
 						</li>
 				
@@ -958,15 +959,45 @@ noticeList.addEventListener("mouseleave", () => {
 
 </script>-->
 <script>
+
 let noticeBox = document.querySelector(".notice-box");
 let noticeList = document.getElementById("noticeList");
+
+
+// ================= SORT NOTICE =================
+
+function sortNotices() {
+
+    let notices = Array.from(noticeList.querySelectorAll("li"));
+
+    notices.sort((a, b) => {
+
+        let dateA = new Date(a.getAttribute("data-date"));
+        let dateB = new Date(b.getAttribute("data-date"));
+
+        return dateB - dateA; // New notice top me
+    });
+
+    notices.forEach(notice => {
+        noticeList.appendChild(notice);
+    });
+}
+
+sortNotices();
+
+
+// ================= AUTO SCROLL =================
 
 let speed = 0.5;
 
 function scrollLoop() {
+
     noticeBox.scrollTop += speed;
 
-    if (noticeBox.scrollTop >= noticeList.scrollHeight - noticeBox.clientHeight) {
+    if (
+        noticeBox.scrollTop >=
+        noticeList.scrollHeight - noticeBox.clientHeight
+    ) {
         noticeBox.scrollTop = 0;
     }
 
@@ -974,6 +1005,30 @@ function scrollLoop() {
 }
 
 scrollLoop();
+
+
+// ================= REMOVE NEW TAG AFTER 1 DAY =================
+
+document.querySelectorAll("#noticeList li").forEach(item => {
+
+    let date = item.getAttribute("data-date");
+
+    if (date) {
+
+        let noticeDate = new Date(date);
+        let today = new Date();
+
+        let diffTime = today - noticeDate;
+        let diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+        if (diffDays >= 1) {
+            item.classList.remove("important");
+            item.classList.remove("new");
+        }
+    }
+
+});
+
 </script>
 <script>
 
@@ -982,18 +1037,32 @@ document.querySelectorAll("#noticeList li").forEach(item => {
     let date = item.getAttribute("data-date");
 
     if (date) {
+
         let noticeDate = new Date(date);
         let today = new Date();
 
-        // Difference in days
+        // Days Difference
         let diffTime = today - noticeDate;
         let diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-        // अगर 1 दिन (24h) से ज्यादा हो गया
+        // ===== 1 Day ke baad NEW tag remove =====
         if (diffDays >= 1) {
             item.classList.remove("important");
             item.classList.remove("new");
         }
+
+        // ===== 7 Day ke baad notice hide =====
+        if (diffDays >= 7) {
+            //item.style.display = "none";
+			//item.style.opacity = "0.5";
+			//item.classList.add("expired");
+			/* item.style.opacity = "0.5";
+            item.style.pointerEvents = "none";
+
+            item.innerHTML += " ❌ Expired";*/
+			item.remove();
+        }
+
     }
 
 });
