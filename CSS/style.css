@@ -1113,6 +1113,7 @@ ul.dropdown li:hover .dropdown1 {
     position: fixed;
     inset: 0;
     background: radial-gradient(circle, #1a2a3a, #05070c);
+   /* background:linear-gradient(135deg, #009dff, #00f7ff);*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1216,6 +1217,7 @@ circle:first-child{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.8);
+	/*background:linear-gradient(135deg, #009dff, #00f7ff);*/
     display: none;
     align-items: center;
     justify-content: center;
@@ -1242,3 +1244,193 @@ circle:first-child{
     cursor: pointer;
 }
 
+/* ================= NOTICE SECTION ================= */
+
+.notice-section {
+    margin-top: 90px;
+    display: flex;
+    justify-content: center;
+}
+
+.notice-box {
+    width: 90%;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    border-top: 5px solid red;
+}
+.notice-box {
+    height: 250px;       /* adjust kar sakte ho */
+    overflow: hidden;    /* scroll hide */
+    position: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+#noticeList {
+    margin: 0;
+    padding: 0;
+}
+
+#noticeList li {
+    list-style: none;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 🔥 NOTICE LIST (MAIN FIX) */
+#noticeList {
+    height: 180px;       /* ✔️ 3 notice visible */
+    overflow: auto;    /* ✔️ smooth scroll */
+    padding-right: 5px;
+    display: block;
+}
+
+/* EACH NOTICE */
+#noticeList li {
+    list-style: none;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    margin: 5px 0;
+    border-radius: .5rem;
+    background: #f5f5f5;
+    font-size: 1.6rem;
+    transition: 0.3s;
+}
+
+/* 🔥 HOVER */
+#noticeList li:hover {
+    transform: scale(1.03);
+    background: #ffeeba;
+}
+
+/* 🔥 IMPORTANT (Dark Red Highlight) */
+#noticeList li.important {
+    background: #5c0000;
+    color: #fff;
+    border-left: 5px solid #ff1a1a;
+    font-weight: bold;
+}
+
+/* NEW TAG */
+#noticeList li.new::after {
+    content: "NEW";
+    background: red;
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+/* TITLE */
+.notice-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: red;
+    animation: blink 1.2s infinite;
+}
+
+/* BLINK EFFECT */
+@keyframes blink {
+    0% {opacity: 1;}
+    50% {opacity: 0.4;}
+    100% {opacity: 1;}
+}
+
+/* LINK */
+.notice-link {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 1.4rem;
+    text-decoration: none;
+    background: green;
+    color: white;
+}
+
+/* COMING SOON AUTO */
+.notice-link[href=""] {
+    background: orange;
+    pointer-events: none;
+}
+
+/* DARK MODE */
+.dark-mode .notice-box {
+    background: #1f232b;
+}
+
+.dark-mode #noticeList li {
+    background: #282C35;
+}
+/* ================= POPUP ALERT ================= */
+
+#noticePopup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-box {
+    background: #fff;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+}
+
+.dark-mode .popup-box {
+    background: #1f232b;
+    color: #fff;
+}
+
+.popup-box h3 {
+    font-size: 2rem;
+    color: red;
+    margin-bottom: 1rem;
+}
+
+.popup-box p {
+    font-size: 1.4rem;
+}
+
+.popup-box button {
+    margin-top: 1rem;
+    padding: 8px 20px;
+    border-radius: 5px;
+    background: red;
+    color: white;
+    cursor: pointer;
+}
+
+/* 🔥 Breaking News Flash (YELLOW) */
+#noticeList li.important {
+    background: #b8860b;  /* dark yellow (golden) */
+    color: #000;          /* black text for readability */
+    border-left: 5px solid #ffd700;
+    font-weight: bold;
+
+    animation: flashBlink 1s infinite;
+}
+
+/* 🔥 Yellow Blink Animation */
+@keyframes flashBlink {
+    0% {
+        background: #b8860b;   /* dark yellow */
+    }
+    50% {
+        background: #ffff00;   /* bright yellow */
+    }
+    100% {
+        background: #b8860b;
+    }
+}
