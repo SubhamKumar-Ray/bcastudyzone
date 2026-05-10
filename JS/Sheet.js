@@ -33,7 +33,6 @@ form.addEventListener('submit', e => {
 /* if (performance.navigation.type === 1) {
         const screen = document.getElementById("refreshScreen");
         screen.classList.add("show");
-
         setTimeout(() => {
             screen.classList.remove("show");
         }, 2000); // 2 second baad under page dikhega
