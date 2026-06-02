@@ -173,6 +173,7 @@ function showPDF(){
 
 </body>
 </html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,168 +181,389 @@ function showPDF(){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1001 - Business Communications</title>
 
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome (icon ke liye) -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #4facfe, #00f2fe);
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Poppins',sans-serif;
+            background:linear-gradient(135deg,#4facfe,#00f2fe);
+            min-height:100vh;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:30px auto;
+            background:#fff;
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .badge{
+            background:#ff9800;
+            color:#fff;
+            width:max-content;
+            margin:auto;
+            padding:8px 18px;
+            border-radius:30px;
+            font-size:14px;
+            font-weight:600;
+        }
+
+        h1{
+            text-align:center;
+            margin-top:15px;
+            color:#222;
+        }
+
+        .subtitle{
+            text-align:center;
+            color:#666;
+            margin-top:10px;
+            margin-bottom:20px;
+        }
+
+        .note-info{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+            margin:20px 0;
+        }
+
+        .info-box{
+            background:#f8f9fa;
+            padding:12px 18px;
+            border-radius:12px;
+            box-shadow:0 3px 10px rgba(0,0,0,.1);
+            font-size:14px;
+            font-weight:500;
+        }
+
+        .info-box i{
+            color:#ff5722;
+            margin-right:8px;
+        }
+
+        .pdf-box{
+            margin-top:20px;
+            border-radius:15px;
+            overflow:hidden;
+            border:3px solid #f1f1f1;
+            box-shadow:0 8px 20px rgba(0,0,0,.15);
+        }
+
+        embed{
+            width:100%;
+            height:650px;
+            border:none;
+        }
+
+        .btn-group{
+            text-align:center;
+            margin-top:25px;
+        }
+
+        .btn{
+            display:inline-block;
+            padding:12px 25px;
+            margin:10px;
+            border-radius:50px;
+            text-decoration:none;
+            color:#fff;
+            font-weight:600;
+            transition:all .3s ease;
+        }
+
+        .btn:hover{
+            transform:translateY(-4px);
+            box-shadow:0 8px 20px rgba(0,0,0,.2);
+        }
+
+        .download{
+            background:#28a745;
+        }
+
+        .preview{
+            background:#6f42c1;
+        }
+
+        .home{
+            background:#ff5722;
+        }
+
+        .footer1{
+            background:#f5f5f5;
+            text-align:center;
+            padding:25px 10px;
+            margin-top:40px;
+            border-top:1px solid #ddd;
+        }
+
+        .footer1 .credit{
+            color:#444;
+            line-height:1.8;
+        }
+
+        .footer1 p{
+            font-size:13px;
+            color:#777;
+        }
+
+        .footer1 span{
+            color:red;
+            font-weight:600;
+        }
+
+        .footer1 a{
+            color:red;
+            text-decoration:none;
+            font-weight:500;
+        }
+
+        .footer1 a:hover{
+            text-decoration:underline;
+        }
+		/* Related Notes Section */
+
+.related-title{
+    text-align:center;
+    margin:40px 0 20px;
+    color:#222;
+    font-size:28px;
+    font-weight:600;
 }
 
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        p {
-            text-align: center;
-            color: #555;
-        }
-
-        .pdf-box {
-            margin-top: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        embed {
-            width: 100%;
-            height: 600px;
-            border: none;
-        }
-
-        .btn-group {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            margin: 10px;
-            border-radius: 30px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .download {
-            background: #28a745;
-        }
-
-        .download:hover {
-            background: #218838;
-        }
-
-        .open {
-            background: #007bff;
-        }
-
-        .open:hover {
-            background: #0056b3;
-        }
-
-        .footer1 {
-    background: #f2f2f2;   /* light grey background */
-    text-align: center;
-    padding: 20px 10px;
-    border-top: 1px solid #ddd;
+.related-notes{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-top:20px;
 }
 
-.footer1 .credit {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.8;
+.note-card{
+    background:#fff;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    text-decoration:none;
+    color:#333;
+    font-weight:600;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    transition:all .3s ease;
+    border:2px solid transparent;
 }
 
-.footer1 .credit p {
-    margin: 2px 0;
-    font-size: 12px;
-    color: #777;
+.note-card i{
+    display:block;
+    font-size:30px;
+    margin-bottom:10px;
+    color:#4facfe;
 }
 
-/* BCA Study Zone text */
-.footer1 .credit span {
-    color: red;
-    font-weight: 500;
+.note-card:hover{
+    transform:translateY(-5px);
+    border-color:#4facfe;
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
-/* Developer link */
-.footer1 .credit a {
-    color: red;
-    text-decoration: none;
-    font-weight: 500;
+.note-card span{
+    display:block;
+    font-size:15px;
 }
+        @media(max-width:768px){
 
-.footer1 .credit a:hover {
-    text-decoration: underline;
-}
+            .container{
+                margin:15px;
+                padding:15px;
+            }
 
-        @media(max-width: 600px){
-            embed {
-                height: 400px;
+            embed{
+                height:450px;
+            }
+
+            .btn{
+                display:block;
+                width:90%;
+                margin:10px auto;
+            }
+
+            .note-info{
+                flex-direction:column;
             }
         }
+		
+		.floating-download{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:60px;
+    height:60px;
+    background:#28a745;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    font-size:24px;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);
+    z-index:999;
+}
+
+.floating-download:hover{
+    transform:scale(1.1);
+}
+
+		.subject-code{
+    text-align:center;
+    margin-top:10px;
+    color:#666;
+    font-weight:600;
+}
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>📘 Business Communication Handwritten Notes</h1>
-<p>Access and download high-quality handwritten notes for better understanding</p>
 
-        <div class="pdf-box">
+        <div class="badge">
+            ⭐ Premium Handwritten Notes
+        </div>
+
+        <h1>📘 Business Communication Handwritten Notes</h1>
+		<div class="subject-code">
+			Subject Code: F1001
+		</div>
+        <p class="subtitle">
+            Access and download high-quality handwritten notes for better understanding
+        </p>
+
+        <!-- Info Section -->
+        <div class="note-info">
+
+            <div class="info-box">
+                <i class="fas fa-file-pdf"></i>
+                PDF Notes
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-book"></i>
+                Semester - 1
+            </div>
+
+
+            <div class="info-box">
+                <i class="fas fa-graduation-cap"></i>
+                BCA
+            </div>
+
+        </div>
+
+        <!-- PDF Viewer -->
+        <div class="pdf-box" id="pdf-viewer">
             <embed src="BUSINESS-COMMUNICATION-SEM-1-FULL-NOTES.pdf">
         </div>
 
+        <!-- Buttons -->
         <div class="btn-group">
-            <a href="BUSINESS-COMMUNICATION-SEM-1-FULL-NOTES.pdf" class="btn download">
-                ⬇ Download PDF
-            </a>
 
-            <a href="BUSINESS-COMMUNICATION-SEM-1-FULL-NOTES.pdf" target="_blank" class="btn open">
-                🔗 Open in Drive
-            </a>
+    <a href="BUSINESS-COMMUNICATION-SEM-1-FULL-NOTES.pdf"
+       download
+       class="btn download">
+        <i class="fas fa-download"></i>
+        Download PDF
+    </a>
+
+    <a href="#pdf-viewer"
+       class="btn preview">
+        <i class="fas fa-book-open"></i>
+        Read Notes
+    </a>
+
+    <a href="https://subhamkumar-ray.github.io/bcastudyzone/"
+       class="btn home">
+        <i class="fas fa-home"></i>
+        Back To Home
+    </a>
+
+</div>
+
+<!-- Other Semester 1 Notes -->
+
+<h2 class="related-title">📚 Semester 1 Notes Click Now 👇</h2>
+
+<div class="related-notes">
+
+   <!-- <a href="#" class="note-card">
+        <i class="fas fa-book"></i>
+        <span>Subject 1</span>
+    </a>-->
+
+    <a href="F1002.html" class="note-card">
+        <i class="fas fa-book"></i>
+        <span>Basic Mathematics-I</span>
+    </a>
+
+    <a href="F1003.html" class="note-card">
+        <i class="fas fa-book"></i>
+        <span>Business Practices And Management</span>
+    </a>
+
+    <a href="C1004.html" class="note-card">
+        <i class="fas fa-book"></i>
+        <span>Introduction to Computer Science</span>
+    </a>
+
+    <a href="C1005.html" class="note-card">
+        <i class="fas fa-book"></i>
+        <span>Problem Solving and Programming in C</span>
+    </a>
+
+</div>
+
+</div>
+
+    <section class="footer1">
+
+        <div class="credit">
+
+            <p>Version 1.0.0</p>
+            <p>Last Update: 18-04-2026</p>
+
+            <div>
+                BCA Study <span>Zone</span>
+            </div>
+
+            <div>
+                © Copyright 2025 All Rights Reserved
+            </div>
+
+            <div>
+                Developed by
+                <a href="https://subhamkumar-ray.github.io/bcastudyzone/" target="_blank">
+                    Subham Kumar Ray 🔗
+                </a>
+            </div>
+
         </div>
-    </div>
 
-    <!-- Footer -->
-    <hr style="height: 2px; background: #eee; margin-top: 50px;">
-
-        <section class="footer1">
-    <div class="credit">
-
-        <p>version 1.0.0</p>
-        <p>Last update: 18-04-2026</p>
-
-        <div>BCA Study <span>Zone</span></div>
-
-        <div>© copyright 2025 All Rights Reserved</div>
-
-        <div>
-            Developed by 
-            <a href="https://subhamkumar-ray.github.io/bcastudyzone/" target="_blank">
-                Subham Kumar Ray 🔗
-            </a>
-        </div>
-
-    </div>
-</section>
-
+    </section>
+	<a href="BUSINESS-COMMUNICATION-SEM-1-FULL-NOTES.pdf"
+   download
+   class="floating-download">
+    <i class="fas fa-download"></i>
+</a>
 </body>
 </html>
