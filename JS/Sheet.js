@@ -74,7 +74,7 @@ let interval = setInterval(() => {
 
 
 // 🔊 English (Indian Accent)
-function speakEnglishIndian(){
+/*function speakEnglishIndian(){
 
     window.speechSynthesis.cancel();
 
@@ -95,7 +95,31 @@ function speakEnglishIndian(){
 
     speechSynthesis.speak(msg);
 }
+*/
+function speakEnglishIndian(){
 
+    window.speechSynthesis.cancel();
+
+    /*const msg = new SpeechSynthesisUtterance(
+    "नमस्ते। बी सी ए स्टडी ज़ोन में आपका हार्दिक स्वागत है। विनोबा भावे विश्वविद्यालय के विद्यार्थियों के लिए तैयार इस शैक्षणिक मंच पर आपको बी सी ए से संबंधित नोट्स, सिलेबस, प्रश्न पत्र और अन्य महत्वपूर्ण अध्ययन सामग्री प्राप्त होगी। हमें विश्वास है कि यह वेबसाइट आपकी पढ़ाई को और अधिक सरल एवं प्रभावी बनाएगी। आपके सफल शैक्षणिक जीवन के लिए शुभकामनाएं। धन्यवाद। कृपया मैसेज बॉक्स में अपने सुझाव या प्रतिक्रिया अवश्य लिखें।"
+);*/
+	const msg = new SpeechSynthesisUtterance(
+	"नमस्ते। बी सी ए स्टडी ज़ोन में आपका हार्दिक स्वागत है। यहां आपको विनोबा भावे विश्वविद्यालय के बी सी ए पाठ्यक्रम से संबंधित महत्वपूर्ण अध्ययन सामग्री उपलब्ध है। धन्यवाद। कृपया मैसेज बॉक्स में अपनी राय, सुझाव या कोई संदेश अवश्य लिखें।"
+	);
+    msg.lang = "hi-IN";
+    msg.rate = 0.95;
+    msg.pitch = 1;
+    msg.volume = 1;
+
+    const voices = speechSynthesis.getVoices();
+    const hindiVoice = voices.find(v => v.lang === "hi-IN");
+
+    if (hindiVoice) {
+        msg.voice = hindiVoice;
+    }
+
+    speechSynthesis.speak(msg);
+}
 
 // 🔥 Button click (MOBILE FRIENDLY)
 function handleEnglishVoiceAndOpen(){
