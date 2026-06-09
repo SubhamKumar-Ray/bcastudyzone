@@ -344,6 +344,7 @@
 				<div class="popup-box">
 					<h3>🚨 New VBU Update</h3>
 					<p>Latest notice has been updated. Check now!</p>
+					<p id="popupText"></p>
 					<button onclick="closePopup()">OK</button>
 				</div>
 			</div>
@@ -352,51 +353,20 @@
 				<h2 class="notice-title">🚨 VBU Latest Updates 🚨</h2>
 					<ul id="noticeList">
 
-						<!-- Notice 1 -->
-						<li class="important new" data-date="2026-05-03">
-							<span>📢 BCA Semester-V Exam Form Fillup Extented date Session- 2023-2026 </span>
-							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice2042.pdf" class="notice-link">Coming Soon</a>
-						</li>
-					
-						<!-- Notice 2 -->
-						<li class="important new" data-date="2026-05-13">
-							<span>📢 BCA Semester-I Exam Routine Session- 2025-2028</span>
-							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice9450.pdf" class="notice-link">View</a>
-						</li>
-				
-						<!-- Notice 3 -->
-						<li class="important new" data-date="2026-05-13">
-							<span>📢 BCA Semester-I Admit Card Session- 2025-2028</span>
-							<a href="https://www.vbuuniv.in/login" class="notice-link">Coming Soon</a>
-						</li>
-						
-						<!-- Notice 4 -->
-						<li class="important new" data-date="2026-04-25">
-							<span>📢 BCA Semester-II Result Published Session- 2024-2027</span>
-							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/result/result9963.pdf" class="notice-link">Coming Soon</a>
-						</li>
-
-						<!-- Notice 5 -->
-						<li class="important new" data-date="2026-05-15">
-							<span>📢 BCA Semester-V Exam Routine Session- 2023-2026</span>
-							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice6003.pdf" class="notice-link">View</a>
-						</li>
-						
-						
 						<!-- Notice 6 -->
-						<li class="important new" data-date="2026-05-15">
-							<span>📢 BCA Semester-V Admit Card Link- 2023-2026</span>
-							<a href="https://www.vbuuniv.in/login" class="notice-link">Coming Soon</a>
+						<li class="important new" data-popup="yes" data-date="2026-06-30">
+							<span>📢 BCA Semester-III Examination Form Submission Open for Session 2024–2027</span>
+							<a href="https://www.vbuuniv.in/vbuexamform/login" class="notice-link">View</a>
 						</li>
 
 						<!-- Notice 7 -->
-						<li class="important new" data-date="2026-07-01">
+						<li class="important new" data-popup="yes" data-date="2026-07-01">
 							<span>📢 BCA Semester-V Programme for Practical Examination 2023-2026 Computer Application</span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice2308.pdf" class="notice-link">Coming Soon</a>
 						</li>
 
 						<!-- Notice 8 -->
-						<li class="important new" data-date="2026-06-17">
+						<li class="important new" data-popup="yes" data-date="2026-06-17">
 							<span>📢 BCA Semester-I Programme for Practical Examination 2025-2028 Computer Application</span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice7909.pdf" class="notice-link">Coming Soon</a>
 						</li>
@@ -1114,7 +1084,58 @@ document.querySelectorAll("#noticeList li").forEach(item => {
 });
 
 </script>
-	<a href="https://wa.me/+917061637118"
+<script>
+
+window.onload = function() {
+
+    let today = new Date();
+    today.setHours(0,0,0,0);
+
+    let popupText = document.getElementById("popupText");
+    popupText.innerHTML = "";
+
+    let colors = ["#ff4d4d", "#00c853", "#2962ff", "#ff9800", "#9c27b0"];
+
+    let i = 0;
+
+    document.querySelectorAll("#noticeList li[data-popup='yes']").forEach(item => {
+
+        let noticeDate = new Date(item.dataset.date);
+        noticeDate.setHours(0,0,0,0);
+
+        if(today <= noticeDate){
+
+            let div = document.createElement("div");
+
+            div.className = "popup-item";
+
+            div.innerHTML = item.querySelector("span").innerText;
+
+            // 🎨 each notice different color
+            let color = colors[i % colors.length];
+            div.style.borderLeft = "6px solid " + color;
+            div.style.color = "#111";
+
+            popupText.appendChild(div);
+
+            i++;
+        }
+
+    });
+
+    if(popupText.innerHTML !== ""){
+
+        document.getElementById("noticePopup").style.display = "flex";
+    }
+
+}
+
+function closePopup(){
+    document.getElementById("noticePopup").style.display = "none";
+}
+
+</script>
+<a href="https://wa.me/+917061637118"
    class="whatsapp-float"
    target="_blank">
     <i class="fab fa-whatsapp"></i>
