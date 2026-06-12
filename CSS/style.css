@@ -1824,3 +1824,27 @@ circle:first-child{
 .whatsapp-float:hover{
     transform:scale(1.1);
 }
+
+.message-float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:20px;      /* same level */
+    left:90px;        /* WhatsApp ke bagal me */
+    background:#007bff;
+    color:#fff;
+    border-radius:50%;
+    text-align:center;
+    font-size:30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
+    z-index:999;
+    transition:.3s;
+}
+
+.message-float:hover{
+    transform:scale(1.1);
+}
