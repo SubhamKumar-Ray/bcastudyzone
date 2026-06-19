@@ -1801,50 +1801,40 @@ circle:first-child{
     font-weight:600;
 }
 
+/* WhatsApp */
 .whatsapp-float{
-    position:fixed;
-    width:60px;
-    height:60px;
-    bottom:20px;
-    left:20px;
-    background:#25D366;
-    color:#fff;
-    border-radius:50%;
-    text-align:center;
-    font-size:30px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-decoration:none;
-    box-shadow:0 5px 15px rgba(0,0,0,.3);
-    z-index:999;
-    transition:.3s;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    bottom: 80px;
+    right: 15px;
+    background: #25D366;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    z-index: 999;
 }
 
-.whatsapp-float:hover{
-    transform:scale(1.1);
-}
-
-.message-float{
-    position:fixed;
-    width:60px;
-    height:60px;
-    bottom:20px;      /* same level */
-    left:90px;        /* WhatsApp ke bagal me */
-    background:#007bff;
-    color:#fff;
-    border-radius:50%;
-    text-align:center;
-    font-size:30px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-decoration:none;
-    box-shadow:0 5px 15px rgba(0,0,0,.3);
-    z-index:999;
-    transition:.3s;
-}
-
-.message-float:hover{
-    transform:scale(1.1);
+/* Call */
+.call-float{
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    bottom: 20px;
+    right: 15px;
+    background: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 22px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    z-index: 999;
 }
