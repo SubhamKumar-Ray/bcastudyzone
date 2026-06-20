@@ -1951,3 +1951,43 @@ circle:first-child{
         margin:0 3px;
     }
 }
+/* Arrow Button */
+
+.slider-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    z-index:5;
+    transition:.3s;
+}
+
+.slider-btn:hover{
+    background:#0066ff;
+}
+
+.prev{
+    left:15px;
+}
+
+.next{
+    right:15px;
+}
+
+/* Mobile */
+
+@media(max-width:480px){
+
+    .slider-btn{
+        width:35px;
+        height:35px;
+        font-size:18px;
+    }
+}
