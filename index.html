@@ -403,6 +403,11 @@
 				<img src="Gallary/slider2.png" class="slide">
 				<img src="Gallary/2048×768.png" class="slide">
 				<img src="Gallary/1920×700.jpg" class="slide">
+				<!-- Left Arrow -->
+    <button class="slider-btn prev">&#10094;</button>
+
+    <!-- Right Arrow -->
+    <button class="slider-btn next">&#10095;</button>
 
 			</div>
 
@@ -1194,7 +1199,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     let currentSlide = 0;
 
-    /* Dots Automatically Create */
+    /* Auto Create Dots */
 
     slides.forEach((slide,index)=>{
 
@@ -1206,10 +1211,9 @@ document.addEventListener("DOMContentLoaded", function(){
             dot.classList.add("active");
         }
 
-        dot.addEventListener("click",function(){
+        dot.addEventListener("click", function(){
 
             currentSlide = index;
-
             showSlide(currentSlide);
 
         });
@@ -1219,6 +1223,8 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     const dots = document.querySelectorAll(".dot");
+
+    /* Show Slide Function */
 
     function showSlide(index){
 
@@ -1235,6 +1241,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
+    /* Next Slide */
+
     function nextSlide(){
 
         currentSlide++;
@@ -1247,8 +1255,39 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
-    /*setInterval(nextSlide,10000); // 10 सेकंड*/
-	setInterval(nextSlide,6000);
+    /* Previous Slide */
+
+    function prevSlide(){
+
+        currentSlide--;
+
+        if(currentSlide < 0){
+            currentSlide = slides.length - 1;
+        }
+
+        showSlide(currentSlide);
+
+    }
+
+    /* Right Arrow Click */
+
+    const nextBtn = document.querySelector(".next");
+
+    if(nextBtn){
+        nextBtn.addEventListener("click", nextSlide);
+    }
+
+    /* Left Arrow Click */
+
+    const prevBtn = document.querySelector(".prev");
+
+    if(prevBtn){
+        prevBtn.addEventListener("click", prevSlide);
+    }
+
+    /* Auto Slide Every 6 Seconds */
+
+    setInterval(nextSlide, 6000);
 
 });
 
