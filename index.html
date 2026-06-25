@@ -1387,7 +1387,8 @@ import {
   getDatabase,
   ref,
   set,
-  onValue
+  onValue,
+  onDisconnect
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
@@ -1438,15 +1439,27 @@ onValue(ref(db, "dailyVisitors/" + today), (snapshot) => {
 
 });
 
-/* Online Users (simple) */
+/* Real Live Online Users */
 
-set(ref(db, "onlineUsers/" + visitorId), Date.now());
+const userStatusRef = ref(db, "onlineUsers/" + visitorId);
 
+/* User Online */
+set(userStatusRef, {
+  online: true,
+  lastSeen: Date.now()
+});
+
+/* User Offline */
+onDisconnect(userStatusRef).remove();
+
+/* Live Count */
 onValue(ref(db, "onlineUsers"), (snapshot) => {
 
-  let count = snapshot.exists()
-    ? Object.keys(snapshot.val()).length
-    : 0;
+  let count = 0;
+
+  if (snapshot.exists()) {
+    count = Object.keys(snapshot.val()).length;
+  }
 
   document.getElementById("onlineUsers").innerText = count;
 
@@ -1454,6 +1467,4 @@ onValue(ref(db, "onlineUsers"), (snapshot) => {
 
 </script>
 </body>
-
-
 </html>
