@@ -353,7 +353,7 @@
 					<ul id="noticeList">
 
 						<!-- Notice 6 -->
-						<li class="important new" data-popup="yes" data-date="2026-06-30">
+						<li class="important new" data-popup="yes" data-date="2026-06-21">
 							<span>📢 BCA Semester-III Examination Form Submission Open for Session 2024–2027</span>
 							<a href="https://www.vbuuniv.in/vbuexamform/login" class="notice-link">View</a>
 						</li>
@@ -448,7 +448,95 @@
 				</div>
 		</section>-->
 <!-- ================= QR CODE SECTION END ================= -->
+<!-- Online Visitor Code -->
+		<!--<section class="visitor-section">
 
+    <h1 class="heading">
+        Visitor <span>Statistics</span>
+    </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <i class="fas fa-users"></i>
+            <h3 id="onlineUsers">0</h3>
+            <p>Online Users</p>
+        </div>
+
+        <div class="box">
+            <i class="fas fa-calendar-day"></i>
+            <h3 id="todayVisitors">0</h3>
+            <p>Today's Visitors</p>
+        </div>
+
+        <div class="box">
+            <i class="fas fa-globe"></i>
+            <h3 id="totalVisitors">0</h3>
+            <p>Total Visitors</p>
+        </div>
+
+    </div>
+
+</section>-->
+<!--<section class="visitor-section">
+
+    <h1 class="heading">
+        📊 Live <span>Statistics</span>
+    </h1>
+
+    <div class="stats-container">
+
+        <div class="stat-card">
+            <div class="icon">👥</div>
+            <h2 id="onlineUsers">0</h2>
+            <p>Online Users</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">📅</div>
+            <h2 id="todayVisitors">0</h2>
+            <p>Today's Visitors</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">🌍</div>
+            <h2 id="totalVisitors">0</h2>
+            <p>Total Visitors</p>
+        </div>
+
+    </div>
+
+</section>-->
+<section class="visitor-section">
+
+    <h1 class="heading">
+        📊 Live <span>Statistics</span>
+    </h1>
+
+    <div class="live-stats-card">
+
+        <div class="stat-item">
+            <div class="icon">👥</div>
+            <h2 id="onlineUsers">0</h2>
+            <p>Online</p>
+        </div>
+
+        <div class="stat-item">
+            <div class="icon">📅</div>
+            <h2 id="todayVisitors">0</h2>
+            <p>Today</p>
+        </div>
+
+        <div class="stat-item">
+            <div class="icon">🌍</div>
+            <h2 id="totalVisitors">0</h2>
+            <p>Total</p>
+        </div>
+
+    </div>
+
+</section>
+<!-- Online Visitor Code End-->
 
         <section class="about" id="about">
                 <div class="bca_info">
@@ -1287,6 +1375,80 @@ document.addEventListener("DOMContentLoaded", function(){
     /* Auto Slide Every 6 Seconds */
 
     setInterval(nextSlide, 6000);
+
+});
+
+</script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDRTSLdyL1B3WAuTmJpnFYWOwG9JRs7Xeg",
+  authDomain: "bca-study-zone-4458d.firebaseapp.com",
+  databaseURL: "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "bca-study-zone-4458d",
+  storageBucket: "bca-study-zone-4458d.firebasestorage.app",
+  messagingSenderId: "182658490074",
+  appId: "1:182658490074:web:b6df5d40a1d83dd3ce8fe3"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const visitorId = localStorage.getItem("visitorId") ||
+("user_" + Math.random().toString(36).substr(2,9));
+
+localStorage.setItem("visitorId", visitorId);
+
+/* Total Visitors */
+
+set(ref(db, "totalVisitors/" + visitorId), true);
+
+onValue(ref(db, "totalVisitors"), (snapshot) => {
+
+  let count = snapshot.exists()
+    ? Object.keys(snapshot.val()).length
+    : 0;
+
+  document.getElementById("totalVisitors").innerText = count;
+
+});
+
+/* Today's Visitors */
+
+const today = new Date().toISOString().split("T")[0];
+
+set(ref(db, "dailyVisitors/" + today + "/" + visitorId), true);
+
+onValue(ref(db, "dailyVisitors/" + today), (snapshot) => {
+
+  let count = snapshot.exists()
+    ? Object.keys(snapshot.val()).length
+    : 0;
+
+  document.getElementById("todayVisitors").innerText = count;
+
+});
+
+/* Online Users (simple) */
+
+set(ref(db, "onlineUsers/" + visitorId), Date.now());
+
+onValue(ref(db, "onlineUsers"), (snapshot) => {
+
+  let count = snapshot.exists()
+    ? Object.keys(snapshot.val()).length
+    : 0;
+
+  document.getElementById("onlineUsers").innerText = count;
 
 });
 
