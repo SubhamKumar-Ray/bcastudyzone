@@ -390,7 +390,7 @@ ul.dropdown li:hover .dropdown1 {
 /* -----------------about section ------------------ */
 
 .about {
-    margin-top: 200px;
+    margin-top: 60px;
 }
 
 .bca_info {
@@ -1989,5 +1989,162 @@ circle:first-child{
         width:35px;
         height:35px;
         font-size:18px;
+    }
+}
+
+/* Online Visitor Code CSS */
+/*.visitor-section{
+    padding:5rem 9%;
+    text-align:center;
+}
+
+.visitor-section .box-container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.5rem;
+    justify-content:center;
+}
+
+.visitor-section .box{
+    flex:1 1 25rem;
+    background:#fff;
+    border-radius:.5rem;
+    box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
+    padding:2rem;
+    transition:.3s;
+}
+
+.visitor-section .box:hover{
+    transform:translateY(-10px);
+}
+
+.visitor-section .box i{
+    font-size:4rem;
+    color:var(--main-color);
+}
+
+.visitor-section .box h3{
+    font-size:3rem;
+    margin:1rem 0;
+    color:#333;
+}
+
+.visitor-section .box p{
+    font-size:1.7rem;
+    color:#666;
+}
+.visitor-section .heading{
+    text-align:center;
+    margin-bottom:3rem;
+}
+.visitor-section .box h3{
+    font-size:4rem;
+    font-weight:700;
+}*/
+/*.visitor-section{
+    padding:60px 20px;
+    text-align:center;
+}
+
+.stats-container{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    flex-wrap:wrap;
+}
+
+.stat-card{
+    width:280px;
+    padding:30px;
+    border-radius:20px;
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+    color:#fff;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+    transition:.4s;
+}
+
+.stat-card:hover{
+    transform:translateY(-10px) scale(1.03);
+}
+
+.stat-card .icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.stat-card h2{
+    font-size:42px;
+    margin:10px 0;
+    font-weight:700;
+}
+
+.stat-card p{
+    font-size:18px;
+    letter-spacing:1px;
+}*/
+.live-stats-card{
+    max-width:900px;
+    margin:20px auto;
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+    border-radius:20px;
+    padding:25px 15px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.stat-item{
+    text-align:center;
+    color:#fff;
+}
+
+.stat-item .icon{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+.stat-item h2{
+    font-size:38px;
+    margin:5px 0;
+    font-weight:700;
+}
+
+.stat-item p{
+    font-size:16px;
+    margin:0;
+}
+.visitor-section{
+    padding:20px 20px 5px 20px;
+}
+.live-stats-card{
+    margin:10px auto 0 auto;
+}
+
+
+.visitor-section .heading{
+    text-align:center;
+    display:block;
+    width:100%;
+    margin-bottom:25px;
+}
+/* Mobile */
+@media(max-width:768px){
+
+    .live-stats-card{
+        padding:15px 5px;
+        border-radius:15px;
+    }
+
+    .stat-item .icon{
+        font-size:24px;
+    }
+
+    .stat-item h2{
+        font-size:24px;
+    }
+
+    .stat-item p{
+        font-size:12px;
     }
 }
