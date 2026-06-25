@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://subhamkumar-ray.github.io/bcastudyzone/sitemap.xml
