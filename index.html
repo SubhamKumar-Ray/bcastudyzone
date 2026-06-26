@@ -520,7 +520,7 @@
     </div>
 
 </section>-->
-<section class="visitor-section">
+<!--<section class="visitor-section">
 
     <h1 class="heading">
         📊 Live <span>Statistics</span>
@@ -531,14 +531,23 @@
         <div class="stat-item">
             <div class="icon">👥</div>
             <h2 id="onlineUsers">0</h2>
-            <p>Online</p>
-        </div>
+
+			<p>Online Users</p>
+	
+			<small id="onlineDate"></small>
+		</div>
 
         <div class="stat-item">
-            <div class="icon">📅</div>
-            <h2 id="todayVisitors">0</h2>
-            <p>Today</p>
-        </div>
+
+			<div class="icon">📅</div>
+
+			<h2 id="todayVisitors">0</h2>
+
+			<p>Today's Visitors</p>
+
+			<small id="todayDate"></small>
+
+		</div>
 
         <div class="stat-item">
             <div class="icon">🌍</div>
@@ -548,7 +557,251 @@
 
     </div>
 
+</section>-->
+<!-- =======================
+     LIVE STATISTICS START
+======================= -->
+
+<section class="stats-section">
+
+    <div class="stats-container">
+
+        <!-- Header -->
+
+        <div class="stats-header">
+
+            <div class="header-left">
+
+                <h2>
+                    📊 Live Statistics
+                </h2>
+
+                <p>
+                    BCA Study Zone • Real Time Visitor Analytics
+                </p>
+
+            </div>
+
+            <div class="live-status">
+
+                <span class="pulse"></span>
+
+                LIVE
+
+            </div>
+
+        </div>
+
+
+        <!-- Time Row -->
+
+        <div class="time-row">
+
+            <div class="time-box">
+
+                <span class="icon">
+                    🕒
+                </span>
+
+                <div>
+
+                    <h4>
+                        Current Time
+                    </h4>
+
+                    <h3 id="liveClock">00:00:00 PM</h3>
+					<p id="currentDay">Friday</p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="time-box">
+
+                <span class="icon">
+                    📅
+                </span>
+
+                <div>
+
+                    <h4>
+                        Today's Date
+                    </h4>
+
+                    <h3 id="todayDate">
+                        26/06/2026
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="time-box">
+
+                <span class="icon">
+                    📍
+                </span>
+
+                <div>
+
+                    <h4>
+                        Status
+                    </h4>
+
+                    <h3>
+
+                        All Systems Live
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Statistics -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    👥
+
+                </div>
+
+                <h1 id="onlineUsers">
+
+                    0
+
+                </h1>
+
+                <h4>
+
+                    Online Users
+
+                </h4>
+
+                <p>
+
+                    Live Visitors
+
+                </p>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    📅
+
+                </div>
+
+                <h1 id="todayVisitors">
+
+                    0
+
+                </h1>
+
+                <h4>
+
+                    Today's Visitors
+
+                </h4>
+
+                <p id="todayDateBottom">
+
+                    26/06/2026
+
+                </p>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    🌍
+
+                </div>
+
+                <h1 id="totalVisitors">
+
+                    0
+
+                </h1>
+
+                <h4>
+
+                    Total Visitors
+
+                </h4>
+
+                <p>
+
+                    Since Website Launch
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Footer -->
+
+        <div class="activity-footer">
+
+            <div>
+
+                👥 Active :
+                <span id="activeNow">
+                    0
+                </span>
+
+            </div>
+
+            <div>
+
+                📅 Today :
+                <span id="activityToday">
+                    0
+                </span>
+
+            </div>
+
+            <div>
+
+                🌍 Total :
+                <span id="activityTotal">
+                    0
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
+
+<!-- =======================
+     LIVE STATISTICS END
+======================= -->
 <!-- Online Visitor Code End-->
 
         <section class="about" id="about">
@@ -1392,7 +1645,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 </script>
-<script type="module">
+<!--<script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -1439,6 +1692,17 @@ onValue(ref(db, "totalVisitors"), (snapshot) => {
 /* Today's Visitors */
 
 const today = new Date().toISOString().split("T")[0];
+// Show Current Date
+const now = new Date();
+
+const day = String(now.getDate()).padStart(2, "0");
+const month = String(now.getMonth() + 1).padStart(2, "0");
+const year = now.getFullYear();
+
+document.getElementById("todayDate").innerText =
+`${day}/${month}/${year}`;
+document.getElementById("onlineDate").innerHTML =
+`📅 ${day}/${month}/${year}`;
 
 set(ref(db, "dailyVisitors/" + today + "/" + visitorId), true);
 
@@ -1477,6 +1741,168 @@ onValue(ref(db, "onlineUsers"), (snapshot) => {
   document.getElementById("onlineUsers").innerText = count;
 
 });
+
+</script>-->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  onDisconnect
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* ================= FIREBASE ================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDRTSLdyL1B3WAuTmJpnFYWOwG9JRs7Xeg",
+  authDomain: "bca-study-zone-4458d.firebaseapp.com",
+  databaseURL: "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "bca-study-zone-4458d",
+  storageBucket: "bca-study-zone-4458d.firebasestorage.app",
+  messagingSenderId: "182658490074",
+  appId: "1:182658490074:web:b6df5d40a1d83dd3ce8fe3"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* ================= VISITOR ID ================= */
+
+const visitorId =
+localStorage.getItem("visitorId") ||
+"user_" + Math.random().toString(36).substr(2,9);
+
+localStorage.setItem("visitorId",visitorId);
+
+/* ================= LIVE CLOCK ================= */
+
+function updateClock(){
+
+    const now = new Date();
+
+    // Live Time
+    document.getElementById("liveClock").innerHTML =
+    now.toLocaleTimeString("en-US",{
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:true
+    });
+
+    // Day Name (Friday, Saturday...)
+    const day = now.toLocaleDateString("en-US",{
+        weekday:"long"
+    });
+
+    document.getElementById("currentDay").innerHTML = day;
+
+    // Date
+    const date = now.toLocaleDateString("en-GB");
+
+    document.getElementById("todayDate").innerHTML = date;
+
+    const bottom = document.getElementById("todayDateBottom");
+
+    if(bottom){
+        bottom.innerHTML = date;
+    }
+
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+/* ================= TOTAL VISITORS ================= */
+
+set(ref(db,"totalVisitors/"+visitorId),true);
+
+onValue(ref(db,"totalVisitors"),snapshot=>{
+
+let count=0;
+
+if(snapshot.exists()){
+
+count=Object.keys(snapshot.val()).length;
+
+}
+
+document.getElementById("totalVisitors").innerHTML=count;
+
+const total=document.getElementById("activityTotal");
+
+if(total){
+
+total.innerHTML=count;
+
+}
+
+});
+
+/* ================= TODAY VISITORS ================= */
+
+const today=new Date().toISOString().split("T")[0];
+
+set(ref(db,"dailyVisitors/"+today+"/"+visitorId),true);
+
+onValue(ref(db,"dailyVisitors/"+today),snapshot=>{
+
+let count=0;
+
+if(snapshot.exists()){
+
+count=Object.keys(snapshot.val()).length;
+
+}
+
+document.getElementById("todayVisitors").innerHTML=count;
+
+const todayCount=document.getElementById("activityToday");
+
+if(todayCount){
+
+todayCount.innerHTML=count;
+
+}
+
+});
+
+/* ================= ONLINE USERS ================= */
+
+const userStatusRef=ref(db,"onlineUsers/"+visitorId);
+
+set(userStatusRef,{
+online:true,
+lastSeen:Date.now()
+});
+
+onDisconnect(userStatusRef).remove();
+
+onValue(ref(db,"onlineUsers"),snapshot=>{
+
+let count=0;
+
+if(snapshot.exists()){
+
+count=Object.keys(snapshot.val()).length;
+
+}
+
+document.getElementById("onlineUsers").innerHTML=count;
+
+const active=document.getElementById("activeNow");
+
+if(active){
+
+active.innerHTML=count;
+
+}
+
+});
+
 
 </script>
 </body>
