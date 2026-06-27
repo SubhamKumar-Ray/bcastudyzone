@@ -262,6 +262,7 @@ ul.dropdown li:hover .dropdown1 {
     background:linear-gradient(90deg,#1e88e5,#22d3ee);
     box-shadow:0 2px 10px rgba(0,0,0,.15);
     z-index:1000;
+    box-sizing: border-box;   /* इसके कारण हेडर स्क्रीन से बाहर नहीं भागेगा */
 }
 
 /* Logo */
@@ -324,15 +325,16 @@ ul.dropdown li:hover .dropdown1 {
     gap:12px;
 }
 
-/* Menu */
+/* Menu (यह कंप्यूटर और क्रोम डेस्कटॉप साइट मोड पर एक लाइन में दिखेगा) */
+.header .navbar {
+    display: flex;
+    align-items:center;
+}
 
 .header .navbar a{
-
-font-size:17px;
-
-margin:0 14px;
-
-font-weight:500;
+    font-size:17px;
+    margin:0 14px;
+    font-weight:500;
     color:#111;
     text-decoration:none;
 }
@@ -342,6 +344,11 @@ font-weight:500;
 }
 
 /* Icons */
+.header .icons{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
 .header .icons div{
     width:35px;
@@ -360,8 +367,78 @@ font-weight:500;
     color:#fff;
 }
 
-/* Logo Design CSS END */
+/* कंप्यूटर पर तीन लाइन वाला मोबाइल बटन (☰) छिप जाएगा */
+#menu-btn {
+    display: none;
+}
 
+
+/* ==========================================================================
+   TABLET + MOBILE VIEW (दुनिया के हर मोबाइल पर परफेक्ट दिखाने के लिए)
+   ========================================================================== */
+@media (max-width: 768px) {
+
+    .header{
+        height:60px;
+        padding:0 15px;
+    }
+
+    .logo img{
+        width:50px;
+        height:50px;
+    }
+
+    .logo-text h2{
+        font-size:16px;
+        line-height:18px;
+    }
+
+    .logo-text .university{
+        font-size:11px;
+    }
+
+    /* मोबाइल पर तीन लाइन वाला बटन (☰) दिखेगा */
+    #menu-btn{
+        display:block;
+    }
+
+    /* मोबाइल पर मेनू साइड से खुलकर आएगा */
+    .header .navbar{
+        position:absolute;
+        top:58px;
+        left:-100%;
+        width:280px;
+        height:calc(100vh - 58px);
+        background:#fff;
+        transition:.3s;
+        overflow-y:auto;
+        box-shadow:0 8px 20px rgba(0,0,0,.15);
+        display: block; /* लिंक्स को एक के नीचे एक करने के लिए */
+    }
+
+    .header .navbar.active{
+        left:0;
+    }
+
+    .header .navbar a{
+        display:block;
+        padding:15px 20px;
+        margin:0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .icons{
+        gap:8px;
+    }
+
+    .icons div{
+        width:36px;
+        height:36px;
+        line-height:36px;
+        font-size:22px;
+    }
+}
+/* Logo Design CSS END */
 #menu-btn {
     display: none;
 }
