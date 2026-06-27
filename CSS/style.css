@@ -189,6 +189,8 @@ ul.dropdown li:hover .dropdown1 {
     box-shadow: var(--box-shadow);
 }
 
+/* ================= PERFECT PROFESSIONAL HEADER STYLING ================= */
+
 .header {
     position: fixed;
     top: 0;
@@ -198,34 +200,69 @@ ul.dropdown li:hover .dropdown1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* padding:1rem 8%; */
-    padding: 0 8%;
-    /* background:#fff; */
-    /*background: yellow;*/
-	background:linear-gradient(135deg, #009dff, #00f7ff);
+    padding: 0 4%; /* Padding ko thoda kam kiya taaki desktop/tablet par sabhi menus ko poori jagah mile */
+    background: linear-gradient(135deg, #009dff, #00f7ff);
     box-shadow: var(--box-shadow);
 }
 
+/* Logo container fix - text kabhi niche nahi tootega */
 .header .logo {
     font-size: 2.5rem;
     font-weight: bolder;
     color: var(--black);
+    display: flex;         /* Logo image aur text ek line me rahenge */
+    align-items: center;    /* Vertically perfectly center align */
+    gap: 1.2rem;            /* Image aur text ke beech professional gap */
+    white-space: nowrap;    /* 🔥 Logo text ko kabhi bhi do line me nahi tootne dega */
+    flex-shrink: 0;         /* Screen choti hone par logo dabega nahi */
 }
-/*.header .logo-img {
-	display: flex;
-    font-size: 2.5rem;
-    font-weight: bolder;
-    color: var(--black);
-}*/
+
+/* Logo Image Settings */
+.header .header-logo-img {
+    height: 4.5rem;         
+    width: auto;            /* Aspect ratio kharab nahi hoga */
+    object-fit: contain;
+    border-radius: 0.5rem;  
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect on Logo */
+.header .logo:hover .header-logo-img {
+    transform: scale(1.05); 
+}
+
+/* Navbar wrappers and links layout alignment */
+.header .navbar {
+    display: flex;
+    align-items: center;
+}
+
+.header .navbar ul {
+    white-space: nowrap;    /* 🔥 Menu items (Syllabus, PYQ etc.) ko hamesha ek hi line me rakhega */
+}
 
 .header .navbar a {
-    font-size: 1.7rem;
-    margin: 0 1rem;
+    font-size: 1.6rem;      /* Thoda clean typography ke liye optimized size */
+    margin: 0 0.8rem;       /* Links ke beech ka margin set kiya taaki tablet par layout na toote */
     color: var(--black);
+    display: inline-flex;
+    align-items: center;
 }
 
 .header .navbar a:hover {
     color: var(--orange);
+}
+
+/* Menu Button (Hamburger) - Default status hidden */
+#menu-btn {
+    display: none;
+}
+
+/* Header Action Icons settings */
+.header .icons {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .header .icons div {
@@ -233,7 +270,6 @@ ul.dropdown li:hover .dropdown1 {
     width: 4.5rem;
     line-height: 4.5rem;
     border-radius: .5rem;
-    /* background: #eee; */
     color: var(--black);
     font-size: 2rem;
     margin-left: .3rem;
@@ -246,9 +282,7 @@ ul.dropdown li:hover .dropdown1 {
     color: #fff;
 }
 
-#menu-btn {
-    display: none;
-}
+/* ================= SEARCH FORM STYLING ================= */
 
 .header .search-form {
     position: absolute;
@@ -291,6 +325,60 @@ ul.dropdown li:hover .dropdown1 {
     color: var(--orange);
 }
 
+
+/* ================= HARD RESPONSIVE BREAKPOINT FOR ALL SCREENS ================= */
+
+/* 🔥 Jab desktop screen 1150px se choti ho (Medium laptops/tablets) jisse layout 2nd-3rd line me na jaye */
+@media (max-width: 1150px) {
+    #menu-btn {
+        display: inline-block; /* Hamburger button automatic show ho jayega */
+    }
+
+    .header .navbar {
+        position: absolute;
+        top: 110%;
+        right: -110%;
+        width: 22rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: orange;
+        border: 2px solid orange;
+    }
+
+    .header .navbar.active {
+        right: 2rem;
+        transition: .4s linear;
+    }
+
+    .header .navbar ul li {
+        display: block;       /* Mobile view dropdown vertical list format me align hoga */
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    .header .navbar a {
+        font-size: 2rem;
+        margin: 0.5rem 1rem;
+        display: block;
+        padding: 5px;
+    }
+}
+
+/* 🔥 Mobile target screens adjustment (480px and below) */
+@media (max-width: 480px) {
+    .header {
+        padding: 0 1.5rem;     /* Extra padding side trim for small devices */
+    }
+
+    .header .header-logo-img {
+        height: 3.5rem;        /* Mobile standard scale image size */
+    }
+
+    .header .logo {
+        font-size: 1.9rem;     /* Mobile display size dynamic compatibility fix */
+        gap: 0.8rem;
+    }
+}
 
 /* ------------------home section------------ */
 
