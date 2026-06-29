@@ -1,0 +1,346 @@
+/*==================================================
+            QUICK ACCESS SECTION
+==================================================*/
+
+.quick-access{
+    padding:1.8rem 8% 5rem;
+    background:#f8fbff;
+}
+
+/* Heading */
+
+.quick-access .heading{
+    text-align:center;
+    font-size:3.6rem;
+    font-weight:700;
+    color:var(--black);
+    margin-bottom:2.5rem;
+    position:relative;
+}
+
+.quick-access .heading span{
+    color:var(--orange);
+}
+
+.quick-access .heading::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    bottom:-12px;
+    transform:translateX(-50%);
+    width:80px;
+    height:4px;
+    border-radius:20px;
+    background:linear-gradient(90deg,#00b8ff,#ff6a00);
+}
+
+/*=========================
+        GRID
+=========================*/
+
+.quick-container{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1.8rem;
+}
+
+/*=========================
+        CARD
+=========================*/
+
+.quick-card{
+    background:#fff;
+    border-radius:15px;
+    padding:1.8rem 1.4rem;
+    text-align:center;
+    text-decoration:none;
+    color:var(--black);
+    border:1px solid #ececec;
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+    transition:.35s ease;
+    position:relative;
+    overflow:hidden;
+    min-height:185px;
+}
+
+.quick-card::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:4px;
+    background:linear-gradient(90deg,#00b8ff,#ff6a00);
+    transform:scaleX(0);
+    transition:.35s;
+}
+
+.quick-card:hover::before{
+    transform:scaleX(1);
+}
+
+.quick-card:hover{
+    transform:translateY(-6px);
+    border-color:#00b8ff;
+    box-shadow:0 14px 28px rgba(0,0,0,.12);
+}
+
+/*=========================
+        ICON
+=========================*/
+
+.icon-box{
+    width:60px;
+    height:60px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    background:#f4f9ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.35s;
+}
+
+.quick-card:hover .icon-box{
+    transform:scale(1.08);
+}
+
+.quick-card i{
+    font-size:2.8rem;
+}
+
+/*=========================
+        TEXT
+=========================*/
+
+.quick-card h3{
+    font-size:2rem;
+    margin-bottom:.6rem;
+    font-weight:700;
+}
+
+.quick-card p{
+    font-size:1.3rem;
+    color:var(--light-color);
+    line-height:1.5;
+}
+
+/*=========================
+      OPEN BUTTON
+=========================*/
+
+.open-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:1.2rem;
+    padding:.6rem 1.4rem;
+    border-radius:30px;
+    background:linear-gradient(90deg,#00a8ff,#0085ff);
+    color:#fff;
+    font-size:1.2rem;
+    font-weight:600;
+    transition:.3s;
+}
+
+.open-btn i{
+    font-size:1rem;
+    margin:0;
+}
+
+.quick-card:hover .open-btn{
+    background:linear-gradient(90deg,#ff8a00,#ff4d4d);
+}
+
+/*=========================
+        ICON COLORS
+=========================*/
+
+.card-blue{color:#2196f3!important;}
+.card-red{color:#f44336!important;}
+.card-green{color:#4caf50!important;}
+.card-orange{color:#ff9800!important;}
+.card-purple{color:#9c27b0!important;}
+.card-sky{color:#00bcd4!important;}
+
+/*=========================
+        DARK MODE
+=========================*/
+
+.dark-mode .quick-access{
+    background:#282C35;
+}
+
+.dark-mode .quick-card{
+    background:#363b45;
+    color:#fff;
+    border-color:#4a4f58;
+}
+
+.dark-mode .quick-card p{
+    color:#ddd;
+}
+
+.dark-mode .icon-box{
+    background:#444c58;
+}
+
+/*=========================
+        TABLET
+=========================*/
+
+@media(max-width:991px){
+
+    .quick-container{
+        grid-template-columns:repeat(2,1fr);
+        gap:1.5rem;
+    }
+
+}
+
+/*=========================
+        MOBILE
+=========================*/
+
+@media(max-width:768px){
+
+    .quick-access{
+    padding:2rem 1.5rem 3rem;
+}
+
+    .quick-access .heading{
+        font-size:3rem;
+        margin-bottom:3rem;
+    }
+
+    .quick-container{
+        grid-template-columns:repeat(2,1fr);
+        gap:1.2rem;
+    }
+
+    .quick-card{
+        min-height:165px;
+        padding:1.5rem 1rem;
+    }
+
+    .icon-box{
+        width:50px;
+        height:50px;
+        margin-bottom:10px;
+    }
+
+    .quick-card i{
+        font-size:2.3rem;
+    }
+
+    .quick-card h3{
+        font-size:1.7rem;
+    }
+
+    .quick-card p{
+        font-size:1.1rem;
+    }
+
+    .open-btn{
+        padding:.5rem 1rem;
+        font-size:1rem;
+    }
+
+}
+
+/*=========================
+      SMALL MOBILE
+=========================*/
+
+@media(max-width:480px){
+
+    .quick-access{
+    padding:1.5rem 1rem 2.5rem;
+}
+
+    .quick-access .heading{
+        font-size:2.5rem;
+    }
+
+    .quick-container{
+        gap:1rem;
+    }
+
+    .quick-card{
+        min-height:155px;
+    }
+
+}
+/*==================================
+      PREMIUM CARD COLORS
+==================================*/
+
+.notes-card{
+    border-top:4px solid #2196f3;
+}
+
+.pyq-card{
+    border-top:4px solid #f44336;
+}
+
+.syllabus-card{
+    border-top:4px solid #4caf50;
+}
+
+.notice-card{
+    border-top:4px solid #ff9800;
+}
+
+.contact-card{
+    border-top:4px solid #9c27b0;
+}
+
+.links-card{
+    border-top:4px solid #00bcd4;
+}
+.notes-card .icon-box{
+    background:#edf6ff;
+}
+
+.pyq-card .icon-box{
+    background:#fff0f0;
+}
+
+.syllabus-card .icon-box{
+    background:#eefbf1;
+}
+
+.notice-card .icon-box{
+    background:#fff7eb;
+}
+
+.contact-card .icon-box{
+    background:#f7efff;
+}
+
+.links-card .icon-box{
+    background:#ecfbff;
+}
+.notes-card:hover{
+    box-shadow:0 15px 30px rgba(33,150,243,.25);
+}
+
+.pyq-card:hover{
+    box-shadow:0 15px 30px rgba(244,67,54,.25);
+}
+
+.syllabus-card:hover{
+    box-shadow:0 15px 30px rgba(76,175,80,.25);
+}
+
+.notice-card:hover{
+    box-shadow:0 15px 30px rgba(255,152,0,.25);
+}
+
+.contact-card:hover{
+    box-shadow:0 15px 30px rgba(156,39,176,.25);
+}
+
+.links-card:hover{
+    box-shadow:0 15px 30px rgba(0,188,212,.25);
+}
