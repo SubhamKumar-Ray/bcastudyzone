@@ -344,3 +344,901 @@
 .links-card:hover{
     box-shadow:0 15px 30px rgba(0,188,212,.25);
 }
+
+/*==================================================
+                HERO SECTION
+==================================================*/
+
+.hero{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:5rem;
+
+    padding:9rem 8% 4rem;
+
+    min-height:72vh;
+
+    background:linear-gradient(135deg,#eef8ff,#ffffff);
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+/* Small Background Decoration */
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-120px;
+
+    right:-120px;
+
+    width:320px;
+
+    height:320px;
+
+    background:#00b7ff12;
+
+    border-radius:50%;
+
+    z-index:0;
+
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-150px;
+
+    left:-100px;
+
+    width:280px;
+
+    height:280px;
+
+    background:#ff7b0012;
+
+    border-radius:50%;
+
+    z-index:0;
+
+}
+
+/*============================*/
+
+.hero-content{
+
+    flex:1;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/*============================*/
+
+.hero-tag{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    background:#eaf6ff;
+
+    color:#008cff;
+
+    border-radius:30px;
+
+    font-size:1.4rem;
+
+    font-weight:600;
+
+    margin-bottom:22px;
+
+    box-shadow:0 6px 18px rgba(0,153,255,.12);
+
+}
+
+/*============================*/
+
+.hero-content h1{
+
+    font-size:5rem;
+
+    font-weight:800;
+
+    line-height:1.25;
+
+    color:#222;
+
+    margin-bottom:20px;
+
+}
+
+.hero-content h1 span{
+
+    color:#ff7b00;
+
+}
+
+/*============================*/
+
+.hero-content p{
+
+    font-size:1.6rem;
+
+    color:#666;
+
+    line-height:1.9;
+
+    max-width:620px;
+
+    margin-bottom:32px;
+
+}
+
+/*============================
+        HERO BUTTONS
+============================*/
+
+.hero-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    margin-top:30px;
+
+}
+
+.hero-btn a{
+
+    text-decoration:none;
+
+    padding:13px 30px;
+
+    border-radius:50px;
+
+    font-size:1.45rem;
+
+    font-weight:600;
+
+    transition:.35s;
+
+}
+
+/* Primary Button */
+
+.hero-btn .btn{
+
+    color:#fff;
+
+    background:linear-gradient(45deg,#0099ff,#00c3ff);
+
+    box-shadow:0 10px 25px rgba(0,153,255,.25);
+
+}
+
+.hero-btn .btn:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 35px rgba(0,153,255,.35);
+
+}
+
+/* Secondary Button */
+
+.hero-btn .btn2{
+
+    background:#fff;
+
+    color:#0099ff;
+
+    border:2px solid #0099ff;
+
+}
+
+.hero-btn .btn2:hover{
+
+    background:#0099ff;
+
+    color:#fff;
+
+}
+
+/*============================
+          IMAGE
+============================*/
+
+.hero-image{
+
+    flex:1;
+
+    text-align:center;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.hero-image img{
+
+    width:100%;
+
+    max-width:430px;
+
+    animation:float 5s ease-in-out infinite;
+
+    filter:drop-shadow(0 18px 35px rgba(0,0,0,.20));
+
+    transition:.4s;
+
+}
+
+.hero-image img:hover{
+
+    transform:scale(1.04);
+
+}
+
+/* Floating */
+
+@keyframes float{
+
+    0%{
+
+        transform:translateY(0px);
+
+    }
+
+    50%{
+
+        transform:translateY(-14px);
+
+    }
+
+    100%{
+
+        transform:translateY(0px);
+
+    }
+
+}
+/*==================================================
+            HERO STATISTICS
+==================================================*/
+
+.hero-stats{
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:30px;
+
+}
+
+.stat-box{
+
+    min-width:120px;
+
+    padding:18px 20px;
+
+    background:#fff;
+
+    border-radius:16px;
+
+    text-align:center;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:.35s;
+
+    border:1px solid #eef2f5;
+
+}
+
+.stat-box:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
+
+}
+
+.stat-box h2{
+
+    font-size:2.6rem;
+
+    color:#0099ff;
+
+    margin-bottom:6px;
+
+    font-weight:700;
+
+}
+
+.stat-box span{
+
+    font-size:1.35rem;
+
+    color:#666;
+
+    font-weight:500;
+
+}
+
+/*==================================================
+          TRUST BADGE
+==================================================*/
+
+.hero-bottom{
+
+    margin-top:30px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    color:#666;
+
+    font-size:1.45rem;
+
+    font-weight:500;
+
+}
+
+.hero-bottom span{
+
+    color:#ff9800;
+
+    font-weight:bold;
+
+}
+
+/*==================================================
+        SCROLL DOWN
+==================================================*/
+
+.scroll-down{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-top:-10px;
+
+    margin-bottom:20px;
+
+    animation:downMove 2s infinite;
+
+}
+
+.scroll-down i{
+
+    font-size:3rem;
+
+    color:#0099ff;
+
+}
+
+@keyframes downMove{
+
+    0%{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        transform:translateY(10px);
+
+        opacity:.6;
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+    }
+
+}
+
+/*==================================================
+            DARK MODE
+==================================================*/
+
+.dark-mode .hero{
+
+    background:#282C35;
+
+}
+
+.dark-mode .hero::before{
+
+    background:#0099ff15;
+
+}
+
+.dark-mode .hero::after{
+
+    background:#ff980015;
+
+}
+
+.dark-mode .hero-tag{
+
+    background:#394150;
+
+    color:#4fc3f7;
+
+}
+
+.dark-mode .hero-content h1{
+
+    color:#fff;
+
+}
+
+.dark-mode .hero-content p{
+
+    color:#d6d6d6;
+
+}
+
+.dark-mode .hero-btn .btn{
+
+    box-shadow:none;
+
+}
+
+.dark-mode .hero-btn .btn2{
+
+    background:transparent;
+
+    color:#fff;
+
+    border:2px solid #4fc3f7;
+
+}
+
+.dark-mode .hero-btn .btn2:hover{
+
+    background:#4fc3f7;
+
+    color:#222;
+
+}
+
+.dark-mode .stat-box{
+
+    background:#363b45;
+
+    border:1px solid #444;
+
+    box-shadow:none;
+
+}
+
+.dark-mode .stat-box h2{
+
+    color:#4fc3f7;
+
+}
+
+.dark-mode .stat-box span{
+
+    color:#ddd;
+
+}
+
+.dark-mode .hero-bottom{
+
+    color:#ddd;
+
+}
+
+.dark-mode .scroll-down i{
+
+    color:#4fc3f7;
+
+}
+/*==================================================
+            TABLET (991px)
+==================================================*/
+
+@media(max-width:991px){
+
+.hero{
+
+    flex-direction:column-reverse;
+
+    text-align:center;
+
+    gap:4rem;
+
+    padding:8rem 5% 4rem;
+
+}
+
+.hero-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+.hero-content h1{
+
+    font-size:4rem;
+
+}
+
+.hero-content p{
+
+    max-width:100%;
+
+}
+
+.hero-stats{
+
+    justify-content:center;
+
+}
+
+.hero-btn{
+
+    justify-content:center;
+
+}
+
+.hero-bottom{
+
+    justify-content:center;
+
+}
+
+.hero-image img{
+
+    max-width:360px;
+
+}
+
+}
+
+/*==================================================
+            MOBILE (768px)
+==================================================*/
+
+@media(max-width:768px){
+
+.hero{
+
+    padding:8rem 2rem 3rem;
+
+    gap:3rem;
+
+}
+
+.hero-tag{
+
+    font-size:1.2rem;
+
+    padding:7px 15px;
+
+}
+
+.hero-content h1{
+
+    font-size:3.2rem;
+
+}
+
+.hero-content p{
+
+    font-size:1.4rem;
+
+    line-height:1.7;
+
+}
+
+.hero-stats{
+
+    width:100%;
+
+    justify-content:center;
+
+    gap:12px;
+
+}
+
+.stat-box{
+
+    min-width:100px;
+
+    padding:15px;
+
+    flex:1;
+
+}
+
+.stat-box h2{
+
+    font-size:2.2rem;
+
+}
+
+.stat-box span{
+
+    font-size:1.2rem;
+
+}
+
+.hero-btn{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+.hero-btn a{
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+.hero-bottom{
+
+    justify-content:center;
+
+    text-align:center;
+
+    font-size:1.3rem;
+
+}
+
+.hero-image img{
+
+    max-width:260px;
+
+}
+
+.scroll-down{
+
+    margin-top:5px;
+
+}
+
+}
+
+/*==================================================
+        SMALL MOBILE (480px)
+==================================================*/
+
+@media(max-width:480px){
+
+.hero{
+
+    padding:7.2rem 1.5rem 2.5rem;
+
+}
+
+.hero-content h1{
+
+    font-size:2.6rem;
+
+    line-height:1.35;
+
+}
+
+.hero-content p{
+
+    font-size:1.3rem;
+
+}
+
+.hero-tag{
+
+    font-size:1.1rem;
+
+}
+
+.hero-stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+}
+
+.stat-box{
+
+    min-width:auto;
+
+    padding:12px 8px;
+
+}
+
+.stat-box h2{
+
+    font-size:1.8rem;
+
+}
+
+.stat-box span{
+
+    font-size:1rem;
+
+}
+
+.hero-btn{
+
+    gap:12px;
+
+}
+
+.hero-btn a{
+
+    font-size:1.3rem;
+
+    padding:11px 18px;
+
+}
+
+.hero-image img{
+
+    max-width:220px;
+
+}
+
+.hero-bottom{
+
+    font-size:1.15rem;
+
+}
+
+.scroll-down i{
+
+    font-size:2.4rem;
+
+}
+
+}
+
+/*==================================================
+        PREMIUM HOVER EFFECTS
+==================================================*/
+
+.hero-tag{
+
+    transition:.35s;
+
+}
+
+.hero-tag:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(0,153,255,.18);
+
+}
+
+.hero-content h1 span{
+
+    position:relative;
+
+}
+
+.hero-content h1 span::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-5px;
+
+    width:100%;
+
+    height:4px;
+
+    background:linear-gradient(90deg,#00b7ff,#ff7b00);
+
+    border-radius:20px;
+
+}
+
+.hero-image img{
+
+    cursor:pointer;
+
+}
+
+.hero-image img:hover{
+
+    transform:scale(1.05);
+
+    filter:drop-shadow(0 25px 45px rgba(0,0,0,.25));
+
+}
+
+.hero-btn .btn,
+
+.hero-btn .btn2{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.hero-btn .btn::before,
+
+.hero-btn .btn2::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-100%;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(255,255,255,.25);
+
+    transition:.45s;
+
+}
+
+.hero-btn .btn:hover::before,
+
+.hero-btn .btn2:hover::before{
+
+    left:100%;
+
+}
