@@ -10,11 +10,12 @@
     content="BCA Study Zone provides Notes, Previous Year Questions, Syllabus and study material for BCA students.">
 
     <meta name="keywords"
-    content="BCA Notes, BCA PYQ, BCA Syllabus, BCA Study Material">
+    content="BCA Notes, BCA PYQ, BCA Syllabus, BCA Study Material, BCA VBU, bca vbu notes, vbu notes">
 
     <meta name="robots" content="index, follow">
 
     <link rel="stylesheet" href="CSS/style.css">
+	<link rel="stylesheet" href="CSS/styles.css">
     <link rel="stylesheet" href="CSS/footer.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -29,116 +30,65 @@
 
 <body>
 		<audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-	
-        <!-- -----------header section start--------------  -->
-		<!-- <div id="refreshScreen">
-    <div class="screen-content">
-        <h1>BCA Study Zone</h1>
-        <p>Page is refreshing...</p>
-    </div>
-</div>
--->
-		<!-- 🔵 LOADER START -->
-<div id="loader">
-    <div class="loader-card">
-        <div class="circle">
-            <img src="Gallary/subham2.png" alt="Profile">
+				<!-- 🔵 LOADER START -->
+			<div id="loader">
+				<div class="loader-card">
+					<div class="circle">
+						<img src="Gallary/subham2.png" alt="Profile">
+							<svg viewBox="0 0 160 160">
+								<defs>
+									<linearGradient id="grad" x1="0" y1="0" x2="160" y2="160">
+										<stop offset="0%" stop-color="#00f7ff"/>
+										<stop offset="50%" stop-color="#9b5cff"/>
+										<stop offset="100%" stop-color="#ff4ecd"/>
+									</linearGradient>
+								</defs>
+								<circle cx="80" cy="80" r="70"></circle>
+								<circle cx="80" cy="80" r="70" id="progress"></circle>
+							</svg>
+					</div>
+				<div id="count">1%</div>
+			</div>
+		</div>
+					<!-- 🔵 LOADER END -->
+						<div id="voicePopup">
+							<div class="voiceBox">
+									<h2>✅ Success</h2>
+								<!--   <p>
+										This website has been created by <b>Subham Kumar Ray</b>.<br>
+										The page has been successfully loaded.
+									</p>	-->
+									<p>
+											<!--"नमस्ते। बी सी ए स्टडी ज़ोन में आपका हार्दिक स्वागत है। विनोबा भावे विश्वविद्यालय के विद्यार्थियों के लिए तैयार इस शैक्षणिक मंच पर आपको बी सी ए से संबंधित नोट्स, सिलेबस, प्रश्न पत्र और अन्य महत्वपूर्ण अध्ययन सामग्री प्राप्त होगी। हमें विश्वास है कि यह वेबसाइट आपकी पढ़ाई को और अधिक सरल एवं प्रभावी बनाएगी। आपके सफल शैक्षणिक जीवन के लिए शुभकामनाएं। धन्यवाद। कृपया मैसेज बॉक्स में अपने सुझाव या प्रतिक्रिया अवश्य लिखें।"-->
+											"नमस्ते। बी सी ए स्टडी ज़ोन में आपका हार्दिक स्वागत है। यहां आपको विनोबा भावे विश्वविद्यालय के बी सी ए पाठ्यक्रम से संबंधित महत्वपूर्ण अध्ययन सामग्री उपलब्ध है। धन्यवाद। कृपया मैसेज बॉक्स में अपनी राय, सुझाव या कोई संदेश अवश्य लिखें।"
+									</p>
 
-            <svg viewBox="0 0 160 160">
-                <defs>
-                    <linearGradient id="grad" x1="0" y1="0" x2="160" y2="160">
-                        <stop offset="0%" stop-color="#00f7ff"/>
-                        <stop offset="50%" stop-color="#9b5cff"/>
-                        <stop offset="100%" stop-color="#ff4ecd"/>
-                    </linearGradient>
-                </defs>
-
-                <circle cx="80" cy="80" r="70"></circle>
-                <circle cx="80" cy="80" r="70" id="progress"></circle>
-            </svg>
-        </div>
-
-        <div id="count">1%</div>
-    </div>
-</div>
-<!-- 🔵 LOADER END -->
-	<div id="voicePopup">
-    <div class="voiceBox">
-        <h2>✅ Success</h2>
-
-    <!--    <p>
-            This website has been created by <b>Subham Kumar Ray</b>.<br>
-            The page has been successfully loaded.
-        </p>-->
-		<p>
-				<!--"नमस्ते। बी सी ए स्टडी ज़ोन में आपका हार्दिक स्वागत है। विनोबा भावे विश्वविद्यालय के विद्यार्थियों के लिए तैयार इस शैक्षणिक मंच पर आपको बी सी ए से संबंधित नोट्स, सिलेबस, प्रश्न पत्र और अन्य महत्वपूर्ण अध्ययन सामग्री प्राप्त होगी। हमें विश्वास है कि यह वेबसाइट आपकी पढ़ाई को और अधिक सरल एवं प्रभावी बनाएगी। आपके सफल शैक्षणिक जीवन के लिए शुभकामनाएं। धन्यवाद। कृपया मैसेज बॉक्स में अपने सुझाव या प्रतिक्रिया अवश्य लिखें।"-->
-				"नमस्ते। बी सी ए स्टडी ज़ोन में आपका हार्दिक स्वागत है। यहां आपको विनोबा भावे विश्वविद्यालय के बी सी ए पाठ्यक्रम से संबंधित महत्वपूर्ण अध्ययन सामग्री उपलब्ध है। धन्यवाद। कृपया मैसेज बॉक्स में अपनी राय, सुझाव या कोई संदेश अवश्य लिखें।"
-        </p>
-
-        <!-- 🔥 MOBILE ke liye ye button bahut important -->
-        <button onclick="handleEnglishVoiceAndOpen()">
-            🔊 Listen & Continue
-        </button>
-    </div>
-</div>
-
-
+								<!-- 🔥 MOBILE ke liye ye button bahut important -->
+								<button onclick="handleEnglishVoiceAndOpen()">🔊 Listen & Continue</button>
+							</div>
+						</div>
 		<div id="mainPage" style="display:none;">
-        <header class="header">
-                <a href="#home" class="logo"> BCA Study - <span>Zone</span></a>
-			   <!--<a href="#home" class="logo">
-        <img src="Gallary/university_logo.png" alt="VBU Logo" class="logo-img"> BCA Study Zone – <span>SUBHAM</span></a>-->
-                <nav class="navbar">
-                        <ul>
-                                <li><a href="#home">Home</a></li>
-										<!-- CLASS 11th & 12th FULL NOTES -->
-								
-								<!--<li><a> Class 11th <i class="fas fa-caret-down"></i></a>
-										<ul class="dropdown">	
-                                                <li><a href="" target="_blank">11th Syllabus</a></li>
-                                                <li><a href="" target="_blank">CMS Full Notes</a></li>
-												<li><a> PYQ <i class="fas fa-caret-right"></i></a>
-												<ul class="dropdown1">
-													<li><h2>Class 11th</h2></li>
-													<li><a href="" target="_blank">2016</a></li>	<!-- Empty link = Coming Soon -->
-													<!--<li><a href="" target="_blank">2017</a></li>-->	<!-- Empty link = Coming Soon -->
-													
-												<!--</ul>
-											</li>
-                                        </ul>
-                                </li>-->
-								
-								<!--<li><a> Class 12th <i class="fas fa-caret-down"></i></a>
-										<ul class="dropdown">
-                                                <li><a href="Syllabus/class12thsyllabus.html" target="_blank">12th Syllabus</a></li>
-                                                <li><a href="" target="_blank">CMS Full Notes</a></li>
-												<li><a> PYQ <i class="fas fa-caret-right"></i></a>
-												<ul class="dropdown1">
-													<li><h2>Class 12th</h2></li>
-													<li><a href="" target="_blank">2012</a></li><!-- Empty link = Coming Soon -->
-													<!--<li><a href="" target="_blank">2013</a></li><!-- Empty link = Coming Soon -->
-													<!--<li><a href="PYQ/class12/2023.html" target="_blank">2023</a></li><!-- Empty link = Coming Soon -->
-												<!--</ul>
-											</li>
-                                        </ul>
-                                </li>-->
-									
+					<header class="header">
+						<a href="#home" class="logo"> BCA Study - <span>Zone</span></a>
+							<!--<a href="#home" class="logo">
+							<img src="Gallary/university_logo.png" alt="VBU Logo" class="logo-img"> BCA Study Zone – <span>SUBHAM</span></a>-->
+							<nav class="navbar">
+								<ul>
+									<li><a href="#home">Home</a></li>									
 										<!-- BCA FULL NOTES AND PYQ  -->
-                                <li><a> Syllabus <i class="fas fa-caret-down"></i></a>
-                                        <ul class="dropdown">
-                                                <li><a href="Syllabus/full.html" target="_blank">Full Syllabus</a></li>
-                                                <li><a href="Syllabus/sem1.html" target="_blank">SEMESTER - 1</a></li>
-                                                <li><a href="Syllabus/sem2.html" target="_blank">SEMESTER - 2</a></li>
-                                                <li><a href="Syllabus/sem3.html" target="_blank">SEMESTER - 3</a></li>
-                                                <li><a href="Syllabus/sem4.html" target="_blank">SEMESTER - 4</a></li>
-                                                <li><a href="Syllabus/sem5.html" target="_blank">SEMESTER - 5</a></li>
-                                                <li><a href="Syllabus/sem6.html" target="_blank">SEMESTER - 6</a></li>
-
-                                        </ul>
-                                </li>
-								<li><a>PYQ <i class="fas fa-caret-down"></i></a>
-                                        <ul class="dropdown">
-											
+										<li><a> Syllabus <i class="fas fa-caret-down"></i></a>
+											<ul class="dropdown">
+													<li><a href="Syllabus/full.html" target="_blank">Full Syllabus</a></li>
+													<li><a href="Syllabus/sem1.html" target="_blank">SEMESTER - 1</a></li>
+													<li><a href="Syllabus/sem2.html" target="_blank">SEMESTER - 2</a></li>
+													<li><a href="Syllabus/sem3.html" target="_blank">SEMESTER - 3</a></li>
+													<li><a href="Syllabus/sem4.html" target="_blank">SEMESTER - 4</a></li>
+													<li><a href="Syllabus/sem5.html" target="_blank">SEMESTER - 5</a></li>
+													<li><a href="Syllabus/sem6.html" target="_blank">SEMESTER - 6</a></li>
+											</ul>
+									</li>
+									<li><a>PYQ <i class="fas fa-caret-down"></i></a>
+                                        <ul class="dropdown">											
 											<li><a>SEMESTER - 1 <i class="fas fa-caret-right"></i></a>
                                                 <ul class="dropdown1">
 													<li>
@@ -360,7 +310,8 @@
 					<button onclick="closePopup()">OK</button>
 				</div>
 			</div>
-		<section class="notice-section">
+			
+		<section id="notice" class="notice-section">
 			<div class="notice-box">
 				<h2 class="notice-title">🚨 VBU Latest Updates 🚨</h2>
 					<ul id="noticeList">
@@ -404,6 +355,58 @@
 					</ul>
 			</div>
 		</section>
+		<!-- ================= QUICK ACCESS START ================= -->
+
+		<section class="quick-access" id="quick-access">
+			<h1 class="heading">Quick <span>Navigation</span></h1>
+			<div class="quick-container">
+						<!-- NOTES -->
+				<a href="#notes" class="quick-card notes-card">
+					<div class="icon-box"><i class="fas fa-book card-blue"></i></div>
+						<h3>Notes</h3>
+						<p>Semester 1 - 6</p>
+					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+				</a>
+						<!-- PYQ -->
+				<a href="#pyq" class="quick-card pyq-card">
+					<div class="icon-box"><i class="fas fa-file-alt card-red"></i></div>
+						<h3>PYQ</h3>
+						<p>Previous Year Questions</p>
+					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+				</a>
+						<!-- SYLLABUS -->
+				<a href="#syllabus" class="quick-card syllabus-card">
+					<div class="icon-box"><i class="fas fa-graduation-cap card-green"></i></div>
+						<h3>Syllabus</h3>
+						<p>Semester 1 - 6</p>
+					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+				</a>
+						<!-- NOTICE -->
+				<a href="#notice" class="quick-card notice-card">
+					<div class="icon-box"><i class="fas fa-bullhorn card-orange"></i></div>
+						<h3>Notice</h3>
+						<p>Latest Updates</p>
+					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+				</a>
+						<!-- CONTACT -->
+				<a href="#about-contact" class="quick-card contact-card">
+					<div class="icon-box"><i class="fas fa-phone card-purple"></i></div>
+					<h3>Contact</h3>
+					<p>Get Help</p>
+					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+				</a>
+						<!-- QUICK LINKS -->
+				<a href="#footer" class="quick-card links-card">
+					<div class="icon-box"><i class="fas fa-link card-sky"></i></div>
+					<h3>Quick Links</h3>
+					<p>Explore Website</p>
+					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+				</a>
+			</div>
+
+		</section>
+
+<!-- ================= QUICK ACCESS END ================= -->
 		
 		<!-- ===== IMAGE SLIDER START ===== -->
 
@@ -880,7 +883,7 @@
                         </div>-->
                         
 								<!-- BCA FULL NOTES & PYQ -->
-						<div class="column">
+						<div id="syllabus" class="column">
                                 <h3>Syllabus</h3>
                                 <ul>
                                         <li><a href="Syllabus/full.html" target="_blank"><i class="fas fa-arrow-right"></i> Full Syllabus</a></li>
@@ -894,7 +897,7 @@
                                    
                                 </ul>
                         </div>
-                        <div class="column">
+                        <div id="pyq" class="column">
                                 <h3>Previous Years Questions</h3>
                                 <ul class="dropdown2">
                                         <li><a>SEMESTER - 1 <i class="fas fa-caret-right"></i></a>
@@ -987,7 +990,7 @@
                                 </ul>
                         </div>
 
-                        <div class="column">
+                        <div id="notes" class="column">
                                 <h3>SEMESTER - 1</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem1.html" target="_blank"><i class="fas fa-arrow-right"></i> SEMESTER - I</a></li>     
@@ -1013,7 +1016,7 @@
                                         </li>
                                 </ul>
                         </div>
-                        <div class="column">
+                        <div id="notes" class="column">
                                 <h3>SEMESTER - 2</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem2.html" target="_blank"><i class="fas fa-arrow-right"></i> SEMESTER - II</a></li>
@@ -1046,7 +1049,7 @@
 
                 <div class="row">
 
-                        <div class="column">
+                        <div id="notes" class="column">
                                 <h3>SEMESTER - 3</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem3.html" target="_blank"><i
@@ -1072,7 +1075,7 @@
                                 </ul>
 							
                         </div>
-                        <div class="column">
+                        <div id="notes" class="column">
                                 <h3>SEMESTER - 4</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem4.html" target="_blank"><i class="fas fa-arrow-right"></i> SEMESTER - IV</a></li>
@@ -1100,7 +1103,7 @@
 
                                 <!-- <a href="#">SEMISTER - 6</a> -->
                         </div>
-                        <div class="column">
+                        <div id="notes" class="column">
                                 <h3>SEMESTER - 5</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem5.html" target="_blank"><i
@@ -1127,7 +1130,7 @@
 
                                 <!-- <a href="#">SEMISTER - 6</a> -->
                         </div>
-                        <div class="column">
+                        <div id="notes" class="column">
                                 <h3>SEMESTER - 6</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem6.html" target="_blank"><i class="fas fa-arrow-right"></i> SEMESTER - VI</a></li>                                       
@@ -1279,8 +1282,8 @@
 
         <section class="footer1">
                 <div class="credit" id="contact">
-                        <p>version 3.0.0</p>
-                        <p>Last update: 19-06-2026</p>
+                        <p>version 4.20.0</p>
+                        <p>Last update: 29-06-2026</p>
                         BCA Study <span>Zone</span><br>
                         &#169; copyright 2026 All Rights Reserved<br>
                         Developed by<a href="https://subhamkumar-ray.github.io/bcastudyzone/" target="_blank">
@@ -1543,8 +1546,9 @@ function closePopup(){
    class="call-float">
     <i class="fas fa-phone-alt"></i>
 </a>
-<script>
 
+								<!-- SLIDE IMAGE -->
+<script>
 document.addEventListener("DOMContentLoaded", function(){
 
     const slides = document.querySelectorAll(".slide");
@@ -1645,6 +1649,10 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 </script>
+									<!-- SLIDE IMAGE END -->
+
+									<!-- LIVE STATICS COUNT -->
+
 <!--<script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1752,7 +1760,8 @@ import {
   ref,
   set,
   onValue,
-  onDisconnect
+  onDisconnect,
+  remove
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 /* ================= FIREBASE ================= */
@@ -1825,8 +1834,16 @@ onValue(ref(db,"totalVisitors"),snapshot=>{
 let count=0;
 
 if(snapshot.exists()){
+    count=Object.keys(snapshot.val()).length;
+}
 
-count=Object.keys(snapshot.val()).length;
+/* ===== 100 hone par reset ===== */
+
+if(count>=100){
+
+    remove(ref(db,"totalVisitors"));
+
+    count=0;
 
 }
 
@@ -1835,9 +1852,7 @@ document.getElementById("totalVisitors").innerHTML=count;
 const total=document.getElementById("activityTotal");
 
 if(total){
-
-total.innerHTML=count;
-
+    total.innerHTML=count;
 }
 
 });
@@ -1905,5 +1920,6 @@ active.innerHTML=count;
 
 
 </script>
+									<!-- LIVE STATICS COUNT END -->
 </body>
 </html>
