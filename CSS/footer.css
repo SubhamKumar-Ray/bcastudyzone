@@ -316,3 +316,25 @@ ul.dropdown2 li:hover .dropdown3 {
     .contact-icon { gap: 12px 8px !important; }
     .contact-icon > a, .contact-icon .social-item a { font-size: 1.8rem !important; }
 }
+/* ===================================================
+   FOOTER VERSION & CREDIT CENTER ALIGNMENT FIX
+=================================================== */
+.footer1 .credit {
+    text-align: center !important;        /* 🔴 टेक्स्ट को ज़बरदस्ती बिल्कुल बीच में लाएगा */
+    margin-top: 2rem !important;
+    padding: 1rem 2.5rem !important;
+    font-size: 1.5rem !important;        /* फॉन्ट साइज़ को थोड़ा सेट किया */
+    width: 100% !important;              /* पूरी चौड़ाई लेगा ताकि सेंटर सही से हो */
+    display: block !important;
+}
+
+.footer1 .credit p { 
+    color: #666; 
+    font-size: 12px !important;          /* वर्शन और लास्ट अपडेट का साइज़ साफ़ किया */
+    text-align: center !important;        /* पैराग्राफ को भी सेंटर करेगा */
+    margin-bottom: 5px !important;
+}
+
+.footer1 .credit span { 
+    color: var(--orange); 
+}
