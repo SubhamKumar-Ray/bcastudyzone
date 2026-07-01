@@ -59,7 +59,6 @@ body{
     position: relative;
     display: inline-block;
   }
-  
   .dropdown3{
     display:none ;  
     z-index: 999;
@@ -87,13 +86,10 @@ body{
 
   /* about me and msg section  */
 
-.contact_info {
+.contact_info{
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 30px;
     margin-top: 50px;
-    padding: 0 8%;
+    
 }
 
 .about_me{
@@ -128,9 +124,6 @@ body{
 .contact-icon a:hover {
     transform: scale(1.5);
 }
-.fa-facebook:hover {
-	color: #0000FF;
-}
 .fa-instagram:hover{
     color: #e11d74;
 }
@@ -143,12 +136,7 @@ body{
 .fa-twitter:hover {
     color: #00adb5;
 }
-.fa-github:hover {
-	color: #0000FF;
-}
-.fa-youtube:hover {
-	color: #FF0000;
-}
+
 .about_image img{
     margin-top: 30px;
     width: 150px;
@@ -163,23 +151,23 @@ strong{
 
 /* sheet  */
 
-/*.msg{
+.msg{
     width: 50%;
     margin: 0 40px;
     padding: 30px;
     border: 1px solid #eee;
-	border-radius: 10px;
-    background-color: #FFFF00;
+    border-radius: 10px;
+    background-color: #15114c;
 }
 h4{
     margin-bottom: 10px;
     font-size: 24px;
-    color: green;
+    color: white;
 }
 .msg p{
     font-size: 15px;
     margin-bottom: 10px;
-    color: red;
+    color: green;
 }
 input{
     width: 100%;
@@ -192,7 +180,7 @@ textarea{
 }
 #submit{
     border: none;
-    background-color: red;
+    background-color: orangered;
     color: white;
     width: 200px;
     margin-top: 10px;
@@ -200,74 +188,10 @@ textarea{
 }
 #submit:hover{
     background-color: green;
-}*/
-
-/* ===== SHEET FORM STYLE ===== */
-
-.msg{
-    width: 50%;
-    margin: 0 40px;
-    padding: 30px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    background-color: #FFFF00;
 }
-
-h4{
-    margin-bottom: 10px;
-    font-size: 24px;
-    color: green;
-}
-
-.msg p{
-    font-size: 15px;
-    margin-bottom: 10px;
-    color: red;
-}
-
-/* Input, Select, Textarea same style */
-input,
-select,
-textarea{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-/* Remove default select arrow issue (optional clean look) */
-select{
-    background-color: #fff;
-    cursor: pointer;
-}
-
-/* Textarea */
-textarea{
-    resize: none;
-}
-
-/* Submit button */
-#submit{
-    border: none;
-    background-color: red;
-    color: white;
-    width: 200px;
-    margin: 10px auto 0 auto;   /* 🔴 CENTER */
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    display: block;             /* 🔴 IMPORTANT */
-}
-
-
-#submit:hover{
-    background-color: green;
-}
-
 /* footer end section  */
-	
+
+
 .footer1 .credit{
     text-align: center;
     margin-top: 2rem;
@@ -366,46 +290,4 @@ textarea{
         left: 220px;    
         top: 20px;
       }
-
-}
-/* ================= MOBILE & TABLET FIX (991px) ================= */
-@media (max-width: 991px) {
-    /* दोनों डिब्बों को एक के नीचे एक अलाइन करेगा */
-    .contact_info {
-        display: flex;
-        flex-direction: column;
-        gap: 50px !important; /* दोनों कार्ड्स के बीच शानदार प्रीमियम गैप */
-        padding: 0 20px;
-    }
-
-    .about_me {
-        width: 100% !important;
-        margin: 0 0 20px 0 !important;
-    }
-
-    /* मोबाइल पर स्लाइडर की ऊंचाई सुनिश्चित करना ताकि आइकॉन और नाम सब दिखें */
-    .team-slide {
-        min-height: 460px; 
-    }
-
-    /* मैसेज बॉक्स डिज़ाइन सुधार */
-    .msg {
-        width: 100% !important;
-        margin: 0 auto !important;
-        position: relative;
-        z-index: 10;
-        clear: both; /* फ्लोटिंग एलिमेंट्स ओवरलैप फिक्स */
-    }
-}
-
-@media (max-width: 480px) {
-    /* छोटे मोबाइल स्क्रीन्स के लिए ऊंचाई बैलेंस */
-    .team-slide {
-        min-height: 490px; /* सोशल आइकन्स को पूरा स्पेस देने के लिए */
-    }
-    
-    .bio-text {
-        font-size: 1.35rem !important;
-        margin: 10px 15px !important;
-    }
 }
