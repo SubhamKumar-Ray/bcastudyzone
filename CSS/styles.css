@@ -1242,3 +1242,185 @@
     left:100%;
 
 }
+/* ================= ABOUT ME & MSG UPGRADED STYLE ================= */
+
+.contact_info {
+    display: flex;
+    margin-top: 50px;
+    gap: 30px;
+    align-items: stretch;
+}
+
+.about_me {
+    width: 50%;
+    text-align: center;
+    margin: 0 20px;
+}
+
+.about_me h2 {
+    font-size: 3.5rem;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+/* Biography Text Styling */
+.bio-text {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    margin: 15px 30px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.02);
+}
+.text-orange { color: #ff7800; border-left: 4px solid #ff7800; }
+.text-blue { color: #0066ff; border-left: 4px solid #0066ff; }
+.text-green { color: #2e7d32; border-left: 4px solid #2e7d32; }
+
+/* Premium Upgraded Message Box Container */
+.msg {
+    width: 50%;
+    margin: 0 20px;
+    padding: 30px;
+    border: 1px solid rgba(0, 157, 255, 0.2);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.dark-mode .msg {
+    background: #363b45;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.msg-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.msg-header i {
+    font-size: 3.5rem;
+    color: #009dff;
+    margin-bottom: 8px;
+}
+
+.msg h4 {
+    margin-bottom: 5px;
+    font-size: 2.4rem;
+    color: #130f40;
+    font-weight: 600;
+}
+
+.dark-mode .msg h4 {
+    color: #fff;
+}
+
+.msg-header p {
+    font-size: 1.3rem;
+    color: #666;
+}
+
+.dark-mode .msg-header p {
+    color: #ddd;
+}
+
+/* Beautiful Icon-Integrated Inputs */
+.input-group {
+    position: relative;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    color: #009dff;
+    font-size: 1.6rem;
+    z-index: 2;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 12px 12px 12px 45px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    background-color: #f8fafc;
+    color: #130f40;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .input-group input,
+.dark-mode .input-group select,
+.dark-mode .input-group textarea {
+    background-color: #282c35;
+    border-color: #4a4f58;
+    color: #fff;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: #009dff;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(0, 157, 255, 0.15);
+}
+
+.dark-mode .input-group input:focus,
+.dark-mode .input-group select:focus,
+.dark-mode .input-group textarea:focus {
+    background-color: #2c313c;
+}
+
+.input-group.text-group i {
+    top: 15px;
+}
+
+.input-group textarea {
+    resize: none;
+}
+
+/* Premium Button Upgrade */
+#submit {
+    border: none;
+    background: linear-gradient(135deg, #009dff, #00f7ff);
+    color: white;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 157, 255, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s ease;
+}
+
+#submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0, 157, 255, 0.4);
+    background: linear-gradient(135deg, #0082ff, #00e5ff);
+}
+
+#submit:active {
+    transform: translateY(-1px);
+}
+
+/* Responsiveness Fix */
+@media (max-width: 991px) {
+    .contact_info {
+        display: block;
+    }
+    .about_me, .msg {
+        width: 100%;
+        margin: 0 0 40px 0;
+    }
+}
