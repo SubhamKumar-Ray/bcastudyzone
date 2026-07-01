@@ -1416,11 +1416,128 @@
 
 /* Responsiveness Fix */
 @media (max-width: 991px) {
+    /* दोनों ब्लॉक्स को एक के नीचे एक लाने और स्पेस देने के लिए */
     .contact_info {
-        display: block;
+        display: flex;
+        flex-direction: column; /* एलिमेंट्स को वर्टिकल अलाइन करेगा */
+        gap: 40px !important;  /* About Us और Message Box के बीच मजबूत गैप बनाएगा */
     }
-    .about_me, .msg {
-        width: 100%;
-        margin: 0 0 40px 0;
+
+    .about_me {
+        width: 100% !important;
+        text-align: center;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        margin-bottom: 20px !important; /* नीचे से अतिरिक्त सुरक्षित स्पेस */
+    }
+
+    /* मैसेज बॉक्स मोबाइल पर सही दिखे और ऊपर न चढ़े */
+    .msg {
+        width: 100% !important;
+        margin: 0 auto !important;
+        position: relative;
+        z-index: 1; /* यह सुनिश्चित करेगा कि फॉर्म किसी के नीचे न दबे */
+    }
+}
+/* ================= SOCIAL ICONS PERFECTION FIX ================= */
+
+/* सभी सोशल आइकन्स के मुख्य डिब्बे को फ्लेक्स बनाकर एक लाइन में सेट करना */
+.contact-icon {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-end !important; /* नंबर और नॉर्मल आइकन्स को बेसलाइन पर रखेगा */
+    gap: 15px !important;            /* आइकन्स के बीच का गैप कम किया ताकि यूट्यूब न टूटे */
+    margin-top: 25px !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;     /* ज़बरदस्ती एक ही लाइन में रखेगा, टूटने नहीं देगा */
+}
+
+/* सीधे लिंक वाले आइकन्स (Facebook, LinkedIn, WhatsApp, YouTube) को हल्का बड़ा करना */
+.contact-icon > a {
+    font-size: 2.2rem !important;    /* आइकन्स का साइज़ हल्का बड़ा (halka big) किया */
+    display: inline-block !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* इंस्टाग्राम वाले नंबर और आइकॉन के डिब्बे को एक कतार में सीधा रखना */
+.contact-icon .social-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+}
+
+/* इंस्टाग्राम के ऊपर लिखे छोटे 1 और 2 नंबर का साइज़ */
+.contact-icon .social-item span {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1px !important;
+}
+
+/* इंस्टाग्राम के दोनों आइकन्स का साइज़ भी बाकी आइकन्स जितना बड़ा करना */
+.contact-icon .social-item a {
+    font-size: 2.2rem !important;    /* इंस्टाग्राम आइकॉन का साइज़ भी बराबर किया */
+}
+
+/* होवर करने पर हल्का सा ज़ूम इफ़ेक्ट */
+.contact-icon a:hover {
+    transform: scale(1.15) !important;
+}
+/* ================= MOBILE SOCIAL ICONS AUTO-WRAP FIX ================= */
+
+@media (max-width: 768px) {
+    /* कार्ड की साइड पैडिंग थोड़ी कम की ताकि अंदर जगह बनी रहे */
+    .team-member {
+        padding: 2.5rem 1.5rem !important;
+    }
+
+    /* आइकन्स का मुख्य कंटेनर */
+    .contact-icon {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-end !important;
+        gap: 15px 12px !important;       /* 🔴 पहला नंबर (15px) नीचे की लाइन के बीच गैप देगा, दूसरा (12px) साइड का गै定 */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 25px !important;
+        padding: 0 5px !important;
+        box-sizing: border-box !important;
+        
+        /* 🔴 मुख्य जादू: जब और आइकन्स आएंगे, तो ये अपने आप नीचे चले जाएंगे, बाहर नहीं भागेंगे */
+        flex-wrap: wrap !important;     
+    }
+
+    /* आइकन्स का साइज़ ताकि दिखने में प्रीमियम लगें */
+    .contact-icon > a,
+    .contact-icon .social-item a {
+        font-size: 2rem !important;      /* एक परफेक्ट रिस्पॉन्सिव साइज़ */
+        display: inline-block !important;
+    }
+
+    /* इंस्टाग्राम वाले स्ट्रक्चर को सीधा रखने के लिए */
+    .contact-icon .social-item {
+        display: inline-flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        min-width: 35px !important;
+    }
+
+    .contact-icon .social-item span {
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 2px !important;
+        display: block !important;
+    }
+}
+
+@media (max-width: 360px) {
+    /* बहुत छोटे स्क्रीन्स के लिए थोड़ा और एडजस्टमेंट */
+    .contact-icon {
+        gap: 12px 8px !important;
+    }
+    .contact-icon > a,
+    .contact-icon .social-item a {
+        font-size: 1.8rem !important;
     }
 }
