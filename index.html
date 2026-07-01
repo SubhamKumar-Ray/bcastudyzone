@@ -426,47 +426,53 @@
 					</ul>
 			</div>
 		</section>
-		<!-- ================= QUICK ACCESS START ================= -->
+		<!-- ================= QUICK ACCESS START (SMOOTH SCROLLING) ================= -->
 
 		<section class="quick-access" id="quick-access">
 			<h1 class="heading">Quick <span>Navigation</span></h1>
 			<div class="quick-container">
-						<!-- NOTES -->
+				
+				<!-- 📘 1. NOTES (Scrolls down to Notes Section) -->
 				<a href="#notes" class="quick-card notes-card">
 					<div class="icon-box"><i class="fas fa-book card-blue"></i></div>
 						<h3>Notes</h3>
 						<p>Semester 1 - 6</p>
 					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
 				</a>
-						<!-- PYQ -->
+
+				<!-- 📄 2. PYQ (Scrolls down to PYQ Section) -->
 				<a href="#pyq" class="quick-card pyq-card">
 					<div class="icon-box"><i class="fas fa-file-alt card-red"></i></div>
 						<h3>PYQ</h3>
 						<p>Previous Year Questions</p>
 					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
 				</a>
-						<!-- SYLLABUS -->
+
+				<!-- 🗂️ 3. SYLLABUS (Scrolls down to Syllabus Section) -->
 				<a href="#syllabus" class="quick-card syllabus-card">
 					<div class="icon-box"><i class="fas fa-graduation-cap card-green"></i></div>
 						<h3>Syllabus</h3>
 						<p>Semester 1 - 6</p>
 					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
 				</a>
-						<!-- NOTICE -->
+
+				<!-- 📢 4. NOTICE (Scrolls down to Notice area) -->
 				<a href="#notice" class="quick-card notice-card">
 					<div class="icon-box"><i class="fas fa-bullhorn card-orange"></i></div>
 						<h3>Notice</h3>
 						<p>Latest Updates</p>
 					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
 				</a>
-						<!-- CONTACT -->
+
+				<!-- 📞 5. CONTACT (Scrolls down to Contact Form) -->
 				<a href="#about-contact" class="quick-card contact-card">
 					<div class="icon-box"><i class="fas fa-phone card-purple"></i></div>
 					<h3>Contact</h3>
 					<p>Get Help</p>
 					<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
 				</a>
-						<!-- QUICK LINKS -->
+
+				<!-- 🔗 6. QUICK LINKS (Scrolls down to Footer Grid) -->
 				<a href="#footer" class="quick-card links-card">
 					<div class="icon-box"><i class="fas fa-link card-sky"></i></div>
 					<h3>Quick Links</h3>
@@ -1229,7 +1235,7 @@
     <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #4caf50; padding-left: 10px;">
         📚 BCA Semester Syllabus
     </h3>
-    <div class="quick-container" style="margin-bottom: 5rem;">
+    <div id="syllabus" class="quick-container" style="margin-bottom: 5rem;">
         <a href="Syllabus/sem1.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
             <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
             <h3>Semester - I</h3><p>BCA Syllabus Part 1</p>
@@ -1266,7 +1272,7 @@
     <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #f44336; padding-left: 10px;">
         📄 Previous Year Questions (PYQ)
     </h3>
-    <div class="quick-container" style="margin-bottom: 5rem;">
+    <div id="pyq" class="quick-container" style="margin-bottom: 5rem;">
         <a href="javascript:void(0)" onclick="openPyqPopup(1)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
             <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
             <h3>Semester - I</h3><p>All Sessions Papers</p>
@@ -1303,7 +1309,7 @@
     <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #2196f3; padding-left: 10px;">
         📘 BCA Subject Wise Notes
     </h3>
-    <div class="quick-container" style="margin-bottom: 2rem;">
+    <div id="notes" class="quick-container" style="margin-bottom: 2rem;">
         <a href="javascript:void(0)" onclick="openNotesPopup(1)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
             <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
             <h3>Semester - I</h3><p>Subject Wise Notes</p>
