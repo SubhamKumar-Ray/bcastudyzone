@@ -188,6 +188,258 @@ ul.dropdown li:hover .dropdown1 {
     border-radius: 5px;
     box-shadow: var(--box-shadow);
 }
+/* ==================== UNIVERSAL SAFE PROFESSIONAL HEADER ==================== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 8%;
+    
+    /* ⚪ लाइट मोड में डिफ़ॉल्ट सफ़ेद बैकग्राउंड */
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* लोगो कंटेनर स्ट्रक्चर */
+.logo-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    text-decoration: none !important;
+}
+
+.logo-text-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    line-height: 1.3 !important;
+}
+
+/* 🎯 लाइट मोड में टेक्स्ट कलर्स (एकदम साफ़ दिखने वाले) */
+.logo-text .txt-black {
+    color: #1e293b !important; /* गहरा चारकोल ब्लैक - लाइट मोड के लिए */
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+}
+
+.logo-text .txt-red {
+    color: #df2020 !important; /* साफ़ और गहरा लाल रंग */
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+}
+
+/* ऑथर नाम - लाइट मोड */
+.logo-container .author-name {
+    font-size: 1.1rem !important;
+    color: #475569 !important; /* मीडियम स्लेट ग्रे */
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* 🌐 लाइट मोड में नेवबार लिंक्स (Professional Blue-Grey Accent) */
+.header .navbar a {
+    font-size: 1.5rem !important;
+    margin: 0 1.2rem !important;
+    color: #334155 !important; /* साफ़ दिखने वाला गहरा रंग */
+    font-weight: 600 !important;
+    transition: color 0.2s ease !important;
+}
+
+/* होवर करने पर आपका प्राइमरी ब्रांड ब्लू कलर */
+.header .navbar a:hover {
+    color: #009dff !important;
+}
+
+/* राइट साइड के आइकन्स - लाइट मोड */
+.header .icons div {
+    color: #334155 !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   🌑 डार्क मोड अपग्रेड (जब छात्र या एक्सटर्नल मून आइकॉन दबाएगा)
+   ────────────────────────────────────────────────────────── */
+.dark-mode .header {
+    background: #111827 !important; /* प्योर प्रीमियम डार्क नाइट (Rich Dark) */
+    border-bottom: 1px solid #1f2937 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* डार्क मोड में 'BCA Study' सफ़ेद हो जाएगा */
+.dark-mode .logo-text .txt-black {
+    color: #ffffff !important;
+}
+
+/* डार्क मोड में 'Zone' और निखर कर लाल दिखेगा */
+.dark-mode .logo-text .txt-red {
+    color: #ff3b3b !important;
+}
+
+/* डार्क मोड में ऑथर नाम */
+.dark-mode .logo-container .author-name {
+    color: #9ca3af !important; /* लाइट सिल्वर ग्रे */
+}
+
+/* डार्क मोड में नेवबार लिंक्स */
+.dark-mode .header .navbar a {
+    color: #e5e7eb !important; /* आँखों को आराम देने वाला वाइट-ग्रे */
+}
+
+.dark-mode .header .navbar a:hover {
+    color: #00f7ff !important; /* नियॉन स्काई ब्लू होवर इफ़ेक्ट */
+}
+
+/* डार्क मोड में आइकन्स */
+.dark-mode .header .icons div {
+    color: #e5e7eb !important;
+}
+
+/* ==================== NEW LOGO ALIGNMENT STYLE ==================== */
+.logo-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important; /* लोगो इमेज और टेक्स्ट के बीच का स्पेस */
+    text-decoration: none !important;
+}
+
+.header-logo {
+    height: 45px !important;  /* हेडर के हिसाब से परफेक्ट ऊंचाई */
+    width: 45px !important;   /* चौड़ाई */
+    object-fit: contain !important;
+    border-radius: 50% !important; /* गोल (Circle) शेप के लिए */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    transition: transform 0.3s ease !important;
+}
+
+.logo-container:hover .header-logo {
+    transform: rotate(360deg); /* लोगो पर माउस ले जाने पर घूमने वाला मज़ेदार इफ़ेक्ट */
+}
+
+.logo-text {
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+
+.dark-mode .logo-text {
+    color: #ffffff !important;
+}
+/* ==================== EXECUTIVE TEXT & MULTI-COLOR NAVBAR ==================== */
+/* लोगो टेक्स्ट को ऊपर-नीचे सेट करने के लिए डिब्बा */
+.logo-text-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    line-height: 1.2 !important;
+}
+
+/* BCA Study का ब्लैक कलर */
+.logo-text .txt-black {
+    color: #0f172a !important; /* Charcoal Black */
+    font-weight: 700 !important;
+}
+
+/* Zone का रेड कलर */
+.logo-text .txt-red {
+    color: #ff1744 !important; /* Perfect Red */
+    font-weight: 700 !important;
+}
+
+/* नीचे छोटे अक्षरों में आपका नाम */
+.logo-container .author-name {
+    font-size: 1.1rem !important;
+    color: #64748b !important; /* Soft Slate Grey */
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 2px !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   🎨 नेवबार के सभी लिंक्स का अलग-अलग टेक्स्ट कलर (Multi-Color)
+   ────────────────────────────────────────────────────────── */
+
+/* 1. Home - Royal Blue */
+.header .navbar ul li:nth-child(1) > a { color: #2563eb !important; font-weight: 600; }
+
+/* 2. Syllabus - Green */
+.header .navbar ul li:nth-child(2) > a { color: #16a34a !important; font-weight: 600; }
+
+/* 3. PYQ - Dark Orange/Red */
+.header .navbar ul li:nth-child(3) > a { color: #ea580c !important; font-weight: 600; }
+
+/* 4. Notes - Purple */
+.header .navbar ul li:nth-child(4) > a { color: #9333ea !important; font-weight: 600; }
+
+/* 5. About - Magenta/Pink */
+.header .navbar ul li:nth-child(5) > a { color: #db2777 !important; font-weight: 600; }
+
+/* 6. Quick Link - Teal/Sky Blue */
+.header .navbar ul li:nth-child(6) > a { color: #0d9488 !important; font-weight: 600; }
+
+/* 7. Contact - Deep Navy */
+.header .navbar ul li:nth-child(7) > a { color: #1e3a8a !important; font-weight: 600; }
+
+
+/* होवर करने पर सभी लिंक्स पर हल्का सा अंडरलाइन या इफ़ेक्ट */
+.header .navbar a:hover {
+    filter: brightness(1.2) !important;
+    text-decoration: underline !important;
+}
+
+/* ==================== DARK MODE ADJUSTMENT ==================== */
+/* डार्क मोड में ब्लैक टेक्स्ट को वाइट कर देंगे ताकि साफ़ दिखे, रेड वैसे ही रहेगा */
+.dark-mode .logo-text .txt-black {
+    color: #ffffff !important;
+}
+
+.dark-mode .logo-container .author-name {
+    color: #cbd5e1 !important; /* डार्क मोड में नाम का कलर हल्का वाइट */
+}
+
+/* डार्क मोड में मोबाइल रिस्पॉन्सिविटी के दौरान लिंक्स का कलर वाइट रखना बेहतर होता है */
+@media (max-width: 767px) {
+    .header .navbar ul li > a {
+        color: #ffffff !important; /* मोबाइल मेनू के अंदर सफ़ेद रंग बेस्ट रहेगा */
+    }
+}
+/* मोबाइल रिस्पॉन्सिविटी के लिए छोटा एडजस्टमेंट */
+@media (max-width: 480px) {
+    .header-logo {
+        height: 38px !important;
+        width: 38px !important;
+    }
+    .logo-text {
+        font-size: 1.8rem !important; /* मोबाइल स्क्रीन पर टेक्स्ट छोटा हो जाएगा */
+    }
+}
+/* ==================== NEW TRANSPARENT LOGO STYLE ==================== */
+.logo-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    text-decoration: none !important;
+}
+
+.header-logo {
+    height: 52px !important;   /* बिना बैकग्राउंड के यह साइज हेडर में एकदम परफेक्ट दिखेगा */
+    width: auto !important;     /* चौड़ाई अपने आप एडजस्ट होगी */
+    object-fit: contain !important;
+    border-radius: 0 !important; /* ❌ गोल घेरा यहाँ से हटा दिया गया है */
+    box-shadow: none !important; /* ❌ शैडो हटा दी गई है */
+    transition: transform 0.3s ease !important;
+}
+
+/* माउस ले जाने पर हल्का सा ज़ूम इफ़ेक्ट */
+.logo-container:hover .header-logo {
+    transform: scale(1.08); 
+}
+
 
 .header {
     position: fixed;
