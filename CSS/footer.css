@@ -84,74 +84,79 @@ ul.dropdown2 li:hover .dropdown3 {
 =================================================== */
 .contact_info {
     display: flex !important;
-    flex-direction: row !important;      /* डेस्कटॉप पर आमने-सामने (लेफ्ट-राइट) */
-    justify-content: center !important;  /* स्क्रीन के बीच में रखेगा */
-    align-items: flex-start !important;  /* ऊपर से लेवल बराबर रखेगा */
-    gap: 50px !important;                /* दोनों के बीच की दूरी */
+    flex-direction: row !important;      /* 🔴 कंप्यूटर और मोबाइल 'Desktop Site' दोनों में हमेशा लेफ्ट-राइट रखेगा */
+    flex-wrap: nowrap !important;        
+    justify-content: center !important;  
+    align-items: flex-start !important;  
+    gap: 40px !important;                
     max-width: 1200px !important;
     margin: 50px auto 0 auto !important; 
     padding: 0 4% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .about_me {
-    width: 45% !important;               /* डेस्कटॉप पर बाएं तरफ की चौड़ाई */
-    text-align: center;
+    width: 48% !important;               /* बाएं तरफ का हिस्सा (About Us) */
+    min-width: 320px !important;
     margin: 0 !important;
+    text-align: center;
 }
-.about_me h2 { font-size: 30px; }
-.about_me h3 { font-size: 20px; }
-.about_me p { font-size: 15px; margin: 10px 50px; }
+.about_me h2 { font-size: 3.5rem; margin-bottom: 25px; font-weight: 700; }
 
 /* 🟡 प्योर ब्राइट पीला मैसेज बॉक्स स्टाइल */
 .msg {
-    width: 45% !important;               /* डेस्कटॉप पर दाएं तरफ की चौड़ाई */
+    width: 48% !important;               /* दाएं तरफ का हिस्सा (Message Box) */
+    min-width: 320px !important;
     margin: 0 !important;
     padding: 30px !important;
     border: 2px solid #b59300 !important;
     border-radius: 20px !important;
-    background-color: #FFFF00 !important; /* 100% प्योर येलो */
+    background-color: #FFFF00 !important; /* 100% प्योर पीला बैकग्राउंड */
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
     position: relative !important;
     box-sizing: border-box !important;
 }
 
-/* डार्क मोड में मैसेज बॉक्स */
+/* डार्क मोड में भी मैसेज बॉक्स का पीला शेड नियंत्रित रखना */
 .dark-mode .msg {
     background-color: #ffe600 !important; 
     border-color: #000000 !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* टेक्स्ट कलर्स (डार्क रेड और ब्लू) */
+/* हेडर और पैराग्राफ टेक्स्ट (साफ़ विजिबिलिटी के लिए) */
 .msg h4, .msg .msg-header h4 {
-    margin-bottom: 10px !important;
-    font-size: 26px !important;
-    color: #990000 !important;          /* 🔴 डार्क रेड हेडिंग */
+    margin-bottom: 5px !important;
+    font-size: 2.4rem !important;
+    color: #990000 !important;          /* 🔴 हेडिंग डार्क रेड */
     font-weight: 700 !important;
     text-align: center !important;
 }
 .msg p, .msg .msg-header p {
-    font-size: 14px !important;
+    font-size: 1.35rem !important;
     margin-bottom: 15px !important;
-    color: #00008B !important;          /* 🔵 डार्क ब्लू पैराग्राफ टेक्स्ट */
+    color: #00008B !important;          /* 🔵 पैराग्राफ टेक्स्ट डार्क ब्लू */
     font-weight: 600 !important;
     text-align: center !important;
 }
 
-/* इनपुट्स और आइकन्स का रंग */
+/* इनपुट ग्रुप्स आइकन्स */
 .input-group {
     position: relative !important;
+    margin-bottom: 18px !important;
 }
 .input-group i {
     position: absolute !important;
     left: 15px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    color: #00008B !important;          /* 🔵 डार्क ब्लू आइकन्स */
-    font-size: 16px !important;
+    color: #00008B !important;          /* 🔵 आइकन्स डार्क ब्लू */
+    font-size: 1.6rem !important;
     z-index: 2 !important;
 }
 .input-group.text-group i {
-    top: 20px !important;
+    top: 15px !important;
     transform: none !important;
 }
 
@@ -163,13 +168,12 @@ ul.dropdown2 li:hover .dropdown3 {
 .input-group textarea {
     width: 100% !important;
     padding: 12px 12px 12px 45px !important;
-    margin-bottom: 15px !important;
-    border: 2px solid #00008B !important; /* 🔵 डार्क ब्लू बॉर्डर्स */
+    border: 2px solid #00008B !important; /* 🔵 बॉर्डर्स डार्क ब्लू */
     border-radius: 10px !important;
-    font-size: 15px !important;
+    font-size: 1.4rem !important;
     font-weight: 600 !important;
     background-color: #ffffff !important;
-    color: #990000 !important;          /* 🔴 डार्क रेड इनपुट टेक्स्ट */
+    color: #990000 !important;          /* 🔴 अंदर का इनपुट टेक्स्ट डार्क रेड */
     box-sizing: border-box !important;
 }
 .msg input::placeholder, 
@@ -178,32 +182,7 @@ ul.dropdown2 li:hover .dropdown3 {
     font-weight: 500 !important;
 }
 
-/* सबमिट बटन */
-#submit {
-    border: none !important;
-    background-color: orangered !important;
-    color: white !important;
-    width: 100% !important;
-    padding: 14px !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    margin-top: 5px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 10px !important;
-    box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3) !important;
-    transition: all 0.3s ease !important;
-}
-#submit:hover {
-    background-color: green !important;
-    box-shadow: 0 5px 15px rgba(0, 128, 0, 0.4) !important;
-    transform: translateY(-2px) !important;
-}
-
-/* टीम स्लाइडर फ़िक्स */
+/* टीम स्लाइडर और बायो टेक्स्ट बेस स्टाइल */
 .team-slide {
     position: relative !important;
     width: 100% !important;
@@ -211,74 +190,96 @@ ul.dropdown2 li:hover .dropdown3 {
     margin: auto !important;
     min-height: 480px !important; 
 }
-.about_image img {
-    margin-top: 30px;
-    width: 150px;
-    border-radius: 50%;
-    border: 5px solid #eee;
+.bio-text {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    margin: 15px 30px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.02);
 }
-strong { color: crimson; }
-.footer1 .credit {
-    text-align: center;
-    margin-top: 2rem;
-    padding: 1rem 2.5rem;
-    font-size: 2rem;
-}
-.footer1 .credit p { color: #666; font-size: 10px; }
-.footer1 .credit span { color: var(--orange); }
+.text-orange { color: #ff7800; border-left: 4px solid #ff7800; }
+.text-blue { color: #0066ff; border-left: 4px solid #0066ff; }
+.text-green { color: #2e7d32; border-left: 4px solid #2e7d32; }
 
+#submit {
+    border: none !important;
+    background: linear-gradient(135deg, #009dff, #00f7ff) !important;
+    color: white !important;
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 1.6rem !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 20px rgba(0, 157, 255, 0.25) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
 
 /* ===================================================
-   3. TOTAL RESPONSIVE FIXES (मीडिया क्वेरीज सबसे नीचे)
+   3. PURE MOBILE RESPONSIVE LAYOUT (768px से नीचे)
 =================================================== */
-
-@media (max-width: 1280px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
-}
-
-@media (max-width: 1024px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 80px; top: 40px; }
-}
-
-/* 📱 टैबलेट और मोबाइल कंबाइंड सुधार (991px) */
-@media (max-width: 991px) {
+@media (max-width: 768px) {
+    /* मोबाइल व्यू होने पर ही एलिमेंट्स ऊपर-नीचे अलाइन होंगे */
     .contact_info {
-        display: flex !important;
-        flex-direction: column !important; /* मोबाइल पर ऊपर-नीचे अलाइनमेंट */
-        gap: 50px !important;              /* अबाउट मी और पीले बॉक्स के बीच मजबूत गैप */
+        flex-direction: column !important; 
+        gap: 40px !important;              
         padding: 0 20px !important;
         margin-top: 30px !important;
     }
-    .about_me, .msg {
-        width: 100% !important;            /* मोबाइल पर पूरी चौड़ाई */
-        max-width: 500px !important;       /* कार्ड लेआउट बैलेंस */
+    
+    .about_me {
+        width: 100% !important;
+        max-width: 500px !important;
         margin: 0 auto !important;
     }
-    .about_me {
-        margin-bottom: 0px !important;
-    }
+
+    /* 🔴 ओवरलैप रोकने के लिए मोबाइल पर स्लाइडर को फ्लेक्स-रिलेटिव स्ट्रक्चर दिया */
     .team-slide {
-        min-height: 460px !important; 
+        position: relative !important;
+        width: 100% !important;
+        min-height: auto !important; 
+        display: flex !important;
+        flex-direction: column !important;
     }
-}
 
-@media (max-width: 800px) {
-    .column { flex: 50%; max-width: 50%; }
-}
-
-/* 📱 मोबाइल स्पेसिफिक सोशल आइकन्स और कॉलम्स फ़िक्स */
-@media (max-width: 768px) {
     .team-member {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        display: none !important; 
+        opacity: 0;
+        transform: none !important;
         padding: 2.5rem 1.5rem !important;
     }
-    /* सोशल आइकन्स ऑटो-रैप सुविधा */
+
+    .team-member.active {
+        display: block !important; 
+        opacity: 1;
+    }
+
+    /* मोबाइल व्यू में पीला बॉक्स सुरक्षित रूप से नीचे रहेगा */
+    .msg {
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 10px auto 0 auto !important; 
+        position: relative !important;
+        clear: both !important;
+        z-index: 10 !important;
+    }
+
+    /* 🔴 सोशल आइकन्स का ऑटो-रैप (नया आइकॉन जोड़ने पर खुद-ब-खुद नीचे एडजस्ट होगा) */
     .contact-icon {
         display: flex !important;
         justify-content: center !important;
         align-items: flex-end !important;
         gap: 15px 12px !important;       
         width: 100% !important;
-        flex-wrap: wrap !important;        /* नए आइकॉन आने पर अपने आप नीचे आ जाएंगे */
+        flex-wrap: wrap !important;        
         margin-top: 25px !important;
     }
     .contact-icon > a, .contact-icon .social-item a {
@@ -292,26 +293,26 @@ strong { color: crimson; }
     }
 }
 
+/* ===================================================
+   4. EXTRA MISC RESPONSIVE STYLES
+=================================================== */
+@media (max-width: 1280px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
+}
+@media (max-width: 1024px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 80px; top: 40px; }
+}
+@media (max-width: 800px) {
+    .column { flex: 50%; max-width: 50%; }
+}
 @media (max-width: 600px) {
     .column { flex: 100%; max-width: 100%; }
     ul.dropdown2 li:hover .dropdown3 { left: 330px; top: 35px; }
 }
-
 @media (max-width: 480px) {
     ul.dropdown2 li:hover .dropdown3 { left: 280px; top: 20px; }
-    .team-slide { min-height: 510px !important; } /* छोटे स्क्रीन पर आइकन्स को पूरा स्पेस */
 }
-
-@media (max-width: 450px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 250px; top: 20px; }
-}
-
-@media (max-width: 400px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 240px; top: 20px; }
-}
-
 @media (max-width: 380px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
     .contact-icon { gap: 12px 8px !important; }
     .contact-icon > a, .contact-icon .social-item a { font-size: 1.8rem !important; }
 }
