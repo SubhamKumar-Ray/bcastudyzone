@@ -14,280 +14,396 @@ body{
     padding:5px;
     color: orange;
 } */
-.footer{
+/* ===================================================
+   1. BASE STRUCTURE & DROPDOWNS (डेस्कटॉप डिफ़ॉल्ट)
+=================================================== */
+.footer {
     margin-top: 50px;
     font-size: 15px;
 }
-.row{
+.row {
     display: flex;
     flex-wrap: wrap;
     padding: 0 4px;
     text-align: center;
 }
-.column{
+.column {
     flex: 25%;
     max-width: 25%;
-    /* padding: 0 4px; */
 }
-.column h3{
+.column h3 {
     margin-top: 20px;
 }
-
-.column ul{
+.column ul {
     list-style: none;
 }
-.row .column li{
-    /* margin-top: 5px; */
-    display:grid;
+.row .column li {
+    display: grid;
     cursor: pointer;
-
 }
-.row .column li i{
-    color:blue;
+.row .column li i {
+    color: blue;
 }
-
-.row .column li a{
+.row .column li a {
     color: #666;
     cursor: pointer;
 }
-.row .column li a:hover{
+.row .column li a:hover {
     color: orange;
     text-decoration: underline;
     padding-left: 1.5rem;
 }
-.column li{
+.column li {
     position: relative;
     display: inline-block;
-  }
-  .dropdown3{
-    display:none ;  
+}
+.dropdown3 {
+    display: none;  
     z-index: 999;
-    background:#fff;
+    background: #fff;
     border-radius: 5px;
     box-shadow: var(--box-shadow);  
-  }
-  .dropdown3 li{
+}
+.dropdown3 li {
     color: crimson;
     margin: 0;
     padding: 5px 0px;
     border: 1px solid orange;
     cursor: pointer;
-
-    /* border-radius: 0; */
-
-  }
-  ul.dropdown2 li:hover .dropdown3{
+}
+ul.dropdown2 li:hover .dropdown3 {
     display: block;
     width: 130px;
-    position:absolute;
+    position: absolute;
     left: 250px;    
     top: 20px;
-  }
-
-  /* about me and msg section  */
-
-.contact_info{
-    display: flex;
-    margin-top: 50px;
-    
 }
 
-.about_me{
-    width: 50%;
+/* ===================================================
+   2. DESKTOP LAYOUT (About Us & Yellow Message Box)
+=================================================== */
+.contact_info {
+    display: flex !important;
+    flex-direction: row !important;      /* डेस्कटॉप पर आमने-सामने (लेफ्ट-राइट) */
+    justify-content: center !important;  /* स्क्रीन के बीच में रखेगा */
+    align-items: flex-start !important;  /* ऊपर से लेवल बराबर रखेगा */
+    gap: 50px !important;                /* दोनों के बीच की दूरी */
+    max-width: 1200px !important;
+    margin: 50px auto 0 auto !important; 
+    padding: 0 4% !important;
+}
+
+.about_me {
+    width: 45% !important;               /* डेस्कटॉप पर बाएं तरफ की चौड़ाई */
     text-align: center;
-    /* background: yellow; */
-    margin: 0 40px;
+    margin: 0 !important;
+}
+.about_me h2 { font-size: 30px; }
+.about_me h3 { font-size: 20px; }
+.about_me p { font-size: 15px; margin: 10px 50px; }
 
-}
-.about_me h2{
-    font-size: 30px;
-}
-.about_me h3{
-    font-size: 20px;
-}
-.about_me p{
-    font-size: 15px;
-    margin: 10px 50px;
-}
-.contact-icon{
-    margin-top: 10px;
-    font-size: 30px;
-   
-}
-.contact-icon a{
-    padding: 0 10px;
-    text-decoration: none;
-    color: #666;
-    transition: all 0.3s linear;
+/* 🟡 प्योर ब्राइट पीला मैसेज बॉक्स स्टाइल */
+.msg {
+    width: 45% !important;               /* डेस्कटॉप पर दाएं तरफ की चौड़ाई */
+    margin: 0 !important;
+    padding: 30px !important;
+    border: 2px solid #b59300 !important;
+    border-radius: 20px !important;
+    background-color: #FFFF00 !important; /* 100% प्योर येलो */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+    position: relative !important;
+    box-sizing: border-box !important;
 }
 
-.contact-icon a:hover {
-    transform: scale(1.5);
-}
-.fa-instagram:hover{
-    color: #e11d74;
-}
-.fa-linkedin:hover {
-    color: #04009a;
-}
-.fa-whatsapp:hover {
-    color: green;
-}
-.fa-twitter:hover {
-    color: #00adb5;
+/* डार्क मोड में मैसेज बॉक्स */
+.dark-mode .msg {
+    background-color: #ffe600 !important; 
+    border-color: #000000 !important;
 }
 
-.about_image img{
+/* टेक्स्ट कलर्स (डार्क रेड और ब्लू) */
+.msg h4, .msg .msg-header h4 {
+    margin-bottom: 10px !important;
+    font-size: 26px !important;
+    color: #990000 !important;          /* 🔴 डार्क रेड हेडिंग */
+    font-weight: 700 !important;
+    text-align: center !important;
+}
+.msg p, .msg .msg-header p {
+    font-size: 14px !important;
+    margin-bottom: 15px !important;
+    color: #00008B !important;          /* 🔵 डार्क ब्लू पैराग्राफ टेक्स्ट */
+    font-weight: 600 !important;
+    text-align: center !important;
+}
+
+/* इनपुट्स और आइकन्स का रंग */
+.input-group {
+    position: relative !important;
+}
+.input-group i {
+    position: absolute !important;
+    left: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #00008B !important;          /* 🔵 डार्क ब्लू आइकन्स */
+    font-size: 16px !important;
+    z-index: 2 !important;
+}
+.input-group.text-group i {
+    top: 20px !important;
+    transform: none !important;
+}
+
+.msg input, 
+.msg select, 
+.msg textarea,
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100% !important;
+    padding: 12px 12px 12px 45px !important;
+    margin-bottom: 15px !important;
+    border: 2px solid #00008B !important; /* 🔵 डार्क ब्लू बॉर्डर्स */
+    border-radius: 10px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    background-color: #ffffff !important;
+    color: #990000 !important;          /* 🔴 डार्क रेड इनपुट टेक्स्ट */
+    box-sizing: border-box !important;
+}
+.msg input::placeholder, 
+.msg textarea::placeholder {
+    color: #444444 !important;
+    font-weight: 500 !important;
+}
+
+/* सबमिट बटन */
+#submit {
+    border: none !important;
+    background-color: orangered !important;
+    color: white !important;
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    margin-top: 5px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+    box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+#submit:hover {
+    background-color: green !important;
+    box-shadow: 0 5px 15px rgba(0, 128, 0, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* टीम स्लाइडर फ़िक्स */
+.team-slide {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: auto !important;
+    min-height: 480px !important; 
+}
+.about_image img {
     margin-top: 30px;
     width: 150px;
     border-radius: 50%;
-    /* border: 5px solid #cbcaca; */
     border: 5px solid #eee;
 }
-
-strong{
-    color: crimson;
-}
-
-/* sheet  */
-
-.msg{
-    width: 50%;
-    margin: 0 40px;
-    padding: 30px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    background-color: #15114c;
-}
-h4{
-    margin-bottom: 10px;
-    font-size: 24px;
-    color: white;
-}
-.msg p{
-    font-size: 15px;
-    margin-bottom: 10px;
-    color: green;
-}
-input{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-textarea{
-    width: 100%;
-    padding: 10px;
-}
-#submit{
-    border: none;
-    background-color: orangered;
-    color: white;
-    width: 200px;
-    margin-top: 10px;
-    border-radius: 5px;
-}
-#submit:hover{
-    background-color: green;
-}
-/* footer end section  */
-
-
-.footer1 .credit{
+strong { color: crimson; }
+.footer1 .credit {
     text-align: center;
     margin-top: 2rem;
-    padding:1rem;
-    padding-top: 2.5rem;
+    padding: 1rem 2.5rem;
     font-size: 2rem;
 }
-.footer1 .credit p{
-    color: #666;
-    font-size: 10px;
+.footer1 .credit p { color: #666; font-size: 10px; }
+.footer1 .credit span { color: var(--orange); }
+
+
+/* ===================================================
+   3. TOTAL RESPONSIVE FIXES (मीडिया क्वेरीज सबसे नीचे)
+=================================================== */
+
+@media (max-width: 1280px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
 }
 
-.footer1 .credit span{
-    color:var(--orange);
+@media (max-width: 1024px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 80px; top: 40px; }
 }
 
-/* responsivness */
-
-@media (max-width:1280px){
-
-    ul.dropdown2 li:hover .dropdown3{
-        left: 220px;    
-        top: 20px;
-      }
-}
-
-@media (max-width:1024px) {
-    ul.dropdown2 li:hover .dropdown3{
-        left: 80px;    
-        top: 40px;
-      }
-}
-
-@media (max-width:991px){
-    .contact_info{
-        display: block;
-        /* text-align: center; */
+/* 📱 टैबलेट और मोबाइल कंबाइंड सुधार (991px) */
+@media (max-width: 991px) {
+    .contact_info {
+        display: flex !important;
+        flex-direction: column !important; /* मोबाइल पर ऊपर-नीचे अलाइनमेंट */
+        gap: 50px !important;              /* अबाउट मी और पीले बॉक्स के बीच मजबूत गैप */
+        padding: 0 20px !important;
+        margin-top: 30px !important;
     }
-    .about_me{
-        width: 100%;
-        text-align: center;
-        margin-bottom: 50px;
-        margin-left: 0px;
-        /* margin: 0 50px; */
+    .about_me, .msg {
+        width: 100% !important;            /* मोबाइल पर पूरी चौड़ाई */
+        max-width: 500px !important;       /* कार्ड लेआउट बैलेंस */
+        margin: 0 auto !important;
     }
-    .msg{
-        /* margin-top:100px; */
-        width:90%;
-        margin: auto;
-        /* margin-right:200px; */
+    .about_me {
+        margin-bottom: 0px !important;
     }
-    /* .about_me p{
-        margin: 10px 80px;
-    } */
-}
-
-@media(max-width:800px){
-    .column{
-        flex: 50%;
-        max-width: 50%;
+    .team-slide {
+        min-height: 460px !important; 
     }
 }
 
+@media (max-width: 800px) {
+    .column { flex: 50%; max-width: 50%; }
+}
 
-@media(max-width:600px){
-    .column{
-        flex: 100%;
-        max-width: 100%;
+/* 📱 मोबाइल स्पेसिफिक सोशल आइकन्स और कॉलम्स फ़िक्स */
+@media (max-width: 768px) {
+    .team-member {
+        padding: 2.5rem 1.5rem !important;
     }
-    ul.dropdown2 li:hover .dropdown3{
-        left: 330px;    
-        top: 35px;
-      }
+    /* सोशल आइकन्स ऑटो-रैप सुविधा */
+    .contact-icon {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-end !important;
+        gap: 15px 12px !important;       
+        width: 100% !important;
+        flex-wrap: wrap !important;        /* नए आइकॉन आने पर अपने आप नीचे आ जाएंगे */
+        margin-top: 25px !important;
+    }
+    .contact-icon > a, .contact-icon .social-item a {
+        font-size: 2rem !important;
+    }
+    .contact-icon .social-item {
+        display: inline-flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        min-width: 35px !important;
+    }
 }
 
-@media (max-width:480px){
-    ul.dropdown2 li:hover .dropdown3{
-        left: 280px;    
-        top: 20px;
-      }
+/* ===================================================
+   3. TOTAL RESPONSIVE & OVERLAP FIXES (मीडिया क्वेरीज सबसे नीचे)
+=================================================== */
+
+@media (max-width: 1280px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
 }
-@media (max-width:450px){
-    ul.dropdown2 li:hover .dropdown3{
-        left: 250px;    
-        top: 20px;
-      }
+
+@media (max-width: 1024px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 80px; top: 40px; }
 }
-@media (max-width:400px){
-    ul.dropdown2 li:hover .dropdown3{
-        left: 240px;    
-        top: 20px;
-      }
+
+/* 📱 टैबलेट और मोबाइल कंबाइंड सुधार (991px) */
+@media (max-width: 991px) {
+    .contact_info {
+        display: flex !important;
+        flex-direction: column !important; /* मोबाइल पर ऊपर-नीचे अलाइनमेंट */
+        gap: 30px !important;              /* अबाउट मी और पीले बॉक्स के बीच परफेक्ट गैप */
+        padding: 0 20px !important;
+        margin-top: 30px !important;
+    }
+    
+    .about_me {
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 0 auto !important;
+    }
+
+    /* 🔴 ओवरलैप को रोकने के लिए सबसे ज़रूरी सुधार */
+    .team-slide {
+        position: relative !important;
+        width: 100% !important;
+        min-height: auto !important; /* फिक्स हाइट हटा दी */
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* 🔴 एब्सोल्यूट हटाकर रिलेटिव किया ताकि कार्ड अपनी जगह घेरे और पीला बॉक्स नीचे ही रहे */
+    .team-member {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        display: none !important; /* सिर्फ एक्टिव मेंबर ही दिखेगा */
+        opacity: 0;
+        transform: none !important;
+        padding: 2.5rem 1.5rem !important;
+        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,0.1) !important;
+        border-radius: 15px !important;
+    }
+
+    .team-member.active {
+        display: block !important; /* एक्टिव मेंबर का पूरा डिब्बा रेंडर होगा */
+        opacity: 1;
+    }
+
+    /* 🟡 पीला मैसेज बॉक्स स्टाइल */
+    .msg {
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 10px auto 0 auto !important; /* ऊपर से हल्का गैप */
+        position: relative !important;
+        clear: both !important;
+    }
 }
-@media (max-width:380px){
-    ul.dropdown2 li:hover .dropdown3{
-        left: 220px;    
-        top: 20px;
-      }
+
+@media (max-width: 800px) {
+    .column { flex: 50%; max-width: 50%; }
+}
+
+/* 📱 मोबाइल स्पेसिफिक सोशल आइकन्स और कॉलम्स फ़िक्स */
+@media (max-width: 768px) {
+    /* सोशल आइकन्स ऑटो-रैप सुविधा */
+    .contact-icon {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-end !important;
+        gap: 15px 12px !important;       
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        margin-top: 25px !important;
+    }
+    .contact-icon > a, .contact-icon .social-item a {
+        font-size: 2rem !important;
+    }
+    .contact-icon .social-item {
+        display: inline-flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        min-width: 35px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .column { flex: 100%; max-width: 100%; }
+    ul.dropdown2 li:hover .dropdown3 { left: 330px; top: 35px; }
+}
+
+@media (max-width: 480px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 280px; top: 20px; }
+}
+
+@media (max-width: 450px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 250px; top: 20px; }
+}
+
+@media (max-width: 400px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 240px; top: 20px; }
+}
+
+@media (max-width: 380px) {
+    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
+    .contact-icon { gap: 12px 8px !important; }
+    .contact-icon > a, .contact-icon .social-item a { font-size: 1.8rem !important; }
 }
