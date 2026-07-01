@@ -68,16 +68,16 @@
 								<button onclick="handleEnglishVoiceAndOpen()">🔊 Listen & Continue</button>
 							</div>
 						</div>
-		<div id="mainPage" style="display:none;">
+		<!--<div id="mainPage" style="display:none;">
 					<header class="header">
 						<a href="#home" class="logo"> BCA Study - <span>Zone</span></a>
 							<!--<a href="#home" class="logo">
 							<img src="Gallary/university_logo.png" alt="VBU Logo" class="logo-img"> BCA Study Zone – <span>SUBHAM</span></a>-->
-							<nav class="navbar">
+						<!--	<nav class="navbar">
 								<ul>
 									<li><a href="#home">Home</a></li>									
 										<!-- BCA FULL NOTES AND PYQ  -->
-										<li><a> Syllabus <i class="fas fa-caret-down"></i></a>
+									<!--	<li><a> Syllabus <i class="fas fa-caret-down"></i></a>
 											<ul class="dropdown">
 													<li><a href="Syllabus/full.html" target="_blank">Full Syllabus</a></li>
 													<li><a href="Syllabus/sem1.html" target="_blank">SEMESTER - 1</a></li>
@@ -292,7 +292,77 @@
                         <label for="search-box" class="fas fa-search"></label>
                 </form>
         </header>
+-->
+        <!-- ------------ end header section ------------------- -->
+		<div id="mainPage" style="display:none;">
+        <header class="header">
+                <!-- 🎯 LEFT SIDE NEW LOGO WITH TEXT -->
+                <!-- 🎯 LEFT SIDE TRANSPARENT LOGO WITH SUBHAM'S BRANDING -->
+				<a href="#home" class="logo-container">
+						<img src="Gallary/logo4.png" alt="BCA Study Zone Logo" class="header-logo">
+						<div class="logo-text-wrapper">
+								<!-- BCA Study (Black) और Zone (Red) -->
+								<span class="logo-text"><span class="txt-black">BCA Study</span> - <span class="txt-red">Zone</span></span>
+								<!-- नीचे छोटा ऑथर नाम -->
+								<span class="author-name">By: - Subham Kumar Ray</span>
+						</div>
+				</a>
+                
+                <nav class="navbar">
+                        <ul>
+                                <li><a href="#home">Home</a></li>									
+                                
+                                <!-- 1. SYLLABUS DROPDOWN -->
+                                <li><a>Syllabus <i class="fas fa-caret-down"></i></a>
+                                        <ul class="dropdown">
+                                                <li><a href="Syllabus/full.html" target="_blank">Full Syllabus</a></li>
+                                                <li><a href="Syllabus/sem1.html" target="_blank">SEMESTER - 1</a></li>
+                                                <li><a href="Syllabus/sem2.html" target="_blank">SEMESTER - 2</a></li>
+                                                <li><a href="Syllabus/sem3.html" target="_blank">SEMESTER - 3</a></li>
+                                                <li><a href="Syllabus/sem4.html" target="_blank">SEMESTER - 4</a></li>
+                                                <li><a href="Syllabus/sem5.html" target="_blank">SEMESTER - 5</a></li>
+                                                <li><a href="Syllabus/sem6.html" target="_blank">SEMESTER - 6</a></li>
+                                        </ul>
+                                </li>
+                                
+                                <!-- 2. PYQ DROPDOWN -->
+                                <li><a>PYQ <i class="fas fa-caret-down"></i></a>
+                                        <ul class="dropdown">											
+                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(1)">SEMESTER - 1</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(2)">SEMESTER - 2</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(3)">SEMESTER - 3</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(4)">SEMESTER - 4</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(5)">SEMESTER - 5</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(6)">SEMESTER - 6</a></li>
+                                        </ul>	
+                                </li>
+                                            
+                                <!-- 3. NOTES DROPDOWN -->
+                                <li><a>Notes <i class="fas fa-caret-down"></i></a>
+                                        <ul class="dropdown">
+                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(1)">SEMESTER - 1</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(2)">SEMESTER - 2</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(3)">SEMESTER - 3</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(4)">SEMESTER - 4</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(5)">SEMESTER - 5</a></li>
+                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(6)">SEMESTER - 6</a></li>
+                                        </ul>
+                                </li>
+                                
+                                <li><a href="#about">About</a></li>
+                                <li><a href="#footer">Quick Link</a></li>
+                                <li><a href="#about-contact">Contact</a></li>
+                        </ul>
+                </nav>          
 
+                <div class="icons">
+                        <!-- 🔍 सर्च का बटन यहाँ से हटा दिया गया है -->
+                        <div onclick="myFunction()" class="fas fa-adjust"></div>
+                        <div class="fas fa-bars" id="menu-btn"></div>
+                </div>
+                
+                <!-- 🔍 सर्च का फॉर्म भी यहाँ से पूरी तरह हटा दिया गया है -->
+        </header>
         <!-- ------------ end header section ------------------- -->
 
 
@@ -348,10 +418,10 @@
 						</li>
 						
 						<!-- Notice 10 -->
-						<!--<li class="important new" data-popup="yes" data-date="2026-07-07">
-							<span>📢 BCA Semester-III Examination Date Session 2024–2027</span>
-							<a href="" class="notice-link">COMMING SOON</a>
-						</li>-->
+						<li class="important new" data-popup="yes" data-date="2026-07-13">
+							<span>📢 BCA Semester-III Admit Card: 2024–2027 (Bachelor of Computer Applications)</span>
+							<a href="" class="notice-link">Coming Soon</a>
+						</li>
 						
 					</ul>
 			</div>
@@ -866,12 +936,12 @@
 
         <!------------------- contact section----------------  -->
 
-        <section class="footer" id="footer">
+      <!--  <section class="footer" id="footer">
                 <h2 style="text-align: center;">Quick <span>Section</span></h2>
                 <div class="row">
 
 								<!-- BCA FULL NOTES & PYQ -->
-						<div id="syllabus" class="column">
+					<!--	<div id="syllabus" class="column">
                                 <h3>Syllabus</h3>
                                 <ul>
                                         <li><a href="Syllabus/full.html" target="_blank"><i class="fas fa-arrow-right"></i> Full Syllabus</a></li>
@@ -902,7 +972,7 @@
 													<li><a href="PYQ/sem1/2024_27.html" target="_blank">2024-2027</a></li>
 													<li><a href="PYQ/sem1/2025_28.html" target="_blank">2025-2028</a></li>
 													<!--<li><a href="" target="_blank">2026-2029</a></li>-->
-                                                </ul>
+                                           <!--     </ul>
 											</li>
                                         <li><a>SEMESTER - 2 <i class="fas fa-caret-right"></i></a>
                                                 <ul class="dropdown3">
@@ -1063,7 +1133,7 @@
                                 </ul>
 							
                         </div>
-                        <div id="notes" class="column">
+                    <!--    <div id="notes" class="column">
                                 <h3>SEMESTER - 4</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem4.html" target="_blank"><i class="fas fa-arrow-right"></i> SEMESTER - IV</a></li>
@@ -1090,14 +1160,13 @@
                                 </ul>
 
                                 <!-- <a href="#">SEMISTER - 6</a> -->
-                        </div>
-                        <div id="notes" class="column">
+                     <!--   <div id="notes" class="column">
                                 <h3>SEMESTER - 5</h3>
                                 <ul class="dropdown2">
                                         <li><a href="Syllabus/sem5.html" target="_blank"><i
                                                                 class="fas fa-arrow-right"></i> SEMESTER - V</a></li>
                                         <!--<li><a href="Syllabus/syllabus5.html" target="_blank"><i class="fas fa-arrow-right"></i> Syllabus - V</a></li>-->
-                                        <li><a href="Notes/sem5/C5001.html"><i class="fas fa-arrow-right"></i> Internet Concept and Web Design</a></li>
+                                    <!--    <li><a href="Notes/sem5/C5001.html"><i class="fas fa-arrow-right"></i> Internet Concept and Web Design</a></li>
                                         <li><a href="Notes/sem5/C5002.html"><i class="fas fa-arrow-right"></i> Design And Analysis of Algorithms</a></li>
                                         <li><a href="Notes/sem5/C5003.html"><i class="fas fa-arrow-right"></i> Linux Programming</a></li>
                                         <li><a href="Notes/sem5/C5004.html"><i class="fas fa-arrow-right"></i> Computer Oriented Numerical Methods</a></li>
@@ -1117,7 +1186,7 @@
                                 </ul>
 
                                 <!-- <a href="#">SEMISTER - 6</a> -->
-                        </div>
+                    <!--    </div>
                         <div id="notes" class="column">
                                 <h3>SEMESTER - 6</h3>
                                 <ul class="dropdown2">
@@ -1149,7 +1218,125 @@
 
 
 
-        </section>
+        </section>-->
+		<!-- ================= UPGRADED COMPLETED QUICK FOOTER SECTION ================= -->
+<section class="footer" id="footer" style="padding: 4rem 8% 2rem 8%;">
+    <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem; font-weight: 700;">
+        Quick <span>Sections</span>
+    </h2>
+
+    <!-- ─── SECTION 1: SYLLABUS CARD GRID ─── -->
+    <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #4caf50; padding-left: 10px;">
+        📚 BCA Semester Syllabus
+    </h3>
+    <div class="quick-container" style="margin-bottom: 5rem;">
+        <a href="Syllabus/sem1.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - I</h3><p>BCA Syllabus Part 1</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #4caf50, #81c784);">Open <i class="fas fa-external-link-alt"></i></span>
+        </a>
+        <a href="Syllabus/sem2.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - II</h3><p>BCA Syllabus Part 1</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #4caf50, #81c784);">Open <i class="fas fa-external-link-alt"></i></span>
+        </a>
+        <a href="Syllabus/sem3.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - III</h3><p>BCA Syllabus Part 2</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #4caf50, #81c784);">Open <i class="fas fa-external-link-alt"></i></span>
+        </a>
+        <a href="Syllabus/sem4.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - IV</h3><p>BCA Syllabus Part 2</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #4caf50, #81c784);">Open <i class="fas fa-external-link-alt"></i></span>
+        </a>
+        <a href="Syllabus/sem5.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - V</h3><p>BCA Syllabus Part 3</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #4caf50, #81c784);">Open <i class="fas fa-external-link-alt"></i></span>
+        </a>
+        <a href="Syllabus/sem6.html" target="_blank" class="quick-card syllabus-card" style="border-top: 4px solid #4caf50;">
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - VI</h3><p>BCA Syllabus Part 3</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #4caf50, #81c784);">Open <i class="fas fa-external-link-alt"></i></span>
+        </a>
+    </div>
+
+    <!-- ─── SECTION 2: PYQ HUB CARD GRID ─── -->
+    <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #f44336; padding-left: 10px;">
+        📄 Previous Year Questions (PYQ)
+    </h3>
+    <div class="quick-container" style="margin-bottom: 5rem;">
+        <a href="javascript:void(0)" onclick="openPyqPopup(1)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - I</h3><p>All Sessions Papers</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #f44336, #ef5350);">Get PYQ <i class="fas fa-list"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openPyqPopup(2)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - II</h3><p>All Sessions Papers</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #f44336, #ef5350);">Get PYQ <i class="fas fa-list"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openPyqPopup(3)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - III</h3><p>All Sessions Papers</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #f44336, #ef5350);">Get PYQ <i class="fas fa-list"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openPyqPopup(4)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - IV</h3><p>All Sessions Papers</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #f44336, #ef5350);">Get PYQ <i class="fas fa-list"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openPyqPopup(5)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - V</h3><p>All Sessions Papers</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #f44336, #ef5350);">Get PYQ <i class="fas fa-list"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openPyqPopup(6)" class="quick-card pyq-card" style="border-top: 4px solid #f44336;">
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - VI</h3><p>All Sessions Papers</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #f44336, #ef5350);">Get PYQ <i class="fas fa-list"></i></span>
+        </a>
+    </div>
+
+    <!-- ─── SECTION 3: STUDY NOTES CARD GRID ─── -->
+    <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #2196f3; padding-left: 10px;">
+        📘 BCA Subject Wise Notes
+    </h3>
+    <div class="quick-container" style="margin-bottom: 2rem;">
+        <a href="javascript:void(0)" onclick="openNotesPopup(1)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - I</h3><p>Subject Wise Notes</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openNotesPopup(2)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - II</h3><p>Subject Wise Notes</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openNotesPopup(3)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - III</h3><p>Subject Wise Notes</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openNotesPopup(4)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - IV</h3><p>Subject Wise Notes</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openNotesPopup(5)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - V</h3><p>Subject Wise Notes</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
+        </a>
+        <a href="javascript:void(0)" onclick="openNotesPopup(6)" class="quick-card notes-card" style="border-top: 4px solid #2196f3;">
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - VI</h3><p>Subject Wise Notes</p>
+            <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
+        </a>
+    </div>
+</section>
+<hr style="height: 2px; background: #eee; margin-top: 50px;">
 
         <hr style="height: 2px; background: #eee; margin-top: 50px;">
 
