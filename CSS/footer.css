@@ -293,7 +293,7 @@ strong { color: crimson; }
 }
 
 /* ===================================================
-   3. TOTAL RESPONSIVE & OVERLAP FIXES (मीडिया क्वेरीज सबसे नीचे)
+   3. TOTAL RESPONSIVE & OVERLAP FIXES (मीडिया क्वेरीज)
 =================================================== */
 
 @media (max-width: 1280px) {
@@ -304,12 +304,13 @@ strong { color: crimson; }
     ul.dropdown2 li:hover .dropdown3 { left: 80px; top: 40px; }
 }
 
-/* 📱 टैबलेट और मोबाइल कंबाइंड सुधार (991px) */
-@media (max-width: 991px) {
+/* 📱 🔴 सुधार: लिमिट को 991px से घटाकर 768px किया 
+   ताकि मोबाइल में "Desktop Site" करने पर ये ऊपर-नीचे न हों, बल्कि लेफ्ट-राइट आमने-सामने रहें */
+@media (max-width: 768px) {
     .contact_info {
         display: flex !important;
-        flex-direction: column !important; /* मोबाइल पर ऊपर-नीचे अलाइनमेंट */
-        gap: 30px !important;              /* अबाउट मी और पीले बॉक्स के बीच परफेक्ट गैप */
+        flex-direction: column !important; /* सिर्फ प्योर मोबाइल व्यू में ऊपर-नीचे होगा */
+        gap: 30px !important;              
         padding: 0 20px !important;
         margin-top: 30px !important;
     }
@@ -320,22 +321,21 @@ strong { color: crimson; }
         margin: 0 auto !important;
     }
 
-    /* 🔴 ओवरलैप को रोकने के लिए सबसे ज़रूरी सुधार */
+    /* ओवरलैप को रोकने के लिए मोबाइल मोड में रिलेटिव लेआउट */
     .team-slide {
         position: relative !important;
         width: 100% !important;
-        min-height: auto !important; /* फिक्स हाइट हटा दी */
+        min-height: auto !important; 
         display: flex !important;
         flex-direction: column !important;
     }
 
-    /* 🔴 एब्सोल्यूट हटाकर रिलेटिव किया ताकि कार्ड अपनी जगह घेरे और पीला बॉक्स नीचे ही रहे */
     .team-member {
         position: relative !important;
         top: auto !important;
         left: auto !important;
         width: 100% !important;
-        display: none !important; /* सिर्फ एक्टिव मेंबर ही दिखेगा */
+        display: none !important; 
         opacity: 0;
         transform: none !important;
         padding: 2.5rem 1.5rem !important;
@@ -344,26 +344,19 @@ strong { color: crimson; }
     }
 
     .team-member.active {
-        display: block !important; /* एक्टिव मेंबर का पूरा डिब्बा रेंडर होगा */
+        display: block !important; 
         opacity: 1;
     }
 
-    /* 🟡 पीला मैसेज बॉक्स स्टाइल */
+    /* मोबाइल व्यू में पीला मैसेज बॉक्स फुल विड्थ */
     .msg {
         width: 100% !important;
         max-width: 500px !important;
-        margin: 10px auto 0 auto !important; /* ऊपर से हल्का गैप */
+        margin: 10px auto 0 auto !important; 
         position: relative !important;
         clear: both !important;
     }
-}
 
-@media (max-width: 800px) {
-    .column { flex: 50%; max-width: 50%; }
-}
-
-/* 📱 मोबाइल स्पेसिफिक सोशल आइकन्स और कॉलम्स फ़िक्स */
-@media (max-width: 768px) {
     /* सोशल आइकन्स ऑटो-रैप सुविधा */
     .contact-icon {
         display: flex !important;
@@ -371,7 +364,7 @@ strong { color: crimson; }
         align-items: flex-end !important;
         gap: 15px 12px !important;       
         width: 100% !important;
-        flex-wrap: wrap !important;
+        flex-wrap: wrap !important;        
         margin-top: 25px !important;
     }
     .contact-icon > a, .contact-icon .social-item a {
@@ -385,6 +378,10 @@ strong { color: crimson; }
     }
 }
 
+@media (max-width: 800px) {
+    /* इसे खाली छोड़ सकते हैं या हटा सकते हैं क्योंकि 768px से सब हैंडल हो रहा है */
+}
+
 @media (max-width: 600px) {
     .column { flex: 100%; max-width: 100%; }
     ul.dropdown2 li:hover .dropdown3 { left: 330px; top: 35px; }
@@ -392,6 +389,7 @@ strong { color: crimson; }
 
 @media (max-width: 480px) {
     ul.dropdown2 li:hover .dropdown3 { left: 280px; top: 20px; }
+    .team-slide { min-height: 510px !important; } 
 }
 
 @media (max-width: 450px) {
