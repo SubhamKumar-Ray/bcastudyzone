@@ -292,96 +292,6 @@ strong { color: crimson; }
     }
 }
 
-/* ===================================================
-   3. TOTAL RESPONSIVE & OVERLAP FIXES (मीडिया क्वेरीज)
-=================================================== */
-
-@media (max-width: 1280px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 220px; top: 20px; }
-}
-
-@media (max-width: 1024px) {
-    ul.dropdown2 li:hover .dropdown3 { left: 80px; top: 40px; }
-}
-
-/* 📱 🔴 सुधार: लिमिट को 991px से घटाकर 768px किया 
-   ताकि मोबाइल में "Desktop Site" करने पर ये ऊपर-नीचे न हों, बल्कि लेफ्ट-राइट आमने-सामने रहें */
-@media (max-width: 768px) {
-    .contact_info {
-        display: flex !important;
-        flex-direction: column !important; /* सिर्फ प्योर मोबाइल व्यू में ऊपर-नीचे होगा */
-        gap: 30px !important;              
-        padding: 0 20px !important;
-        margin-top: 30px !important;
-    }
-    
-    .about_me {
-        width: 100% !important;
-        max-width: 500px !important;
-        margin: 0 auto !important;
-    }
-
-    /* ओवरलैप को रोकने के लिए मोबाइल मोड में रिलेटिव लेआउट */
-    .team-slide {
-        position: relative !important;
-        width: 100% !important;
-        min-height: auto !important; 
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    .team-member {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        width: 100% !important;
-        display: none !important; 
-        opacity: 0;
-        transform: none !important;
-        padding: 2.5rem 1.5rem !important;
-        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,0.1) !important;
-        border-radius: 15px !important;
-    }
-
-    .team-member.active {
-        display: block !important; 
-        opacity: 1;
-    }
-
-    /* मोबाइल व्यू में पीला मैसेज बॉक्स फुल विड्थ */
-    .msg {
-        width: 100% !important;
-        max-width: 500px !important;
-        margin: 10px auto 0 auto !important; 
-        position: relative !important;
-        clear: both !important;
-    }
-
-    /* सोशल आइकन्स ऑटो-रैप सुविधा */
-    .contact-icon {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: flex-end !important;
-        gap: 15px 12px !important;       
-        width: 100% !important;
-        flex-wrap: wrap !important;        
-        margin-top: 25px !important;
-    }
-    .contact-icon > a, .contact-icon .social-item a {
-        font-size: 2rem !important;
-    }
-    .contact-icon .social-item {
-        display: inline-flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        min-width: 35px !important;
-    }
-}
-
-@media (max-width: 800px) {
-    /* इसे खाली छोड़ सकते हैं या हटा सकते हैं क्योंकि 768px से सब हैंडल हो रहा है */
-}
-
 @media (max-width: 600px) {
     .column { flex: 100%; max-width: 100%; }
     ul.dropdown2 li:hover .dropdown3 { left: 330px; top: 35px; }
@@ -389,7 +299,7 @@ strong { color: crimson; }
 
 @media (max-width: 480px) {
     ul.dropdown2 li:hover .dropdown3 { left: 280px; top: 20px; }
-    .team-slide { min-height: 510px !important; } 
+    .team-slide { min-height: 510px !important; } /* छोटे स्क्रीन पर आइकन्स को पूरा स्पेस */
 }
 
 @media (max-width: 450px) {
