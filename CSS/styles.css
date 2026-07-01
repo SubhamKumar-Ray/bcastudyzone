@@ -1245,16 +1245,23 @@
 /* ================= ABOUT ME & MSG UPGRADED STYLE ================= */
 
 .contact_info {
-    display: flex;
-    margin-top: 50px;
-    gap: 30px;
-    align-items: stretch;
+    display: flex !important;
+    flex-direction: row !important;      /* 🔴 यह हमेशा लेफ्ट-राइट ही रखेगा */
+    flex-wrap: nowrap !important;        /* 🔴 डेस्कटॉप मोड में नीचे टूटने नहीं देगा */
+    justify-content: center !important;  
+    align-items: flex-start !important;  
+    gap: 40px !important;                
+    max-width: 1200px !important;
+    margin: 50px auto 0 auto !important; 
+    padding: 0 4% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .about_me {
-    width: 50%;
-    text-align: center;
-    margin: 0 20px;
+    width: 48% !important;               /* बाएं तरफ का हिस्सा */
+    min-width: 320px !important;
+    margin: 0 !important;
 }
 
 .about_me h2 {
@@ -1278,15 +1285,16 @@
 
 /* Premium Upgraded Message Box Container */
 .msg {
-    width: 50%;
-    margin: 0 20px;
-    padding: 30px;
-    border: 1px solid rgba(0, 157, 255, 0.2);
-    border-radius: 20px;
-    background: #ffffff;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-    position: relative;
-    transition: 0.3s ease;
+    width: 48% !important;               /* दाएं तरफ का हिस्सा */
+    min-width: 320px !important;
+    margin: 0 !important;
+    padding: 30px !important;
+    border: 2px solid #b59300 !important;
+    border-radius: 20px !important;
+    background-color: #FFFF00 !important; /* 🟡 आपका पसंदीदा पीला रंग */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+    position: relative !important;
+    box-sizing: border-box !important;
 }
 
 .dark-mode .msg {
