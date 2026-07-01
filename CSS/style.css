@@ -959,28 +959,28 @@ ul.dropdown li:hover .dropdown1 {
     width: 100%;
     max-width: 400px;
     margin: auto;
-    min-height: 500px;
+    min-height: 480px; /* पर्याप्त जगह ताकि सोशल मीडिया आइकॉन नीचे दिखाई दें */
 }
 
+/* प्रत्येक टीम मेंबर का कार्ड */
 .team-member {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
+    background: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 .5rem 1.5rem rgba(0,0,0,0.1);
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.6s ease;
-    text-align: center;
-    background: #fff;
-    padding: 4rem 2rem 2rem 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,0.2);
 }
 
 .team-member.active {
     opacity: 1;
     transform: translateY(0);
-    z-index: 1;
+    z-index: 5;
 }
 
 /* Circle Photo */
@@ -1401,10 +1401,22 @@ circle:first-child{
 /* ================= GLASSMORPHISM NOTICE BOX ================= */
 
 .notice-section{
-    margin-top: 90px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-top:90px;      /* Desktop */
+    margin-bottom:20px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+@media(max-width:768px){
+
+    .notice-section{
+
+        margin-top:80px;
+        margin-bottom:15px;
+
+    }
+
 }
 
 /* MAIN BOX */
@@ -1800,7 +1812,6 @@ circle:first-child{
     margin-left:8px;
     font-weight:600;
 }
-
 /* WhatsApp */
 .whatsapp-float{
     position: fixed;
