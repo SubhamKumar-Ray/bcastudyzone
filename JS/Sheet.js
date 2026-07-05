@@ -30,67 +30,118 @@ form.addEventListener('submit', e => {
     alert("🙏 धन्यवाद! आपका संदेश सफलतापूर्वक भेज दिया गया है।")
   })
 })*/
-const scriptURL = 'https://script.google.com/macros/s/AKfycbx761_6FchoKp05elYLPhg8q7muURLuwWGqND3TZKjVwi1YI62vOISFRHmqfG-A4BU3/exec';
-const form = document.forms['contact-form'];
-const submitBtn = document.getElementById('submit');
+const scriptURL = 'https://script.google.com/macros/s/AKfycbx761_6FchoKp05elYLPhg8q7muURLuwWGqND3TZKjVwi1YI62vOISFRHmqfG-A4BU3/exec'; //
+const form = document.forms['contact-form']; //
+const submitBtn = document.getElementById('submit'); //
 
 form.addEventListener('submit', e => {
-  e.preventDefault();
+  e.preventDefault(); //
 
-  // 1. बटन को लॉक करें ताकि सबमिशन के दौरान यूजर दोबारा क्लिक न करे
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>';
+  // बटन को लॉक करें ताकि सबमिशन के दौरान यूजर दोबारा क्लिक न करे
+  submitBtn.disabled = true; //
+  submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>'; //
 
-  // 2. FormData अपने आप Name, College, Semester, Mobile, Email और Message सब उठा लेगा
-  const formData = new FormData(form);
+  // ──────────────────────────────────────────────────────────
+  // ⚡ START: SECURITY & VALIDATION GUARDS (NEW CODE)
+  // ──────────────────────────────────────────────────────────
 
-  // 3. Google App Script URL पर डेटा भेजना
-  fetch(scriptURL, {
-    method: 'POST',
-    body: formData,
-    mode: 'no-cors'
+  // User ke inputs ko fetch aur trim karein
+  const mobileInput = form.elements['mobile'].value.trim();
+  const emailInput = form.elements['EMAIL'].value.trim();
+
+  // Guard 1: Indian Mobile Number Validator (Exactly 10 digits, starts with 6-9)
+  const phonePattern = /^[6-9]\d{9}$/;
+  if (!phonePattern.test(mobileInput)) {
+      Swal.fire({
+          title: 'Invalid Mobile Number',
+          html: '<p style="font-size:16px; color:#555;">Please enter a valid <b>10-digit</b> Indian mobile number starting with 6, 7, 8, or 9.</p>',
+          icon: 'warning',
+          confirmButtonColor: '#ea580c',
+          confirmButtonText: 'Review and Fix',
+          background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff', //
+          color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40' //
+      });
+      
+      // Button ko wapas normal karein aur execution rokein
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>';
+      return; 
+  }
+
+  // Guard 2: Standard Email Address Validator
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailPattern.test(emailInput)) {
+      Swal.fire({
+          title: 'Invalid Email Address',
+          html: '<p style="font-size:16px; color:#555;">The email address provided does not match standard verification formats. Please verify your entry.</p>',
+          icon: 'warning',
+          confirmButtonColor: '#ea580c',
+          confirmButtonText: 'Review and Fix',
+          background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff', //
+          color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40' //
+      });
+      
+      // Button ko wapas normal karein aur execution rokein
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>';
+      return; 
+  }
+
+  // ──────────────────────────────────────────────────────────
+  // 🏁 END: SECURITY & VALIDATION GUARDS
+  // ──────────────────────────────────────────────────────────
+
+  // FormData apne aap Name, College, Semester, Mobile, Email और Message सब उठा लेगा
+  const formData = new FormData(form); //
+
+  // Google App Script URL पर डेटा भेजना
+  fetch(scriptURL, { //
+    method: 'POST', //
+    body: formData, //
+    mode: 'no-cors' //
   })
-  .then(() => {
-    // 4. प्रीमियम SweetAlert2 पॉपअप (बिना किसी डिस्प्ले लैग के)
+  .then(() => { //
+    // प्रीमियम SweetAlert2 पॉपअप (Professional English me)
     Swal.fire({
-      title: '✅ Success!',
-      html: '<p style="font-size:16px; color:#555;">नमस्ते! आपका संदेश और कॉलेज का विवरण <b>BCA Study Zone</b> को सफलतापूर्वक भेज दिया गया है।</p>',
-      icon: 'success',
-      confirmButtonColor: '#009dff',
-      confirmButtonText: 'OK, Continue',
-      background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff',
-      color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40',
-      allowOutsideClick: false, // पॉपअप के बाहर क्लिक करने पर यह बंद नहीं होगा
-      allowEscapeKey: false
-    }).then((result) => {
-      // 5. जब यूजर 'OK, Continue' पर क्लिक करेगा, सिर्फ तभी फॉर्म रीसेट होगा और स्क्रीन क्लीन होगी
-      if (result.isConfirmed) {
-        form.reset(); // फ़ॉर्म पूरी तरह खाली (Reset) हो जाएगा
+      title: 'Submission Successful',
+      html: '<p style="font-size:16px; color:#555;">Thank you! Your feedback and academic details have been securely recorded by <b>BCA Study Zone</b>.</p>',
+      icon: 'success', //
+      confirmButtonColor: '#009dff', //
+      confirmButtonText: 'Acknowledge & Continue',
+      background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff', //
+      color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40', //
+      allowOutsideClick: false, //
+      allowEscapeKey: false //
+    }).then((result) => { //
+      // जब यूजर 'Acknowledge & Continue' पर क्लिक करेगा, सिर्फ तभी फॉर्म रीसेट होगा
+      if (result.isConfirmed) { //
+        form.reset(); //
         
         // बटन को वापस अपनी पुरानी स्थिति में लाएं
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>';
+        submitBtn.disabled = false; //
+        submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>'; //
         
         // स्क्रीन पर किसी भी स्टक डिस्प्ले को हटाने के लिए रीफ्रेश एंकर ट्रिक
-        window.location.hash = "#about-contact"; 
+        window.location.hash = "#about-contact"; //
       }
     });
   })
-  .catch(error => {
-    console.error('Error!', error.message);
+  .catch(error => { //
+    console.error('Error!', error.message); //
+    
+    // Professional English Error Alert
     Swal.fire({
-      title: '❌ Error!',
-      text: 'मैसेज भेजने में समस्या आई। कृपया दोबारा कोशिश करें।',
-      icon: 'error',
-      confirmButtonColor: 'red'
+      title: 'Transmission Failure',
+      text: 'An unexpected database error occurred. Please verify your connection and try again.',
+      icon: 'error', //
+      confirmButtonColor: 'red' //
     });
     
     // एरर आने पर भी बटन को दोबारा वर्किंग स्टेट में लाएं
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>';
+    submitBtn.disabled = false; //
+    submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>'; //
   });
 });
-
 /* if (performance.navigation.type === 1) {
         const screen = document.getElementById("refreshScreen");
         screen.classList.add("show");
