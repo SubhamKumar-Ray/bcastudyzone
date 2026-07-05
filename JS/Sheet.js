@@ -34,110 +34,169 @@ const scriptURL = 'https://script.google.com/macros/s/AKfycbx761_6FchoKp05elYLPh
 const form = document.forms['contact-form']; //
 const submitBtn = document.getElementById('submit'); //
 
+// ──────────────────────────────────────────────────────────
+// 📂 1. POWERED DRAFT RECOVERY ENGINE (ON PAGE LOAD)
+// ──────────────────────────────────────────────────────────
+const messageArea = document.querySelector('textarea[name="MESSAGE"]'); //
+
+if (messageArea) { //
+    messageArea.value = localStorage.getItem('form_msg_draft') || ''; //
+    messageArea.addEventListener('input', () => { //
+        localStorage.setItem('form_msg_draft', messageArea.value); //
+    });
+}
+// ──────────────────────────────────────────────────────────
+
 form.addEventListener('submit', e => {
   e.preventDefault(); //
+
+  // ──────────────────────────────────────────────────────────
+  // 🚨 2. SECURITY GUARD: ANTI-SPAM VELOCITY LOCK (RATE LIMITER)
+  // ──────────────────────────────────────────────────────────
+  const currentTimestamp = Date.now(); //
+  const lastSubmission = localStorage.getItem('last_submission_time'); //
+  const submissionCount = parseInt(localStorage.getItem('submission_today_count') || '0'); //
+
+  if (lastSubmission && (currentTimestamp - lastSubmission > 24 * 60 * 60 * 1000)) { //
+      localStorage.setItem('submission_today_count', '0'); //
+  }
+
+  if (submissionCount >= 3) { //
+      Swal.fire({ //
+          title: 'Submission Limit Exceeded', //
+          html: '<p style="font-size:16px; color:#555;">To protect our servers from spam, you can only submit up to <b>3 messages every 24 hours</b>.<br><br>Please try again tomorrow or contact support directly.</p>', //
+          icon: 'warning', //
+          confirmButtonColor: '#ea580c', //
+          confirmButtonText: 'Understood' //
+      });
+      return; //
+  }
+  // ──────────────────────────────────────────────────────────
 
   // बटन को लॉक करें ताकि सबमिशन के दौरान यूजर दोबारा क्लिक न करे
   submitBtn.disabled = true; //
   submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>'; //
 
-  // ──────────────────────────────────────────────────────────
-  // ⚡ START: SECURITY & VALIDATION GUARDS (NEW CODE)
-  // ──────────────────────────────────────────────────────────
+  // USER INPUTS METRIC EXTRACTION
+  const nameInput = form.elements['NAME']; //
+  const collegeInput = form.elements['COLLEGE']; //
+  const semesterInput = form.elements['SEMESTER']; //
+  const mobileInput = form.elements['mobile'].value.trim(); //
+  const emailInput = form.elements['EMAIL'].value.trim(); //
 
-  // User ke inputs ko fetch aur trim karein
-  const mobileInput = form.elements['mobile'].value.trim();
-  const emailInput = form.elements['EMAIL'].value.trim();
-
-  // Guard 1: Indian Mobile Number Validator (Exactly 10 digits, starts with 6-9)
-  const phonePattern = /^[6-9]\d{9}$/;
-  if (!phonePattern.test(mobileInput)) {
-      Swal.fire({
-          title: 'Invalid Mobile Number',
-          html: '<p style="font-size:16px; color:#555;">Please enter a valid <b>10-digit</b> Indian mobile number starting with 6, 7, 8, or 9.</p>',
-          icon: 'warning',
-          confirmButtonColor: '#ea580c',
-          confirmButtonText: 'Review and Fix',
+  // 🛡️ Guard A: Indian Mobile Number Validator
+  const phonePattern = /^[6-9]\d{9}$/; //
+  if (!phonePattern.test(mobileInput)) { //
+      Swal.fire({ //
+          title: 'Invalid Mobile Number', //
+          html: '<p style="font-size:16px; color:#555;">Please enter a valid <b>10-digit</b> Indian mobile number starting with 6, 7, 8, or 9.</p>', //
+          icon: 'warning', //
+          confirmButtonColor: '#ea580c', //
+          confirmButtonText: 'Review and Fix', //
           background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff', //
           color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40' //
       });
-      
-      // Button ko wapas normal karein aur execution rokein
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>';
-      return; 
+      submitBtn.disabled = false; //
+      submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>'; //
+      return; //
   }
 
-  // Guard 2: Standard Email Address Validator
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailPattern.test(emailInput)) {
-      Swal.fire({
-          title: 'Invalid Email Address',
-          html: '<p style="font-size:16px; color:#555;">The email address provided does not match standard verification formats. Please verify your entry.</p>',
-          icon: 'warning',
-          confirmButtonColor: '#ea580c',
-          confirmButtonText: 'Review and Fix',
+  // 🛡️ Guard B: Standard Email Address Validator
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; //
+  if (!emailPattern.test(emailInput)) { //
+      Swal.fire({ //
+          title: 'Invalid Email Address', //
+          html: '<p style="font-size:16px; color:#555;">The email address provided does not match standard verification formats. Please verify your entry.</p>', //
+          icon: 'warning', //
+          confirmButtonColor: '#ea580c', //
+          confirmButtonText: 'Review and Fix', //
           background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff', //
           color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40' //
       });
-      
-      // Button ko wapas normal karein aur execution rokein
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>';
-      return; 
+      submitBtn.disabled = false; //
+      submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>'; //
+      return; //
+  }
+
+  // Auto-Capitalize Name Field before submission
+  if (nameInput && nameInput.value) { //
+      nameInput.value = nameInput.value.trim().replace(/\b\w/g, char => char.toUpperCase()); //
   }
 
   // ──────────────────────────────────────────────────────────
-  // 🏁 END: SECURITY & VALIDATION GUARDS
+  // 🚀 3. INSTANT TELEGRAM BOT ALERT SYSTEM
+  // ──────────────────────────────────────────────────────────
+  const telegramToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; //
+  
+  // ⚠️ IMPORTANT: Yahan quotes ke andar apni numerical User ID paste kar dein!
+  const telegramChatId = '1814896362'; //
+
+  const alertText = `🚨 *URGENT SUPPORT REQUEST* 🚨\n\n` +
+                    `👤 *Student:* ${nameInput ? nameInput.value : 'N/A'}\n` +
+                    `🎓 *Semester:* ${semesterInput ? semesterInput.value : 'N/A'}\n` +
+                    `🏫 *College:* ${collegeInput ? collegeInput.value : 'N/A'}\n` +
+                    `📱 *Mobile:* ${mobileInput}\n` +
+                    `📧 *Email:* ${emailInput}\n\n` +
+                    `💬 *Message Sent:* \n"${messageArea ? messageArea.value : 'No text content'}"`; //
+
+  fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, { //
+      method: 'POST', //
+      headers: { 'Content-Type': 'application/json' }, //
+      body: JSON.stringify({ //
+          chat_id: telegramChatId, //
+          text: alertText, //
+          parse_mode: 'Markdown' //
+      })
+  }).catch(err => console.log("Telegram alert bypassed. Processing master matrix database pipeline.")); //
   // ──────────────────────────────────────────────────────────
 
-  // FormData apne aap Name, College, Semester, Mobile, Email और Message सब उठा लेगा
   const formData = new FormData(form); //
 
-  // Google App Script URL पर डेटा भेजना
+  // Data Transmission to Google App Script Spreadsheet Engine
   fetch(scriptURL, { //
     method: 'POST', //
     body: formData, //
     mode: 'no-cors' //
   })
   .then(() => { //
-    // प्रीमियम SweetAlert2 पॉपअप (Professional English me)
-    Swal.fire({
-      title: 'Submission Successful',
-      html: '<p style="font-size:16px; color:#555;">Thank you! Your feedback and academic details have been securely recorded by <b>BCA Study Zone</b>.</p>',
+    Swal.fire({ //
+      title: 'Submission Successful', //
+      html: '<p style="font-size:16px; color:#555;">Thank you! Your feedback and academic details have been securely recorded by <b>BCA Study Zone</b>.</p>', //
       icon: 'success', //
       confirmButtonColor: '#009dff', //
-      confirmButtonText: 'Acknowledge & Continue',
+      confirmButtonText: 'Acknowledge & Continue', //
       background: document.body.classList.contains('dark-mode') ? '#282c35' : '#ffffff', //
       color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40', //
       allowOutsideClick: false, //
       allowEscapeKey: false //
     }).then((result) => { //
-      // जब यूजर 'Acknowledge & Continue' पर क्लिक करेगा, सिर्फ तभी फॉर्म रीसेट होगा
       if (result.isConfirmed) { //
-        form.reset(); //
         
-        // बटन को वापस अपनी पुरानी स्थिति में लाएं
+        form.reset(); //
+
+        // 🔒 SUCCESS ENGINE METRICS
+        if (!localStorage.getItem('last_submission_time')) { //
+            localStorage.setItem('last_submission_time', Date.now().toString()); //
+        }
+        localStorage.setItem('submission_today_count', (submissionCount + 1).toString()); //
+
+        // Clear temporary message draft cache matrix
+        localStorage.removeItem('form_msg_draft'); //
+        
         submitBtn.disabled = false; //
         submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>'; //
-        
-        // स्क्रीन पर किसी भी स्टक डिस्प्ले को हटाने के लिए रीफ्रेश एंकर ट्रिक
         window.location.hash = "#about-contact"; //
       }
     });
   })
   .catch(error => { //
     console.error('Error!', error.message); //
-    
-    // Professional English Error Alert
-    Swal.fire({
-      title: 'Transmission Failure',
-      text: 'An unexpected database error occurred. Please verify your connection and try again.',
+    Swal.fire({ //
+      title: 'Transmission Failure', //
+      text: 'An unexpected database error occurred. Please verify your connection and try again.', //
       icon: 'error', //
       confirmButtonColor: 'red' //
     });
-    
-    // एरर आने पर भी बटन को दोबारा वर्किंग स्टेट में लाएं
     submitBtn.disabled = false; //
     submitBtn.innerHTML = '<span>Send Message</span> <i class="fas fa-paper-plane"></i>'; //
   });
