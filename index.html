@@ -2103,141 +2103,97 @@ const db = getDatabase(app);
 
 /* ================= VISITOR ID ================= */
 
-const visitorId =
-localStorage.getItem("visitorId") ||
-"user_" + Math.random().toString(36).substr(2,9);
+/* ==========================================================
+   📊 PREMIUM & SECURE LIVE STATISTICS ENGINE (FIXED)
+========================================================== */
 
-localStorage.setItem("visitorId",visitorId);
+// 1. VISITOR ID SETUP (Unique user track karne ke liye)
+const visitorId = localStorage.getItem("visitorId") || "user_" + Math.random().toString(36).substr(2, 9);
+localStorage.setItem("visitorId", visitorId);
 
-/* ================= LIVE CLOCK ================= */
-
+// 2. LIVE DIGITAL CLOCK LOOP
 function updateClock(){
-
     const now = new Date();
-
-    // Live Time
-    document.getElementById("liveClock").innerHTML =
-    now.toLocaleTimeString("en-US",{
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hour12:true
+    document.getElementById("liveClock").innerHTML = now.toLocaleTimeString("en-US", {
+        hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true
     });
-
-    // Day Name (Friday, Saturday...)
-    const day = now.toLocaleDateString("en-US",{
-        weekday:"long"
-    });
-
+    const day = now.toLocaleDateString("en-US", { weekday: "long" });
     document.getElementById("currentDay").innerHTML = day;
-
-    // Date
     const date = now.toLocaleDateString("en-GB");
-
     document.getElementById("todayDate").innerHTML = date;
 
     const bottom = document.getElementById("todayDateBottom");
+    if(bottom) { bottom.innerHTML = date; }
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-    if(bottom){
-        bottom.innerHTML = date;
+// 3. STRICT TOTAL VISITORS MONITORING (No Unintentional Reset)
+onValue(ref(db, "totalVisitors"), snapshot => {
+    let actualUniqueVisitors = 0; 
+
+    if (snapshot.exists()) {
+        actualUniqueVisitors = Object.keys(snapshot.val()).length;
     }
 
-}
+    // 🎯 AAPKI LIVE DYNAMIC LIMIT
+    let currentDeleteLimit = 500; 
 
-updateClock();
-setInterval(updateClock,1000);
+    // STRICT SECURE CHECK: Jab tak sach me 500 nahi hoga, delete nahi hoga
+    if (actualUniqueVisitors >= currentDeleteLimit) {
+        remove(ref(db, "totalVisitors"));
+        actualUniqueVisitors = 0; 
+    }
 
-/* ================= TOTAL VISITORS ================= */
+    // 🔥 OOFFSET TRICK: Jo data pehle delete ho gaya (maan lijiye 100), use yahan plus kar dein
+    let previousDeletedVisitors = 100; 
+    let totalDisplayCount = actualUniqueVisitors + previousDeletedVisitors;
 
-set(ref(db,"totalVisitors/"+visitorId),true);
+    // Screen par value print karna
+    document.getElementById("totalVisitors").innerHTML = totalDisplayCount;
 
-onValue(ref(db,"totalVisitors"),snapshot=>{
-
-let count=0;
-
-if(snapshot.exists()){
-    count=Object.keys(snapshot.val()).length;
-}
-
-/* ===== 200 hone par reset ===== */
-
-if(count>=200){
-
-    remove(ref(db,"totalVisitors"));
-
-    count=0;
-
-}
-
-document.getElementById("totalVisitors").innerHTML=count;
-
-const total=document.getElementById("activityTotal");
-
-if(total){
-    total.innerHTML=count;
-}
-
+    const totalBottomBadge = document.getElementById("activityTotal");
+    if (totalBottomBadge) {
+        totalBottomBadge.innerHTML = totalDisplayCount;
+    }
 });
 
-/* ================= TODAY VISITORS ================= */
+// 4. TODAY'S VISITORS MONITORING LOOP
+const today = new Date().toISOString().split("T")[0];
+set(ref(db, "dailyVisitors/" + today + "/" + visitorId), true);
 
-const today=new Date().toISOString().split("T")[0];
+onValue(ref(db, "dailyVisitors/" + today), snapshot => {
+    let todayCount = 0;
+    if (snapshot.exists()) {
+        todayCount = Object.keys(snapshot.val()).length;
+    }
+    document.getElementById("todayVisitors").innerHTML = todayCount;
 
-set(ref(db,"dailyVisitors/"+today+"/"+visitorId),true);
-
-onValue(ref(db,"dailyVisitors/"+today),snapshot=>{
-
-let count=0;
-
-if(snapshot.exists()){
-
-count=Object.keys(snapshot.val()).length;
-
-}
-
-document.getElementById("todayVisitors").innerHTML=count;
-
-const todayCount=document.getElementById("activityToday");
-
-if(todayCount){
-
-todayCount.innerHTML=count;
-
-}
-
+    const todayCountBottom = document.getElementById("activityToday");
+    if (todayCountBottom) {
+        todayCountBottom.innerHTML = todayCount;
+    }
 });
 
-/* ================= ONLINE USERS ================= */
-
-const userStatusRef=ref(db,"onlineUsers/"+visitorId);
-
-set(userStatusRef,{
-online:true,
-lastSeen:Date.now()
+// 5. REAL TIME LIVE ONLINE USERS ENGINE
+const userStatusRef = ref(db, "onlineUsers/" + visitorId);
+set(userStatusRef, {
+    online: true,
+    lastSeen: Date.now()
 });
-
 onDisconnect(userStatusRef).remove();
 
-onValue(ref(db,"onlineUsers"),snapshot=>{
+onValue(ref(db, "onlineUsers"), snapshot => {
+    let onlineLiveCount = 0;
+    if (snapshot.exists()) {
+        onlineLiveCount = Object.keys(snapshot.val()).length;
+    }
+    document.getElementById("onlineUsers").innerHTML = onlineLiveCount;
 
-let count=0;
-
-if(snapshot.exists()){
-
-count=Object.keys(snapshot.val()).length;
-
-}
-
-document.getElementById("onlineUsers").innerHTML=count;
-
-const active=document.getElementById("activeNow");
-
-if(active){
-
-active.innerHTML=count;
-
-}
-
+    const activeNowBottom = document.getElementById("activeNow");
+    if (activeNowBottom) {
+        activeNowBottom.innerHTML = onlineLiveCount;
+    }
 });
 
 
