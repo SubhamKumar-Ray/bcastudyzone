@@ -544,85 +544,165 @@ window.addEventListener('offline', () => {
     });
 });
 
-// ==================== 🌌 SYNCHRONIZED PORTAL HANDSHAKE CONTROLLER (FIXED SEQUENCE) ====================
+// =========================================================================
+// 🧠 SYNC NETWORK MATRIX PROTOCOL: MASTER LOGIC SEQUENCE ENGINE
+// =========================================================================
 
+// SEQUENCE STEP 1: USER CLICKS 'ENTER PORTAL' ON GATEWAY
 function startPortalHandshakeSequence() {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
-    if (!gatewayScreen) return;
+    const loaderNode = document.getElementById("loader");
 
-    gatewayScreen.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    if (!gatewayScreen || !loaderNode) return;
+
+    gatewayScreen.style.transition = "opacity 0.4s ease, transform 0.4s ease";
     gatewayScreen.style.opacity = "0";
-    gatewayScreen.style.transform = "scale(1.05)";
+    gatewayScreen.style.transform = "scale(1.03)";
 
     setTimeout(() => {
         gatewayScreen.style.display = "none";
-        executeDynamicGatewayLoader(); // Loader starts right here safely
-    }, 500);
+        
+        // Execute Phase 2: Upgraded Gravity Loader
+        executeDynamicGatewayLoader();
+    }, 400);
 }
 
+// SEQUENCE STEP 2: RUNS THE 1% TO 100% MULTICOLOR GRAVITY MATRIX
 function executeDynamicGatewayLoader() {
     let loaderNode = document.getElementById("loader");
     let mainPageNode = document.getElementById("mainPage");
     let counterNode = document.getElementById("count");
-    let progressCircleNode = document.getElementById("progress");
+    let canvas = document.getElementById("loader-particle-canvas");
 
-    if (!loaderNode || !mainPageNode) return;
+    if (!loaderNode || !mainPageNode || !canvas) return;
 
-    // 🔒 Enforce full security: ensure notice popup stays hidden while loading
     if (document.getElementById("noticePopup")) {
         document.getElementById("noticePopup").style.display = "none";
     }
 
     loaderNode.style.display = "flex";
+    loaderNode.style.opacity = "1";
     mainPageNode.style.display = "none";
 
-    let currentPercent = 1;
-    let radiusValue = 70;
-    let totalCircumference = 2 * Math.PI * radiusValue;
+    // Setup Canvas Boundaries
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    if (progressCircleNode) {
-        progressCircleNode.style.strokeDasharray = totalCircumference;
-        progressCircleNode.style.strokeDashoffset = totalCircumference;
+    let particlesArray = [];
+    let currentPercent = 1;
+    const bubbleColors = ["#ff3838", "#ffd700", "#00ff88", "#ffffff"]; // Red, Yellow, Green, White
+
+    // Sateek center focus jahan photo bada hua hai
+    const targetX = canvas.width / 2;
+    const targetY = canvas.height / 2 - 18; // Adjusted anchor metrics according to larger box size
+
+    class LoadingParticle {
+        constructor() {
+            let angle = Math.random() * Math.PI * 2;
+            // Particles boundary screen distribution
+            let distance = Math.random() * (canvas.width * 0.4) + 220; 
+            this.x = targetX + Math.cos(angle) * distance;
+            this.y = targetY + Math.sin(angle) * distance;
+            
+            this.size = Math.random() * 3 + 2;
+            this.color = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+            this.speed = Math.random() * 0.035 + 0.012;
+            this.angle = angle;
+        }
+        update() {
+            let dx = targetX - this.x;
+            let dy = targetY - this.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+
+            // Larger center photo radius guard (140px size integration)
+            if (dist > 65) { 
+                let factor = (currentPercent / 100) * this.speed * 2.5;
+                this.x += dx * factor;
+                this.y += dy * factor;
+            } else {
+                let angle = Math.random() * Math.PI * 2;
+                let distance = Math.random() * 120 + canvas.width * 0.4;
+                this.x = targetX + Math.cos(angle) * distance;
+                this.y = targetY + Math.sin(angle) * distance;
+            }
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = this.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
     }
 
+    // Initialize 75 particle bits
+    for (let i = 0; i < 75; i++) {
+        particlesArray.push(new LoadingParticle());
+    }
+
+    function animateLoader() {
+        if (currentPercent > 100) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+        }
+        requestAnimationFrame(animateLoader);
+    }
+    animateLoader();
+
+    // Constant Percentage Loop Control
     let gatewayLoaderInterval = setInterval(() => {
         if (counterNode) counterNode.innerText = currentPercent + "%";
-
-        if (progressCircleNode) {
-            let offsetMetrics = totalCircumference - (currentPercent / 100) * totalCircumference;
-            progressCircleNode.style.strokeDashoffset = offsetMetrics;
-        }
-
         currentPercent++;
 
         if (currentPercent > 100) {
             clearInterval(gatewayLoaderInterval);
             
-            // 🎬 1. Hide Loader ring layout
-            loaderNode.style.display = "none";
+            loaderNode.style.transition = "opacity 0.4s ease";
+            loaderNode.style.opacity = "0";
             
-            // 🎬 2. Open Main Website Dashboard Content Canvas
-            mainPageNode.style.display = "block";
+            setTimeout(() => {
+                loaderNode.style.display = "none";
+                mainPageNode.style.display = "block";
 
-            // 🎬 3. Show the official Hindi Welcome speech popup card first!
-            if (document.getElementById("voicePopup")) {
-                document.getElementById("voicePopup").style.display = "flex";
-            }
+                // SEQUENCE STEP 3: Voice Popup Greeting
+                if (document.getElementById("voicePopup")) {
+                    document.getElementById("voicePopup").style.display = "flex";
+                }
+            }, 400);
         }
-    }, 30);
+    }, 32); 
 }
-// 🎬 4. UPDATE INTERCEPTOR: Modified handler to route directly into VBU notices on complete
+
+// SEQUENCE STEP 4: TRIGGERED WHEN USER CLOSES HINDI VOICE POPUP
 function handleEnglishVoiceAndOpen() {
     if (typeof speakEnglishIndian === "function") {
-        speakEnglishIndian(); // Trigger speech audio voice matrix
+        speakEnglishIndian();
     }
     
-    // Hide the नमस्ते voice popup card frame
     document.getElementById("voicePopup").style.display = "none";
     document.getElementById("mainPage").style.display = "block";
 
-    // 🎯 MAGIC STEP: Jaise hi bacha audio click karke "Continue" karega, tab VBU Notice popup automatic samne load hoga!
     if (typeof triggerVbuNoticePopupMetrics === "function") {
         triggerVbuNoticePopupMetrics();
     }
 }
+
+// DIRECT OVERRIDE SECURITY GUARD FOR PORTAL TIMING
+document.addEventListener("DOMContentLoaded", () => {
+    const gatewayScreen = document.getElementById("brand-gateway-screen");
+    const loaderNode = document.getElementById("loader");
+    const mainPageNode = document.getElementById("mainPage");
+
+    if(gatewayScreen) {
+        gatewayScreen.style.display = "flex";
+        gatewayScreen.style.opacity = "1";
+    }
+    if(loaderNode) loaderNode.style.display = "none";
+    if(mainPageNode) mainPageNode.style.display = "none";
+});
