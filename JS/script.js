@@ -656,6 +656,7 @@ function executeDynamicGatewayLoader() {
     animateLoader();
 
     // Constant Percentage Loop Control
+    // Constant Percentage Loop Control
     let gatewayLoaderInterval = setInterval(() => {
         if (counterNode) counterNode.innerText = currentPercent + "%";
         currentPercent++;
@@ -668,15 +669,13 @@ function executeDynamicGatewayLoader() {
             
             setTimeout(() => {
                 loaderNode.style.display = "none";
-                mainPageNode.style.display = "block";
-
-                // SEQUENCE STEP 3: Voice Popup Greeting
-                if (document.getElementById("voicePopup")) {
-                    document.getElementById("voicePopup").style.display = "flex";
-                }
+                
+                // ❌ Puraani mainPageNode aur voicePopup direct logic ko humne yahan se bypass kiya
+                // 🚀 NAYA CORRECTION: Loader 100% hote hi pehle Student Identity Tracking Engine active hoga!
+                initIdentityTrackingVerification();
             }, 400);
         }
-    }, 32); 
+    }, 32);
 }
 
 // SEQUENCE STEP 4: TRIGGERED WHEN USER CLOSES HINDI VOICE POPUP
@@ -706,3 +705,122 @@ document.addEventListener("DOMContentLoaded", () => {
     if(loaderNode) loaderNode.style.display = "none";
     if(mainPageNode) mainPageNode.style.display = "none";
 });
+
+// =========================================================================
+// 🧠 UPGRADED FULL-DATA ENGINE: NEW & RE-VISIT BOTH SHOW FULL DETAILS
+// =========================================================================
+
+// Loader complete hote hi hum is function ko trigger karenge
+function initIdentityTrackingVerification() {
+    // 🎯 VALIDATION CHECK: Kya bacha pehle se details submit kar chuka hai?
+    if (localStorage.getItem("student_verified_profile") === "true") {
+        
+        console.log("Welcome back student! Fetching full profile tags...");
+        
+        // 🔒 FIX CONTEXT: Pehle se stored real values ko memory se nikalna (100% Full Details)
+        const savedName = localStorage.getItem("student_tracked_name") || "Unknown Student";
+        const savedCollege = localStorage.getItem("student_tracked_college") || "Saved College";
+        const savedSem = localStorage.getItem("student_tracked_sem") || "Saved Semester";
+        
+        const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+        
+        // 🚀 RE-VISIT TELEGRAM PACKET: Full Details ke sath wapas lautne ka alert
+        const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
+        const chatId = '@bca_dashboard_subham'; // 👈 Yahan apne channel ka username daalna!
+        
+        const telegramRevisitMessage = `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
+                                     `👤 *Student Name:* ${savedName}\n` +
+                                     `🏫 *College:* ${savedCollege}\n` +
+                                     `📚 *Semester:* ${savedSem}\n` +
+                                     `🕒 *Return Time:* ${formattedDate}\n` +
+                                     `📱 *Device Matrix:* ${navigator.platform}`;
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: telegramRevisitMessage, parse_mode: 'Markdown' }) 
+        }).catch(tErr => console.log("Telegram alert buffer bypassed."));
+
+        // Direct skip karke next panel par handover kar do
+        proceedToVoicePopupHandover();
+
+    } else {
+        // Agar bilkul naya bacha hai, toh dabba screen par display karo
+        if (document.getElementById("studentTrackingPopup")) {
+            document.getElementById("studentTrackingPopup").style.display = "flex";
+        }
+    }
+}
+
+function submitStudentMetadataPipeline() {
+    const name = document.getElementById("track-student-name").value.trim();
+    const college = document.getElementById("track-student-college").value;
+    const semester = document.getElementById("track-student-sem").value;
+    const verifyBtn = document.getElementById("trackVerifyBtn");
+
+    if (!name || !college || !semester) {
+        alert("Subham bhai bache ko bolo saari details bhare bina portal unlock nahi hoga! 😂");
+        return;
+    }
+
+    // Button status locked during execution
+    verifyBtn.disabled = true;
+    verifyBtn.innerText = "VERIFYING MATRIX...";
+
+    const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
+
+    // 🔒 FULL STORAGE KEY RETENTION: Inhi keys se Welcome Back me data uthega
+    localStorage.setItem("student_tracked_name", structuredName);
+    localStorage.setItem("student_tracked_college", college);
+    localStorage.setItem("student_tracked_sem", semester);
+
+    // 🚀 TELEGRAM ALERT MATRIX FOR FIRST TIME SUBMISSION
+    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
+    const chatId = '@bca_dashboard_subham'; // 👈 Yahan bhi same channel username daalna!
+    
+    const telegramAlertMessage = `🎓 *PORTAL ACCESS DETECTED* 🎓\n\n` +
+                                 `👤 *Student Name:* ${structuredName}\n` +
+                                 `🏫 *College:* ${college}\n` +
+                                 `📚 *Semester:* ${semester}\n` +
+                                 `🕒 *Active Time:* ${formattedDate}\n` +
+                                 `📱 *Device Sync:* ${navigator.platform}`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
+    })
+    .then(() => {
+        console.log("Live logs securely routed to Telegram channel.");
+        completeTrackingSequence();
+    })
+    .catch((err) => {
+        console.error("Network buffer delay, processing local handover hook:", err);
+        completeTrackingSequence();
+    });
+}
+
+function completeTrackingSequence() {
+    localStorage.setItem("student_verified_profile", "true");
+    if (document.getElementById("studentTrackingPopup")) {
+        document.getElementById("studentTrackingPopup").style.display = "none";
+    }
+    proceedToVoicePopupHandover();
+}
+
+function proceedToVoicePopupHandover() {
+    if (localStorage.getItem("notification_registered") === "true") {
+        if (document.getElementById("voicePopup")) {
+            document.getElementById("voicePopup").style.display = "flex";
+        } else if (document.getElementById("mainPage")) {
+            document.getElementById("mainPage").style.display = "block";
+        }
+    } else {
+        if (document.getElementById("notificationRequestPopup")) {
+            document.getElementById("notificationRequestPopup").style.display = "flex";
+        } else if (document.getElementById("voicePopup")) {
+            document.getElementById("voicePopup").style.display = "flex";
+        }
+    }
+}
