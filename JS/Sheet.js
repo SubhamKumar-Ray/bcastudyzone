@@ -211,7 +211,7 @@ form.addEventListener('submit', e => {
 */
 
 
-let count = 1;
+/*let count = 1;
 let progressCircle = document.getElementById("progress");
 let counter = document.getElementById("count");
 let loader = document.getElementById("loader");
@@ -242,7 +242,7 @@ let interval = setInterval(() => {
         document.getElementById("voicePopup").style.display = "flex";
     }
 
-}, 30);
+}, 30);*/
 
 
 
@@ -294,13 +294,4 @@ function speakEnglishIndian(){
     }
 
     speechSynthesis.speak(msg);
-}
-
-// 🔥 Button click (MOBILE FRIENDLY)
-function handleEnglishVoiceAndOpen(){
-
-    speakEnglishIndian();   // 🔊 बोलेगा
-
-    document.getElementById("voicePopup").style.display = "none";
-    mainPage.style.display = "block";
 }
