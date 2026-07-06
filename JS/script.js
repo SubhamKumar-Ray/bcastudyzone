@@ -707,42 +707,93 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================================================
-// 🧠 UPGRADED FULL-DATA ENGINE: NEW & RE-VISIT BOTH SHOW FULL DETAILS
+// 🧠 LIVE SYNC MATRIX: FIREBASE LIVE CHECK (DELETE IN DB = RESET ON WEBSITE)
 // =========================================================================
 
 // Loader complete hote hi hum is function ko trigger karenge
 function initIdentityTrackingVerification() {
-    // 🎯 VALIDATION CHECK: Kya bacha pehle se details submit kar chuka hai?
-    if (localStorage.getItem("student_verified_profile") === "true") {
-        
-        console.log("Welcome back student! Fetching full profile tags...");
-        
-        // 🔒 FIX CONTEXT: Pehle se stored real values ko memory se nikalna (100% Full Details)
-        const savedName = localStorage.getItem("student_tracked_name") || "Unknown Student";
-        const savedCollege = localStorage.getItem("student_tracked_college") || "Saved College";
-        const savedSem = localStorage.getItem("student_tracked_sem") || "Saved Semester";
-        
-        const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-        
-        // 🚀 RE-VISIT TELEGRAM PACKET: Full Details ke sath wapas lautne ka alert
-        const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
-        const chatId = '@bca_dashboard_subham'; // 👈 Yahan apne channel ka username daalna!
-        
-        const telegramRevisitMessage = `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
-                                     `👤 *Student Name:* ${savedName}\n` +
-                                     `🏫 *College:* ${savedCollege}\n` +
-                                     `📚 *Semester:* ${savedSem}\n` +
-                                     `🕒 *Return Time:* ${formattedDate}\n` +
-                                     `📱 *Device Matrix:* ${navigator.platform}`;
+    // Unique session/student ID jo local memory mein save hoti hai
+    const studentUID = localStorage.getItem("student_portal_uid");
 
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: telegramRevisitMessage, parse_mode: 'Markdown' }) 
-        }).catch(tErr => console.log("Telegram alert buffer bypassed."));
+    // 🎯 CASE A: Agar bacha pehle se details bhar chuka hai, toh live database check karo
+    if (localStorage.getItem("student_verified_profile") === "true" && studentUID) {
+        
+        console.log("Verifying active database credentials with Firebase Cloud...");
+        
+        // Live check url for that specific student ID
+        const checkUrl = `https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers/${studentUID}.json`;
 
-        // Direct skip karke next panel par handover kar do
-        proceedToVoicePopupHandover();
+        fetch(checkUrl)
+        .then(response => response.json())
+        .then(dbData => {
+            // 🚨 CRITICAL LOCK: Agar Firebase mein data NULL hai (yaani tumne delete kar diya hai)
+            if (!dbData) {
+                console.log("Identity revoked by admin. Force resetting client portal memory...");
+                // Poori local memory mita do aur form dikhao
+                localStorage.removeItem("student_verified_profile");
+                localStorage.removeItem("student_tracked_name");
+                localStorage.removeItem("student_tracked_college");
+                localStorage.removeItem("student_tracked_sem");
+                localStorage.removeItem("student_portal_uid");
+                
+                if (document.getElementById("studentTrackingPopup")) {
+                    document.getElementById("studentTrackingPopup").style.display = "flex";
+                }
+                return;
+            }
+
+            // 🔄 CASE B: Agar data database mein HAI, toh welcome back process karo (Only Telegram Alert)
+            const savedName = dbData.studentName || "Existing Student";
+            const savedCollege = dbData.collegeName || "Saved College";
+            const savedSem = dbData.currentSemester || "Saved Semester";
+            
+            const lastVisitTimeStr = localStorage.getItem("student_last_visit_readable") || "First Session";
+            const lastVisitTimestamp = parseInt(localStorage.getItem("student_last_visit_timestamp")) || Date.now();
+            
+            const currentTimestamp = Date.now();
+            const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+            
+            // ⏳ GAP CALCULATION MATRIX
+            const diffInMilliseconds = currentTimestamp - lastVisitTimestamp;
+            const totalSeconds = Math.floor(diffInMilliseconds / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
+            
+            let gapString = "";
+            if (totalDays > 0) gapString += `${totalDays} Days, `;
+            if ((totalHours % 24) > 0 || totalDays > 0) gapString += `${totalHours % 24} Hours, `;
+            if ((totalMinutes % 60) > 0 || totalHours > 0) gapString += `${totalMinutes % 60} Minutes, `;
+            gapString += `${totalSeconds % 60} Seconds`;
+
+            localStorage.setItem("student_last_visit_timestamp", currentTimestamp.toString());
+            localStorage.setItem("student_last_visit_readable", formattedDate);
+            
+            const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
+            const chatId = '@bca_dashboard_subham'; 
+            
+            const telegramRevisitMessage = `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
+                                         `👤 *Student Name:* ${savedName}\n` +
+                                         `🏫 *College:* ${savedCollege}\n` +
+                                         `📚 *Semester:* ${savedSem}\n\n` +
+                                         `🕒 *Current Return:* ${formattedDate}\n` +
+                                         `⏮️ *Last Active Was:* ${lastVisitTimeStr}\n` +
+                                         `⏳ *Total Offline Gap:* _${gapString}_\n\n` +
+                                         `📱 *Device:* ${navigator.platform}`;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: telegramRevisitMessage, parse_mode: 'Markdown' }) 
+            }).catch(tErr => console.log("Telegram buffer bypassed."));
+
+            proceedToVoicePopupHandover();
+        })
+        // Fallback: Agar internet down ho ya server response na de, toh smooth experience ke liye direct enter hone do
+        .catch(err => {
+            console.log("Database fetch offline latency bypass:", err);
+            proceedToVoicePopupHandover();
+        });
 
     } else {
         // Agar bilkul naya bacha hai, toh dabba screen par display karo
@@ -758,26 +809,46 @@ function submitStudentMetadataPipeline() {
     const semester = document.getElementById("track-student-sem").value;
     const verifyBtn = document.getElementById("trackVerifyBtn");
 
+    // 🚨 ANTI-SPAM INPUT VALIDATION GUARDS
     if (!name || !college || !semester) {
-        alert("Subham bhai bache ko bolo saari details bhare bina portal unlock nahi hoga! 😂");
+        alert("⚠️ Fields Cannot Be Empty!\n\nपोर्टल अनलॉक करने के लिए कृपया सभी डिटेल्स को सही से भरें।");
+        return;
+    }
+    const nameParts = name.split(/\s+/).filter(word => word.length > 0);
+    const alphaOnlyRegex = /^[a-zA-Z\s]+$/;
+    const junkPatternRegex = /(.)\1{2,}/i; 
+
+    if (!alphaOnlyRegex.test(name)) {
+        alert("⚠️ Invalid Name!\n\nName mein keval English letters allowed hain.");
+        return;
+    }
+    if (nameParts.length < 2) {
+        alert("⚠️ Full Name Required!\n\nPlease enter your complete professional name (First Name & Last Name).");
+        return;
+    }
+    if (junkPatternRegex.test(name.replace(/\s/g, ''))) {
+        alert("⚠️ Spam Pattern Detected!\n\nPlease enter your genuine real name.");
         return;
     }
 
-    // Button status locked during execution
     verifyBtn.disabled = true;
     verifyBtn.innerText = "VERIFYING MATRIX...";
 
+    const currentTimestamp = Date.now().toString(); // This is the unique key
     const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
     const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
 
-    // 🔒 FULL STORAGE KEY RETENTION: Inhi keys se Welcome Back me data uthega
+    // 🔒 INITIAL SECURITY MEMORY RECORD
     localStorage.setItem("student_tracked_name", structuredName);
     localStorage.setItem("student_tracked_college", college);
     localStorage.setItem("student_tracked_sem", semester);
+    localStorage.setItem("student_last_visit_timestamp", currentTimestamp);
+    localStorage.setItem("student_last_visit_readable", formattedDate);
+    localStorage.setItem("student_portal_uid", currentTimestamp); // Unique ID Lock
 
-    // 🚀 TELEGRAM ALERT MATRIX FOR FIRST TIME SUBMISSION
+    // 🚀 PIPELINE A: TELEGRAM FIRST TIMERS
     const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
-    const chatId = '@bca_dashboard_subham'; // 👈 Yahan bhi same channel username daalna!
+    const chatId = '@bca_dashboard_subham'; 
     
     const telegramAlertMessage = `🎓 *PORTAL ACCESS DETECTED* 🎓\n\n` +
                                  `👤 *Student Name:* ${structuredName}\n` +
@@ -790,13 +861,28 @@ function submitStudentMetadataPipeline() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
+    }).catch(err => console.log("Telegram fallback active."));
+
+    // 🚀 PIPELINE B: FIREBASE SYNCHRONIZATION
+    const firebaseDatabaseUrl = `https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers/${currentTimestamp}.json`;
+
+    fetch(firebaseDatabaseUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            studentName: structuredName,
+            collegeName: college,
+            currentSemester: semester,
+            entryTime: formattedDate,
+            platform: navigator.platform
+        })
     })
     .then(() => {
-        console.log("Live logs securely routed to Telegram channel.");
+        console.log("Registered to Firebase Sync Matrix successfully.");
         completeTrackingSequence();
     })
-    .catch((err) => {
-        console.error("Network buffer delay, processing local handover hook:", err);
+    .catch((error) => {
+        console.error("Firebase connection latency bypass:", error);
         completeTrackingSequence();
     });
 }
