@@ -543,3 +543,86 @@ window.addEventListener('offline', () => {
         showConfirmButton: false
     });
 });
+
+// ==================== 🌌 SYNCHRONIZED PORTAL HANDSHAKE CONTROLLER (FIXED SEQUENCE) ====================
+
+function startPortalHandshakeSequence() {
+    const gatewayScreen = document.getElementById("brand-gateway-screen");
+    if (!gatewayScreen) return;
+
+    gatewayScreen.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    gatewayScreen.style.opacity = "0";
+    gatewayScreen.style.transform = "scale(1.05)";
+
+    setTimeout(() => {
+        gatewayScreen.style.display = "none";
+        executeDynamicGatewayLoader(); // Loader starts right here safely
+    }, 500);
+}
+
+function executeDynamicGatewayLoader() {
+    let loaderNode = document.getElementById("loader");
+    let mainPageNode = document.getElementById("mainPage");
+    let counterNode = document.getElementById("count");
+    let progressCircleNode = document.getElementById("progress");
+
+    if (!loaderNode || !mainPageNode) return;
+
+    // 🔒 Enforce full security: ensure notice popup stays hidden while loading
+    if (document.getElementById("noticePopup")) {
+        document.getElementById("noticePopup").style.display = "none";
+    }
+
+    loaderNode.style.display = "flex";
+    mainPageNode.style.display = "none";
+
+    let currentPercent = 1;
+    let radiusValue = 70;
+    let totalCircumference = 2 * Math.PI * radiusValue;
+
+    if (progressCircleNode) {
+        progressCircleNode.style.strokeDasharray = totalCircumference;
+        progressCircleNode.style.strokeDashoffset = totalCircumference;
+    }
+
+    let gatewayLoaderInterval = setInterval(() => {
+        if (counterNode) counterNode.innerText = currentPercent + "%";
+
+        if (progressCircleNode) {
+            let offsetMetrics = totalCircumference - (currentPercent / 100) * totalCircumference;
+            progressCircleNode.style.strokeDashoffset = offsetMetrics;
+        }
+
+        currentPercent++;
+
+        if (currentPercent > 100) {
+            clearInterval(gatewayLoaderInterval);
+            
+            // 🎬 1. Hide Loader ring layout
+            loaderNode.style.display = "none";
+            
+            // 🎬 2. Open Main Website Dashboard Content Canvas
+            mainPageNode.style.display = "block";
+
+            // 🎬 3. Show the official Hindi Welcome speech popup card first!
+            if (document.getElementById("voicePopup")) {
+                document.getElementById("voicePopup").style.display = "flex";
+            }
+        }
+    }, 30);
+}
+// 🎬 4. UPDATE INTERCEPTOR: Modified handler to route directly into VBU notices on complete
+function handleEnglishVoiceAndOpen() {
+    if (typeof speakEnglishIndian === "function") {
+        speakEnglishIndian(); // Trigger speech audio voice matrix
+    }
+    
+    // Hide the नमस्ते voice popup card frame
+    document.getElementById("voicePopup").style.display = "none";
+    document.getElementById("mainPage").style.display = "block";
+
+    // 🎯 MAGIC STEP: Jaise hi bacha audio click karke "Continue" karega, tab VBU Notice popup automatic samne load hoga!
+    if (typeof triggerVbuNoticePopupMetrics === "function") {
+        triggerVbuNoticePopupMetrics();
+    }
+}
