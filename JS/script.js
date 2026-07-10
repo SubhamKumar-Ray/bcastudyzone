@@ -910,39 +910,58 @@ function proceedToVoicePopupHandover() {
         }
     }
 }
-// 📥 FORCED RE-PROMPT ENGINE: JITNE BAAR REFRESH HOGA, POPUP AUTOMATIC CHALU HOGA
-let deferredPrompt;
+/* =========================================================================
+    📥 AUTOMATION SYSTEM: HIGH-END FORCED APP INSTALL CODES (BYPASS BLOCK)
+========================================================================= */
+let activeChromePromptTracker = null;
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Chrome ke default behavior ko force stop karo
-    e.preventDefault();
-    // Prompt event ko save karo
-    deferredPrompt = e;
-    
-    console.log("Forced Installation Matrix Active. Triggering automatic prompt...");
-    
-    // Automatic immediate execution without waiting
+// Pure loop me event ko single scope me track karne ke liye event hook setup
+window.addEventListener('beforeinstallprompt', (eventHook) => {
+    // Chrome ke standard silent prompt policy ko bypass karne ke liye prevent karein
+    eventHook.preventDefault();
+    activeChromePromptTracker = eventHook;
+
+    console.log("Forced PWA Installation Matrix Active. Listeners triggered successfully.");
+
+    // Dashboard screen render hone ke exact 2.5 seconds baad custom floating bar slide up hoga
     setTimeout(() => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                // CRITICAL: Reset memory taaki agle refresh par phir se aaye
-                deferredPrompt = null;
-            });
+        const displayInstallPanel = document.getElementById("customForcedInstallBar");
+        if (displayInstallPanel) {
+            displayInstallPanel.style.display = "flex";
         }
-    }, 1500); // 1.5 second ke buffer ke baad automatic trigger hoga
+    }, 2500);
 });
 
-// Service Worker Engine
+// Action Button Execution Core Engine Loop (Custom Floating Widget Click Handler)
+window.triggerForcedPwaInstallation = function() {
+    const displayInstallPanel = document.getElementById("customForcedInstallBar");
+
+    if (activeChromePromptTracker) {
+        // Native system prompt display chalu karein
+        activeChromePromptTracker.prompt();
+        
+        activeChromePromptTracker.userChoice.then((userSelectToken) => {
+            if (userSelectToken.outcome === 'accepted') {
+                console.log('Student successfully configured local installation app.');
+                if (displayInstallPanel) displayInstallPanel.style.display = "none";
+            } else {
+                console.log('Student explicitly bypassed native browser installation bounds.');
+            }
+            
+            // 🔄 CRITICAL MEMORY FLUSH: Ise reset karne se hi har refresh par baar-baar popup chal sakega
+            activeChromePromptTracker = null;
+        });
+    } else {
+        // Fallback Alert Framework agar browser security layers ne system dialog temporary block kiya ho
+        alert("📋 App Kaise Install Karein:\n\n1. Browser ke top right section me click karein (Three Dots / Menu).\n2. Wahan 'Install App' ya 'Add to Home Screen' option select karein.");
+    }
+};
+
+// Standard Service Worker Pipeline Engine Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('PWA Android Core Active'))
-            .catch(err => console.log('PWA Bypassed'));
+            .then(registrationMap => console.log('PWA Service Workers Framework Synced.'))
+            .catch(err => console.log('Offline pipeline skipped:', err));
     });
 }
