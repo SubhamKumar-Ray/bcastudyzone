@@ -295,3 +295,69 @@ function speakEnglishIndian(){
 
     speechSynthesis.speak(msg);
 }
+/* =========================================================================
+    📥 AUTOMATION SYSTEM: 100% FORCE RE-PROMPT POPUP WITH 10-SEC AUTO HIDE
+========================================================================= */
+let activeChromePromptTracker = null;
+
+function forceDisplayInstallWidget() {
+    setTimeout(() => {
+        const displayInstallPanel = document.getElementById("customForcedInstallBar");
+        if (displayInstallPanel) {
+            displayInstallPanel.style.display = "flex"; 
+            console.log("Master panel status: FORCED SCREEN ACTIVE");
+
+            // ⏳ 10 second ke baad popup ko automatic mita do
+            setTimeout(() => {
+                displayInstallPanel.style.transition = "all 0.5s ease";
+                displayInstallPanel.style.bottom = "-120px";
+                displayInstallPanel.style.opacity = "0";
+                
+                setTimeout(() => {
+                    displayInstallPanel.style.display = "none";
+                }, 500);
+                
+                console.log("10 Seconds Completed. Popup auto-hidden successfully.");
+            }, 10000); 
+        }
+    }, 2500); 
+}
+
+// Browser native event trigger tracker
+window.addEventListener('beforeinstallprompt', (eventHook) => {
+    eventHook.preventDefault();
+    activeChromePromptTracker = eventHook;
+    console.log("Native Chrome PWA hook captured successfully.");
+});
+
+// Global function window scope me bind karein
+window.initiateForcedPopupSequence = function() {
+    forceDisplayInstallWidget();
+};
+
+// Install Button Click Trigger
+window.triggerForcedPwaInstallation = function() {
+    const displayInstallPanel = document.getElementById("customForcedInstallBar");
+
+    if (activeChromePromptTracker) {
+        activeChromePromptTracker.prompt();
+        activeChromePromptTracker.userChoice.then((userSelectToken) => {
+            if (userSelectToken.outcome === 'accepted') {
+                console.log('App configuration completely verified.');
+                if (displayInstallPanel) displayInstallPanel.style.display = "none";
+            }
+            activeChromePromptTracker = null;
+        });
+    } else {
+        alert("📋 App Kaise Install Karein:\n\n1. Aapne portal open kiya hai Chrome Browser par.\n2. URL panel ke right side me upar check karein, ya options me jayein (Three Dots/Menu).\n3. Wahan 'Install App' ya 'Add to Home Screen' par click kar dein, App ban jayega!");
+    }
+};
+
+// Service Worker Loop
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('PWA Service Workers Framework Synced.'))
+            .catch(err => console.log('Offline service bypassed.'));
+    });
+}
