@@ -910,11 +910,39 @@ function proceedToVoicePopupHandover() {
         }
     }
 }
-// Service Worker Registration for PWA System Install Prompt
+// 📥 FORCED RE-PROMPT ENGINE: JITNE BAAR REFRESH HOGA, POPUP AUTOMATIC CHALU HOGA
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Chrome ke default behavior ko force stop karo
+    e.preventDefault();
+    // Prompt event ko save karo
+    deferredPrompt = e;
+    
+    console.log("Forced Installation Matrix Active. Triggering automatic prompt...");
+    
+    // Automatic immediate execution without waiting
+    setTimeout(() => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                // CRITICAL: Reset memory taaki agle refresh par phir se aaye
+                deferredPrompt = null;
+            });
+        }
+    }, 1500); // 1.5 second ke buffer ke baad automatic trigger hoga
+});
+
+// Service Worker Engine
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('PWA Android Core Active:', reg.scope))
-            .catch(err => console.log('PWA Initialization Bypassed:', err));
+            .then(reg => console.log('PWA Android Core Active'))
+            .catch(err => console.log('PWA Bypassed'));
     });
 }
