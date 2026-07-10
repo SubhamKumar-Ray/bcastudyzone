@@ -911,57 +911,72 @@ function proceedToVoicePopupHandover() {
     }
 }
 /* =========================================================================
-    📥 AUTOMATION SYSTEM: HIGH-END FORCED APP INSTALL CODES (BYPASS BLOCK)
+    📥 AUTOMATION SYSTEM: 100% FORCE RE-PROMPT POPUP WITH 10-SEC AUTO HIDE
 ========================================================================= */
 let activeChromePromptTracker = null;
 
-// Pure loop me event ko single scope me track karne ke liye event hook setup
-window.addEventListener('beforeinstallprompt', (eventHook) => {
-    // Chrome ke standard silent prompt policy ko bypass karne ke liye prevent karein
-    eventHook.preventDefault();
-    activeChromePromptTracker = eventHook;
-
-    console.log("Forced PWA Installation Matrix Active. Listeners triggered successfully.");
-
-    // Dashboard screen render hone ke exact 2.5 seconds baad custom floating bar slide up hoga
+// 🚀 FIXED FUNCTION: Enter portal ke baad popup dikhayega aur 10 second baad automatic hatayega
+function forceDisplayInstallWidget() {
     setTimeout(() => {
         const displayInstallPanel = document.getElementById("customForcedInstallBar");
         if (displayInstallPanel) {
-            displayInstallPanel.style.display = "flex";
+            displayInstallPanel.style.display = "flex"; // Hard forced screen display active
+            console.log("Master panel status: FORCED SCREEN ACTIVE");
+
+            // ⏳ SMART TIMER MATRIX: Theek 10 second (10000ms) ke baad popup ko automatic mita do
+            setTimeout(() => {
+                // Smooth slide down animation effect dene ke liye opacity and layout transition
+                displayInstallPanel.style.transition = "all 0.5s ease";
+                displayInstallPanel.style.bottom = "-120px";
+                displayInstallPanel.style.opacity = "0";
+                
+                // Animation khatam hone ke baad display completely none kar do
+                setTimeout(() => {
+                    displayInstallPanel.style.display = "none";
+                }, 500);
+                
+                console.log("10 Seconds Completed. Popup auto-hidden successfully.");
+            }, 10000); // 10 Second Limit
         }
-    }, 2500);
+    }, 2500); // Enter portal ke 2.5 second ke baad chalega[cite: 5]
+}
+
+// Browser native event trigger tracker
+window.addEventListener('beforeinstallprompt', (eventHook) => {
+    eventHook.preventDefault(); //[cite: 5]
+    activeChromePromptTracker = eventHook; //[cite: 5]
+    console.log("Native Chrome PWA hook captured successfully.");
 });
 
-// Action Button Execution Core Engine Loop (Custom Floating Widget Click Handler)
+// Enter Portal click handler mapping
+window.initiateForcedPopupSequence = function() {
+    forceDisplayInstallWidget(); //[cite: 5]
+};
+
+// Action Button Trigger Matrix (Install Button Click)
 window.triggerForcedPwaInstallation = function() {
     const displayInstallPanel = document.getElementById("customForcedInstallBar");
 
     if (activeChromePromptTracker) {
-        // Native system prompt display chalu karein
-        activeChromePromptTracker.prompt();
-        
+        activeChromePromptTracker.prompt(); //[cite: 5]
         activeChromePromptTracker.userChoice.then((userSelectToken) => {
-            if (userSelectToken.outcome === 'accepted') {
-                console.log('Student successfully configured local installation app.');
-                if (displayInstallPanel) displayInstallPanel.style.display = "none";
-            } else {
-                console.log('Student explicitly bypassed native browser installation bounds.');
+            if (userSelectToken.outcome === 'accepted') { //[cite: 5]
+                console.log('App configuration completely verified.');
+                if (displayInstallPanel) displayInstallPanel.style.display = "none"; //[cite: 5]
             }
-            
-            // 🔄 CRITICAL MEMORY FLUSH: Ise reset karne se hi har refresh par baar-baar popup chal sakega
-            activeChromePromptTracker = null;
+            activeChromePromptTracker = null; //[cite: 5]
         });
     } else {
-        // Fallback Alert Framework agar browser security layers ne system dialog temporary block kiya ho
-        alert("📋 App Kaise Install Karein:\n\n1. Browser ke top right section me click karein (Three Dots / Menu).\n2. Wahan 'Install App' ya 'Add to Home Screen' option select karein.");
+        // Fallback Alert
+        alert("📋 App Kaise Install Karein:\n\n1. Aapne portal open kiya hai Chrome Browser par.\n2. URL panel ke right side me upar check karein, ya options me jayein (Three Dots/Menu).\n3. Wahan 'Install App' ya 'Add to Home Screen' par click kar dein, App ban jayega!");
     }
 };
 
-// Standard Service Worker Pipeline Engine Registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(registrationMap => console.log('PWA Service Workers Framework Synced.'))
-            .catch(err => console.log('Offline pipeline skipped:', err));
+// Service Worker Loop[cite: 5]
+if ('serviceWorker' in navigator) { //[cite: 5]
+    window.addEventListener('load', () => { //[cite: 5]
+        navigator.serviceWorker.register('sw.js') //[cite: 5]
+            .then(reg => console.log('PWA Service Workers Framework Synced.'))
+            .catch(err => console.log('Offline service bypassed.'));
     });
 }
