@@ -692,19 +692,50 @@ function handleEnglishVoiceAndOpen() {
     }
 }
 
-// DIRECT OVERRIDE SECURITY GUARD FOR PORTAL TIMING
+// 🧠 SMART SESSION MEMORY GUARD: BACK NAVIGATE KARNE PAR DUBARA INITIAL SCREENS NAHI DIKHEGI
 document.addEventListener("DOMContentLoaded", () => {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
     const loaderNode = document.getElementById("loader");
     const mainPageNode = document.getElementById("mainPage");
 
-    if(gatewayScreen) {
-        gatewayScreen.style.display = "flex";
-        gatewayScreen.style.opacity = "1";
+    // Check karo ki kya bacha isi session me portal ke andar enter kar chuka hai?
+    if (sessionStorage.getItem("portal_entered") === "true") {
+        // 🚀 DIRECT ENTER PORTAL BYPASS: Gateway aur loader ko skip karke direct dashboard dikhao
+        if(gatewayScreen) gatewayScreen.style.display = "none";
+        if(loaderNode) loaderNode.style.display = "none";
+        if(mainPageNode) mainPageNode.style.display = "block";
+        
+        console.log("Session verified. Direct entry to dashboard allowed.");
+    } else {
+        // Pehli baar aane wale student ke liye purana default strict sequence rules
+        if(gatewayScreen) {
+            gatewayScreen.style.display = "flex";
+            gatewayScreen.style.opacity = "1";
+        }
+        if(loaderNode) loaderNode.style.display = "none";
+        if(mainPageNode) mainPageNode.style.display = "none";
     }
-    if(loaderNode) loaderNode.style.display = "none";
-    if(mainPageNode) mainPageNode.style.display = "none";
 });
+
+// SEQUENCE STEP 1: USER CLICKS 'ENTER PORTAL' ON GATEWAY
+function startPortalHandshakeSequence() {
+    const gatewayScreen = document.getElementById("brand-gateway-screen");
+    const loaderNode = document.getElementById("loader");
+
+    if (!gatewayScreen || !loaderNode) return;
+
+    // 🔒 LOCK SESSION MEMORY: Yaad rakho ki portal enter ho chuka hai
+    sessionStorage.setItem("portal_entered", "true");
+
+    gatewayScreen.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+    gatewayScreen.style.opacity = "0";
+    gatewayScreen.style.transform = "scale(1.03)";
+
+    setTimeout(() => {
+        gatewayScreen.style.display = "none";
+        executeDynamicGatewayLoader();
+    }, 400);
+}
 
 // =========================================================================
 // 🧠 LIVE SYNC MATRIX: FIREBASE LIVE CHECK (DELETE IN DB = RESET ON WEBSITE)
