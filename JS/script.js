@@ -910,73 +910,39 @@ function proceedToVoicePopupHandover() {
         }
     }
 }
-/* =========================================================================
-    📥 AUTOMATION SYSTEM: 100% FORCE RE-PROMPT POPUP WITH 10-SEC AUTO HIDE
-========================================================================= */
-let activeChromePromptTracker = null;
+// 📥 FORCED RE-PROMPT ENGINE: JITNE BAAR REFRESH HOGA, POPUP AUTOMATIC CHALU HOGA
+let deferredPrompt;
 
-// 🚀 FIXED FUNCTION: Enter portal ke baad popup dikhayega aur 10 second baad automatic hatayega
-function forceDisplayInstallWidget() {
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Chrome ke default behavior ko force stop karo
+    e.preventDefault();
+    // Prompt event ko save karo
+    deferredPrompt = e;
+    
+    console.log("Forced Installation Matrix Active. Triggering automatic prompt...");
+    
+    // Automatic immediate execution without waiting
     setTimeout(() => {
-        const displayInstallPanel = document.getElementById("customForcedInstallBar");
-        if (displayInstallPanel) {
-            displayInstallPanel.style.display = "flex"; // Hard forced screen display active
-            console.log("Master panel status: FORCED SCREEN ACTIVE");
-
-            // ⏳ SMART TIMER MATRIX: Theek 10 second (10000ms) ke baad popup ko automatic mita do
-            setTimeout(() => {
-                // Smooth slide down animation effect dene ke liye opacity and layout transition
-                displayInstallPanel.style.transition = "all 0.5s ease";
-                displayInstallPanel.style.bottom = "-120px";
-                displayInstallPanel.style.opacity = "0";
-                
-                // Animation khatam hone ke baad display completely none kar do
-                setTimeout(() => {
-                    displayInstallPanel.style.display = "none";
-                }, 500);
-                
-                console.log("10 Seconds Completed. Popup auto-hidden successfully.");
-            }, 10000); // 10 Second Limit
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                // CRITICAL: Reset memory taaki agle refresh par phir se aaye
+                deferredPrompt = null;
+            });
         }
-    }, 2500); // Enter portal ke 2.5 second ke baad chalega[cite: 5]
-}
-
-// Browser native event trigger tracker
-window.addEventListener('beforeinstallprompt', (eventHook) => {
-    eventHook.preventDefault(); //[cite: 5]
-    activeChromePromptTracker = eventHook; //[cite: 5]
-    console.log("Native Chrome PWA hook captured successfully.");
+    }, 1500); // 1.5 second ke buffer ke baad automatic trigger hoga
 });
 
-// Enter Portal click handler mapping
-window.initiateForcedPopupSequence = function() {
-    forceDisplayInstallWidget(); //[cite: 5]
-};
-
-// Action Button Trigger Matrix (Install Button Click)
-window.triggerForcedPwaInstallation = function() {
-    const displayInstallPanel = document.getElementById("customForcedInstallBar");
-
-    if (activeChromePromptTracker) {
-        activeChromePromptTracker.prompt(); //[cite: 5]
-        activeChromePromptTracker.userChoice.then((userSelectToken) => {
-            if (userSelectToken.outcome === 'accepted') { //[cite: 5]
-                console.log('App configuration completely verified.');
-                if (displayInstallPanel) displayInstallPanel.style.display = "none"; //[cite: 5]
-            }
-            activeChromePromptTracker = null; //[cite: 5]
-        });
-    } else {
-        // Fallback Alert
-        alert("📋 App Kaise Install Karein:\n\n1. Aapne portal open kiya hai Chrome Browser par.\n2. URL panel ke right side me upar check karein, ya options me jayein (Three Dots/Menu).\n3. Wahan 'Install App' ya 'Add to Home Screen' par click kar dein, App ban jayega!");
-    }
-};
-
-// Service Worker Loop[cite: 5]
-if ('serviceWorker' in navigator) { //[cite: 5]
-    window.addEventListener('load', () => { //[cite: 5]
-        navigator.serviceWorker.register('sw.js') //[cite: 5]
-            .then(reg => console.log('PWA Service Workers Framework Synced.'))
-            .catch(err => console.log('Offline service bypassed.'));
+// Service Worker Engine
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('PWA Android Core Active'))
+            .catch(err => console.log('PWA Bypassed'));
     });
 }
