@@ -910,3 +910,11 @@ function proceedToVoicePopupHandover() {
         }
     }
 }
+// Service Worker Registration for PWA System Install Prompt
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('PWA Android Core Active:', reg.scope))
+            .catch(err => console.log('PWA Initialization Bypassed:', err));
+    });
+}
