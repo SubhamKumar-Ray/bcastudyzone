@@ -18,6 +18,8 @@
 		<link rel="stylesheet" href="CSS/style.css?v=3.0">
 		<link rel="stylesheet" href="CSS/styles.css?v=3.0">
 		<link rel="stylesheet" href="CSS/footer.css?v=3.0">
+		<!-- PWA Android Deployment Core Link -->
+		<link rel="manifest" href="manifest.json">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
@@ -27,24 +29,25 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9801877867978314" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 <!-- ─── PHASE 1: THE EXECUTIVE ENTER PORTAL GATEWAY SCREEN (ALWAYS SHOWN FIRST) ─── -->
-<div id="brand-gateway-screen" style="position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe, #bae6fd, #7dd3fc); z-index: 9999999; display: flex; justify-content: center; align-items: center; padding: 24px; font-family: 'Poppins', sans-serif; text-align: center; overflow: hidden; box-sizing: border-box;">
+		<div id="brand-gateway-screen" style="position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe, #bae6fd, #7dd3fc); z-index: 9999999; display: flex; justify-content: center; align-items: center; padding: 24px; font-family: 'Poppins', sans-serif; text-align: center; overflow: hidden; box-sizing: border-box;">
     
-    <!-- LIVE BACKGROUND CANVAS PARTICLES GRID -->
-    <canvas id="gateway-live-particles" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></canvas>
+			<!-- LIVE BACKGROUND CANVAS PARTICLES GRID -->
+			<canvas id="gateway-live-particles" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></canvas>
 
-    <!-- ACCURATE MESH LINES GEOMETRY -->
-    <div style="position: absolute; inset: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px); background-size: 45px 40px; background-position: center; pointer-events: none; z-index: 2;"></div>
+			<!-- ACCURATE MESH LINES GEOMETRY -->
+			<div style="position: absolute; inset: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px); background-size: 45px 40px; background-position: center; pointer-events: none; z-index: 2;"></div>
 
-    <!-- THE EXECUTIVE BALANCED CARD -->
-    <div style="position: relative; max-width: 480px; width: 100%; padding: 40px 28px; background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc); border-radius: 24px; box-shadow: 0 25px 50px rgba(0, 82, 212, 0.3), inset 0 1px 1px rgba(255,255,255,0.2); border: 2px solid #ffffff; box-sizing: border-box; z-index: 3; overflow: hidden; animation: gatewayCardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+			<!-- THE EXECUTIVE BALANCED CARD -->
+			<div style="position: relative; max-width: 480px; width: 100%; padding: 40px 28px; background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc); border-radius: 24px; box-shadow: 0 25px 50px rgba(0, 82, 212, 0.3), inset 0 1px 1px rgba(255,255,255,0.2); border: 2px solid #ffffff; box-sizing: border-box; z-index: 3; overflow: hidden; animation: gatewayCardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
         
-        <div style="position: absolute; top: 0; left: 0; right: 0; height: 40%; background: linear-gradient(rgba(255,255,255,0.15), transparent); pointer-events: none;"></div>
+			<div style="position: absolute; top: 0; left: 0; right: 0; height: 40%; background: linear-gradient(rgba(255,255,255,0.15), transparent); pointer-events: none;"></div>
 
-        <div style="position: relative; z-index: 2;">
+			<div style="position: relative; z-index: 2;">
             <!-- BRAND LOGO -->
             <div style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
                 <img src="Gallary/logo4.png" alt="BCA Study Zone Logo" style="height: 90px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));">
@@ -1068,8 +1071,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </div>
 
+		<!--<div id="adminAnalyticsPanel" style="margin: 25px 22px; padding: 25px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h3 style="color: #fff; font-size: 2.2rem; margin-bottom: 5px; font-weight: 700; text-align: center;">🏫 College Wise Active Distribution</h3>
+    <p style="color: #bcd3e8; font-size: 1.4rem; margin-bottom: 20px; text-align: center;">Real-time student onboarding demographics engine</p>
 
-
+    <div style="position: relative; width: 100%; max-width: 340px; height: 340px; display: flex; justify-content: center; align-items: center;">
+        <canvas id="collegeAnalyticsChart"></canvas>
+    </div>
+</div>
+-->
         <!-- Footer -->
 
         <div class="activity-footer">
@@ -2388,8 +2398,108 @@ onValue(ref(db, "onlineUsers"), snapshot => {
         activeNowBottom.innerHTML = onlineLiveCount;
     }
 });
+/* =========================================================================
+   📈 LIVE SYNC MATRIX: REAL-TIME PIE-CHART ANALYTICS ENGINE (CHART.JS)
+========================================================================= */
+/*let collegeChartInstance = null;
 
+// Real-time listener for the user profiles directory
+onValue(ref(db, "activePortalUsers"), (snapshot) => {
+    const collegeMetrics = {
+        "Annada College, Hazaribag": 0,
+        "St. Columba's College, Hazaribag": 0,
+        "Chatra College, Chatra": 0,
+        "K.B. Women's College, Hazaribag": 0,
+        "Markham College of Commerce, Hazaribag": 0,
+        "VBU University Department, Hazaribag": 0,
+        "Other College": 0
+    };
 
+    if (snapshot.exists()) {
+        const allProfiles = snapshot.val();
+
+        // Parsing master snapshot node map keys
+        Object.keys(allProfiles).forEach(key => {
+            const profile = allProfiles[key];
+            const collegeName = profile.collegeName;
+
+            if (collegeName && collegeMetrics.hasOwnProperty(collegeName)) {
+                collegeMetrics[collegeName]++;
+            } else if (collegeName) {
+                collegeMetrics["Other College"]++;
+            }
+        });
+    }
+
+    // Chart dataset extraction structures
+    const chartLabels = Object.keys(collegeMetrics).map(name => name.split(',')[0]); // Shorten name for mobile responsiveness
+    const chartDataValues = Object.values(collegeMetrics);
+
+    const ctxElement = document.getElementById('collegeAnalyticsChart');
+    if (!ctxElement) return;
+
+    // Anti-duplication canvas instance clear engine
+    if (collegeChartInstance !== null) {
+        collegeChartInstance.destroy();
+    }
+
+    // Initialize Interactive Cyberpunk Pie Chart
+    collegeChartInstance = new Chart(ctxElement, {
+        type: 'doughnut', // Donut matrix offers cleaner UI layout
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                data: chartDataValues,
+                backgroundColor: [
+                    '#00ffd5', // Electric Neon Mint
+                    '#ff3838', // Bright Red Phase
+                    '#ffd700', // Metallic Gold Yellow
+                    '#9c27b0', // Cyber Purple Tone
+                    '#0026ff', // Royal Deep Blue
+                    '#ff9800', // Vivid Orange Accent
+                    '#94a3b8'  // Steel Slate Muted Grey
+                ],
+                borderWidth: 2,
+                borderColor: '#0b2447', // Matches background matrix panel grid
+                hoverOffset: 12
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: window.innerWidth < 768 ? 'bottom' : 'right',
+                    labels: {
+                        color: '#ffffff',
+                        font: { family: 'Poppins', size: 11, weight: '500' },
+                        padding: 14,
+                        boxWidth: 12
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    titleFont: { family: 'Poppins', size: 13, weight: '700' },
+                    bodyFont: { family: 'Poppins', size: 12 },
+                    borderColor: '#00ffd5',
+                    borderWidth: 1,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.raw || 0;
+                            let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            let percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return ` Students: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '62%' // Center cutout metric space index
+        }
+    });
+});
+*/
 </script>
 									<!-- LIVE STATICS COUNT END -->
 <!--================ BACK TO TOP BUTTON ================-->
