@@ -33,6 +33,30 @@
 </head>
 
 <body>
+<!-- 📥 CUSTOM SYSTEM: FORCED FLOATING INSTALLATION WIDGET PANEL -->
+<div id="customForcedInstallBar" style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid #00ffd5; border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px rgba(0, 255, 213, 0.2); z-index: 999999; padding: 15px 20px; display: none; align-items: center; justify-content: space-between; font-family: 'Poppins', sans-serif; box-sizing: border-box; animation: slideUpWidget 0.5s ease;">
+
+    <!-- Left Block: Branded Icon with Structured Subtitle -->
+    <div style="display: flex; align-items: center; gap: 12px; text-align: left;">
+        <img src="Gallary/logo1.png" alt="App Logo" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #00ffd5;">
+        <div>
+            <h4 style="color: #ffffff; font-size: 1.45rem; font-weight: 700; margin: 0; padding: 0;">BCA Study Zone</h4>
+            <p style="color: #94a3b8; font-size: 1.1rem; margin: 2px 0 0 0; padding: 0;">Install Mobile App for Offline Notes 📱</p>
+        </div>
+    </div>
+
+    <!-- Right Block: Immediate Install Action Engine Trigger Button -->
+    <button onclick="triggerForcedPwaInstallation()" style="background: linear-gradient(135deg, #00ffd5, #00bcff); color: #030611; font-size: 1.25rem; font-weight: 700; border: none; padding: 10px 18px; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 255, 213, 0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+        Install 📥
+    </button>
+</div>
+
+<style>
+@keyframes slideUpWidget {
+    from { bottom: -100px; opacity: 0; }
+    to { bottom: 25px; opacity: 1; }
+}
+</style>
 <!-- ─── PHASE 1: THE EXECUTIVE ENTER PORTAL GATEWAY SCREEN (ALWAYS SHOWN FIRST) ─── -->
 		<div id="brand-gateway-screen" style="position: fixed; inset: 0; background: linear-gradient(135deg, #e0f2fe, #bae6fd, #7dd3fc); z-index: 9999999; display: flex; justify-content: center; align-items: center; padding: 24px; font-family: 'Poppins', sans-serif; text-align: center; overflow: hidden; box-sizing: border-box;">
     
