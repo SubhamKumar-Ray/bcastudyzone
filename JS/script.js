@@ -692,18 +692,33 @@ function handleEnglishVoiceAndOpen() {
     }
 }
 
-// DIRECT OVERRIDE SECURITY GUARD FOR PORTAL TIMING
+// ⚡ NEW SMART MEMORY OVERRIDE: GATEWAY AUTOMATIC BYPASS ENGINE
 document.addEventListener("DOMContentLoaded", () => {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
     const loaderNode = document.getElementById("loader");
     const mainPageNode = document.getElementById("mainPage");
 
-    if(gatewayScreen) {
-        gatewayScreen.style.display = "flex";
-        gatewayScreen.style.opacity = "1";
+    // Check ki kya student pehle portal enter kar chuka hai
+    if (localStorage.getItem("portal_already_entered") === "true") {
+        console.log("Welcome back student! Fast access protocol triggered.");
+        
+        // Direct Screens ko hidden karo bina kisi delay ke
+        if (gatewayScreen) gatewayScreen.style.display = "none";
+        if (loaderNode) loaderNode.style.display = "none";
+        
+        // Direct Verification flow handle karne ke liye (Aapka existing sync code)
+        if (typeof initIdentityTrackingVerification === "function") {
+            initIdentityTrackingVerification();
+        }
+    } else {
+        // Agar pehli baar aaya hai, tabhi Gateway Screen aur Loader chalega
+        if (gatewayScreen) {
+            gatewayScreen.style.display = "flex";
+            gatewayScreen.style.opacity = "1";
+        }
+        if (loaderNode) loaderNode.style.display = "none";
+        if (mainPageNode) mainPageNode.style.display = "none";
     }
-    if(loaderNode) loaderNode.style.display = "none";
-    if(mainPageNode) mainPageNode.style.display = "none";
 });
 
 // =========================================================================
@@ -889,6 +904,10 @@ function submitStudentMetadataPipeline() {
 
 function completeTrackingSequence() {
     localStorage.setItem("student_verified_profile", "true");
+    
+    // 🔥 YEH NAYI LINE ADD KARNI HAI (Agle saare visits ke liye gateway aur loader ko block karne ke liye)
+    localStorage.setItem("portal_already_entered", "true");
+
     if (document.getElementById("studentTrackingPopup")) {
         document.getElementById("studentTrackingPopup").style.display = "none";
     }
@@ -909,40 +928,4 @@ function proceedToVoicePopupHandover() {
             document.getElementById("voicePopup").style.display = "flex";
         }
     }
-}
-// 📥 FORCED RE-PROMPT ENGINE: JITNE BAAR REFRESH HOGA, POPUP AUTOMATIC CHALU HOGA
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Chrome ke default behavior ko force stop karo
-    e.preventDefault();
-    // Prompt event ko save karo
-    deferredPrompt = e;
-    
-    console.log("Forced Installation Matrix Active. Triggering automatic prompt...");
-    
-    // Automatic immediate execution without waiting
-    setTimeout(() => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                // CRITICAL: Reset memory taaki agle refresh par phir se aaye
-                deferredPrompt = null;
-            });
-        }
-    }, 1500); // 1.5 second ke buffer ke baad automatic trigger hoga
-});
-
-// Service Worker Engine
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('PWA Android Core Active'))
-            .catch(err => console.log('PWA Bypassed'));
-    });
 }
