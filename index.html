@@ -636,12 +636,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		</section>
 		<!-- ================= QUICK ACCESS START (SMOOTH SCROLLING) ================= -->
 
-		<section class="quick-access" id="quick-access">
+		<!--<section class="quick-access" id="quick-access">
 			<h1 class="heading">Quick <span>Navigation</span></h1>
 			<div class="quick-container">
 				
 				<!-- 📘 1. NOTES (Scrolls down to Notes Section) -->
-				<a href="#notes" class="quick-card notes-card">
+		<!--		<a href="#notes" class="quick-card notes-card">
 					<div class="icon-box"><i class="fas fa-book card-blue"></i></div>
 						<h3>Notes</h3>
 						<p>Semester 1 - 6</p>
@@ -649,7 +649,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				</a>
 
 				<!-- 📄 2. PYQ (Scrolls down to PYQ Section) -->
-				<a href="#pyq" class="quick-card pyq-card">
+			<!--	<a href="#pyq" class="quick-card pyq-card">
 					<div class="icon-box"><i class="fas fa-file-alt card-red"></i></div>
 						<h3>PYQ</h3>
 						<p>Previous Year Questions</p>
@@ -657,7 +657,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				</a>
 
 				<!-- 🗂️ 3. SYLLABUS (Scrolls down to Syllabus Section) -->
-				<a href="#syllabus" class="quick-card syllabus-card">
+			<!--	<a href="#syllabus" class="quick-card syllabus-card">
 					<div class="icon-box"><i class="fas fa-graduation-cap card-green"></i></div>
 						<h3>Syllabus</h3>
 						<p>Semester 1 - 6</p>
@@ -665,7 +665,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				</a>
 
 				<!-- 📢 4. NOTICE (Scrolls down to Notice area) -->
-				<a href="#notice" class="quick-card notice-card">
+			<!--	<a href="#notice" class="quick-card notice-card">
 					<div class="icon-box"><i class="fas fa-bullhorn card-orange"></i></div>
 						<h3>Notice</h3>
 						<p>Latest Updates</p>
@@ -673,7 +673,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				</a>
 
 				<!-- 📞 5. CONTACT (Scrolls down to Contact Form) -->
-				<a href="#about-contact" class="quick-card contact-card">
+			<!--	<a href="#about-contact" class="quick-card contact-card">
 					<div class="icon-box"><i class="fas fa-phone card-purple"></i></div>
 					<h3>Contact</h3>
 					<p>Get Help</p>
@@ -681,7 +681,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				</a>
 
 				<!-- 🔗 6. QUICK LINKS (Scrolls down to Footer Grid) -->
-				<a href="#footer" class="quick-card links-card">
+		<!--		<a href="#footer" class="quick-card links-card">
 					<div class="icon-box"><i class="fas fa-link card-sky"></i></div>
 					<h3>Quick Links</h3>
 					<p>Explore Website</p>
@@ -692,7 +692,61 @@ document.addEventListener("DOMContentLoaded", () => {
 		</section>
 
 <!-- ================= QUICK ACCESS END ================= -->
+		<!-- ================= QUICK ACCESS START (SMOOTH SCROLLING) ================= -->
+<section class="quick-access" id="quick-access">
+	<h1 class="heading">Quick <span>Navigation</span></h1>
+	<div class="quick-container">
 		
+		<!-- 📘 1. NOTES -->
+		<a href="#footer" onclick="filterSemesterDashboard(1)" class="quick-card notes-card">
+			<div class="icon-box"><i class="fas fa-book card-blue"></i></div>
+			<h3>Notes</h3>
+			<p>Semester 1 - 6</p>
+			<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+		</a>
+
+		<!-- 📄 2. PYQ -->
+		<a href="#footer" onclick="filterSemesterDashboard(1)" class="quick-card pyq-card">
+			<div class="icon-box"><i class="fas fa-file-alt card-red"></i></div>
+			<h3>PYQ</h3>
+			<p>Previous Year Questions</p>
+			<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+		</a>
+
+		<!-- 🗂️ 3. SYLLABUS -->
+		<a href="#footer" onclick="filterSemesterDashboard(1)" class="quick-card syllabus-card">
+			<div class="icon-box"><i class="fas fa-graduation-cap card-green"></i></div>
+			<h3>Syllabus</h3>
+			<p>Semester 1 - 6</p>
+			<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+		</a>
+
+		<!-- 📢 4. NOTICE -->
+		<a href="#notice" class="quick-card notice-card">
+			<div class="icon-box"><i class="fas fa-bullhorn card-orange"></i></div>
+			<h3>Notice</h3>
+			<p>Latest Updates</p>
+			<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+		</a>
+
+		<!-- 📞 5. CONTACT -->
+		<a href="#about-contact" class="quick-card contact-card">
+			<div class="icon-box"><i class="fas fa-phone card-purple"></i></div>
+			<h3>Contact</h3>
+			<p>Get Help</p>
+			<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+		</a>
+
+		<!-- 🔗 6. QUICK LINKS -->
+		<a href="#footer" class="quick-card links-card">
+			<div class="icon-box"><i class="fas fa-link card-sky"></i></div>
+			<h3>Quick Links</h3>
+			<p>Explore Website</p>
+			<span class="open-btn">Open <i class="fas fa-arrow-right"></i></span>
+		</a>
+	</div>
+</section>
+<!-- ================= QUICK ACCESS END ================= -->
 		<!-- ===== IMAGE SLIDER START ===== -->
 
 		<section class="slider-section">
@@ -1441,13 +1495,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </section>-->
 		<!-- ================= UPGRADED COMPLETED QUICK FOOTER SECTION ================= -->
-<section class="footer" id="footer" style="padding: 4rem 8% 2rem 8%;">
+<!--<section class="footer" id="footer" style="padding: 4rem 8% 2rem 8%;">
     <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem; font-weight: 700;">
         Quick <span>Sections</span>
     </h2>
 
     <!-- ─── SECTION 1: SYLLABUS CARD GRID ─── -->
-    <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #4caf50; padding-left: 10px;">
+ <!--   <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #4caf50; padding-left: 10px;">
         📚 BCA Semester Syllabus
     </h3>
     <div id="syllabus" class="quick-container" style="margin-bottom: 5rem;">
@@ -1484,7 +1538,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- ─── SECTION 2: PYQ HUB CARD GRID ─── -->
-    <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #f44336; padding-left: 10px;">
+  <!--  <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #f44336; padding-left: 10px;">
         📄 Previous Year Questions (PYQ)
     </h3>
     <div id="pyq" class="quick-container" style="margin-bottom: 5rem;">
@@ -1521,7 +1575,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- ─── SECTION 3: STUDY NOTES CARD GRID ─── -->
-    <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #2196f3; padding-left: 10px;">
+ <!--   <h3 style="text-align: left; font-size: 2.2rem; margin-bottom: 2rem; border-left: 5px solid #2196f3; padding-left: 10px;">
         📘 BCA Subject Wise Notes
     </h3>
     <div id="notes" class="quick-container" style="margin-bottom: 2rem;">
@@ -1555,6 +1609,171 @@ document.addEventListener("DOMContentLoaded", () => {
             <h3>Semester - VI</h3><p>Subject Wise Notes</p>
             <span class="open-btn" style="background: linear-gradient(90deg, #2196f3, #42a5f5);">View Notes <i class="fas fa-book-open"></i></span>
         </a>
+    </div>
+</section>-->
+<!-- ================= 🗂️ SUBJECT-WISE TABBED FILTER DASHBOARD PANEL ================= -->
+<section class="footer" id="footer" style="padding: 4rem 8% 2rem 8%;">
+    <h2 style="text-align: center; font-size: 3rem; margin-bottom: 1.5rem; font-weight: 700;">
+        Interactive <span>Study Zone</span> Dashboard
+    </h2>
+    <p style="text-align: center; font-size: 1.4rem; color: #64748b; margin-bottom: 0.5rem; font-weight: 500;">
+        Select your Semester to instantly unlock Notes, PYQs, and Syllabus all in one place! 🚀
+    </p>
+    <p style="text-align: center; font-size: 1.2rem; color: #94a3b8; margin-bottom: 3.5rem; font-style: italic;">
+        (अपने सेमेस्टर का चयन करें और एक ही जगह पर नोट्स, पिछले वर्षों के प्रश्न (PYQs) और सिलेबस तुरंत प्राप्त करें! 🚀)
+    </p>
+
+    <!-- ─── MODERN MULTI-COLOR SEMESTER TABS ─── -->
+    <div class="semester-tabs-container">
+        <button class="sem-tab-btn active" onclick="filterSemesterDashboard(1)">Semester I</button>
+        <button class="sem-tab-btn" onclick="filterSemesterDashboard(2)">Semester II</button>
+        <button class="sem-tab-btn" onclick="filterSemesterDashboard(3)">Semester III</button>
+        <button class="sem-tab-btn" onclick="filterSemesterDashboard(4)">Semester IV</button>
+        <button class="sem-tab-btn" onclick="filterSemesterDashboard(5)">Semester V</button>
+        <button class="sem-tab-btn" onclick="filterSemesterDashboard(6)">Semester VI</button>
+    </div>
+
+    <!-- ─── STUDY PACKETS DISPLAY GRID ─── -->
+    <div class="dashboard-display-grid">
+        
+        <!-- ============ SEMESTER 1 HUB ============ -->
+        <div class="sem-display-card show-card" data-sem="1">
+            <div class="card-badge bg-green">Syllabus</div>
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - I</h3>
+            <p>VBU Certified Syllabus Sheet</p>
+            <a href="Syllabus/sem1.html" target="_blank" class="dashboard-action-btn btn-green">Open Syllabus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="sem-display-card show-card" data-sem="1">
+            <div class="card-badge bg-red">PYQ Hub</div>
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - I</h3>
+            <p>Previous Year Exam Papers</p>
+            <button onclick="openPyqPopup(1)" class="dashboard-action-btn btn-red">Get PYQ Papers <i class="fas fa-list"></i></button>
+        </div>
+        <div class="sem-display-card show-card" data-sem="1">
+            <div class="card-badge bg-blue">Study Notes</div>
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - I</h3>
+            <p>Subject Wise Master Notes</p>
+            <button onclick="openNotesPopup(1)" class="dashboard-action-btn btn-blue">View Notes <i class="fas fa-book-open"></i></button>
+        </div>
+
+        <!-- ============ SEMESTER 2 HUB ============ -->
+        <div class="sem-display-card" data-sem="2">
+            <div class="card-badge bg-green">Syllabus</div>
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - II</h3>
+            <p>VBU Certified Syllabus Sheet</p>
+            <a href="Syllabus/sem2.html" target="_blank" class="dashboard-action-btn btn-green">Open Syllabus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="sem-display-card" data-sem="2">
+            <div class="card-badge bg-red">PYQ Hub</div>
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - II</h3>
+            <p>Previous Year Exam Papers</p>
+            <button onclick="openPyqPopup(2)" class="dashboard-action-btn btn-red">Get PYQ Papers <i class="fas fa-list"></i></button>
+        </div>
+        <div class="sem-display-card" data-sem="2">
+            <div class="card-badge bg-blue">Study Notes</div>
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - II</h3>
+            <p>Subject Wise Master Notes</p>
+            <button onclick="openNotesPopup(2)" class="dashboard-action-btn btn-blue">View Notes <i class="fas fa-book-open"></i></button>
+        </div>
+
+        <!-- ============ SEMESTER 3 HUB ============ -->
+        <div class="sem-display-card" data-sem="3">
+            <div class="card-badge bg-green">Syllabus</div>
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - III</h3>
+            <p>VBU Certified Syllabus Sheet</p>
+            <a href="Syllabus/sem3.html" target="_blank" class="dashboard-action-btn btn-green">Open Syllabus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="sem-display-card" data-sem="3">
+            <div class="card-badge bg-red">PYQ Hub</div>
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - III</h3>
+            <p>Previous Year Exam Papers</p>
+            <button onclick="openPyqPopup(3)" class="dashboard-action-btn btn-red">Get PYQ Papers <i class="fas fa-list"></i></button>
+        </div>
+        <div class="sem-display-card" data-sem="3">
+            <div class="card-badge bg-blue">Study Notes</div>
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - III</h3>
+            <p>Subject Wise Master Notes</p>
+            <button onclick="openNotesPopup(3)" class="dashboard-action-btn btn-blue">View Notes <i class="fas fa-book-open"></i></button>
+        </div>
+
+        <!-- ============ SEMESTER 4 HUB ============ -->
+        <div class="sem-display-card" data-sem="4">
+            <div class="card-badge bg-green">Syllabus</div>
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - IV</h3>
+            <p>VBU Certified Syllabus Sheet</p>
+            <a href="Syllabus/sem4.html" target="_blank" class="dashboard-action-btn btn-green">Open Syllabus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="sem-display-card" data-sem="4">
+            <div class="card-badge bg-red">PYQ Hub</div>
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - IV</h3>
+            <p>Previous Year Exam Papers</p>
+            <button onclick="openPyqPopup(4)" class="dashboard-action-btn btn-red">Get PYQ Papers <i class="fas fa-list"></i></button>
+        </div>
+        <div class="sem-display-card" data-sem="4">
+            <div class="card-badge bg-blue">Study Notes</div>
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - IV</h3>
+            <p>Subject Wise Master Notes</p>
+            <button onclick="openNotesPopup(4)" class="dashboard-action-btn btn-blue">View Notes <i class="fas fa-book-open"></i></button>
+        </div>
+
+        <!-- ============ SEMESTER 5 HUB ============ -->
+        <div class="sem-display-card" data-sem="5">
+            <div class="card-badge bg-green">Syllabus</div>
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - V</h3>
+            <p>VBU Certified Syllabus Sheet</p>
+            <a href="Syllabus/sem5.html" target="_blank" class="dashboard-action-btn btn-green">Open Syllabus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="sem-display-card" data-sem="5">
+            <div class="card-badge bg-red">PYQ Hub</div>
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - V</h3>
+            <p>Previous Year Exam Papers</p>
+            <button onclick="openPyqPopup(5)" class="dashboard-action-btn btn-red">Get PYQ Papers <i class="fas fa-list"></i></button>
+        </div>
+        <div class="sem-display-card" data-sem="5">
+            <div class="card-badge bg-blue">Study Notes</div>
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - V</h3>
+            <p>Subject Wise Master Notes</p>
+            <button onclick="openNotesPopup(5)" class="dashboard-action-btn btn-blue">View Notes <i class="fas fa-book-open"></i></button>
+        </div>
+
+        <!-- ============ SEMESTER 6 HUB ============ -->
+        <div class="sem-display-card" data-sem="6">
+            <div class="card-badge bg-green">Syllabus</div>
+            <div class="icon-box" style="background:#eefbf1;"><i class="fas fa-graduation-cap card-green"></i></div>
+            <h3>Semester - VI</h3>
+            <p>VBU Certified Syllabus Sheet</p>
+            <a href="Syllabus/sem6.html" target="_blank" class="dashboard-action-btn btn-green">Open Syllabus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="sem-display-card" data-sem="6">
+            <div class="card-badge bg-red">PYQ Hub</div>
+            <div class="icon-box" style="background:#fff0f0;"><i class="fas fa-file-alt card-red"></i></div>
+            <h3>Semester - VI</h3>
+            <p>Previous Year Exam Papers</p>
+            <button onclick="openPyqPopup(6)" class="dashboard-action-btn btn-red">Get PYQ Papers <i class="fas fa-list"></i></button>
+        </div>
+        <div class="sem-display-card" data-sem="6">
+            <div class="card-badge bg-blue">Study Notes</div>
+            <div class="icon-box" style="background:#edf6ff;"><i class="fas fa-book card-blue"></i></div>
+            <h3>Semester - VI</h3>
+            <p>Subject Wise Master Notes</p>
+            <button onclick="openNotesPopup(6)" class="dashboard-action-btn btn-blue">View Notes <i class="fas fa-book-open"></i></button>
+        </div>
+
     </div>
 </section>
 <hr style="height: 2px; background: #eee; margin-top: 50px;">
