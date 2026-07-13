@@ -692,32 +692,31 @@ function handleEnglishVoiceAndOpen() {
     }
 }
 
-// ⚡ NEW SMART MEMORY OVERRIDE: GATEWAY AUTOMATIC BYPASS ENGINE
+// ⚡ SECURE HANDSHAKE: GATEWAY SYNC AUTO-CONTROLLER
 document.addEventListener("DOMContentLoaded", () => {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
     const loaderNode = document.getElementById("loader");
     const mainPageNode = document.getElementById("mainPage");
 
-    // Check ki kya student pehle portal enter kar chuka hai
-    if (localStorage.getItem("portal_already_entered") === "true") {
-        console.log("Welcome back student! Fast access protocol triggered.");
-        
-        // Direct Screens ko hidden karo bina kisi delay ke
-        if (gatewayScreen) gatewayScreen.style.display = "none";
-        if (loaderNode) loaderNode.style.display = "none";
-        
-        // Direct Verification flow handle karne ke liye (Aapka existing sync code)
-        if (typeof initIdentityTrackingVerification === "function") {
-            initIdentityTrackingVerification();
-        }
-    } else {
-        // Agar pehli baar aaya hai, tabhi Gateway Screen aur Loader chalega
+    // Default states clean state me rakhein
+    if (loaderNode) loaderNode.style.display = "none";
+    if (mainPageNode) mainPageNode.style.display = "none";
+
+    // Agar bacha verified hai, toh jab tak Firebase confirm nahi karega, tab tak hum 'Enter Portal' screen dikha kar rakhenge
+    if (localStorage.getItem("student_verified_profile") === "true" && localStorage.getItem("student_portal_uid")) {
         if (gatewayScreen) {
             gatewayScreen.style.display = "flex";
             gatewayScreen.style.opacity = "1";
         }
-        if (loaderNode) loaderNode.style.display = "none";
-        if (mainPageNode) mainPageNode.style.display = "none";
+        if (typeof initIdentityTrackingVerification === "function") {
+            initIdentityTrackingVerification();
+        }
+    } else {
+        // Agar naya bacha hai ya admin ne data delete kar diya hai
+        if (gatewayScreen) {
+            gatewayScreen.style.display = "flex";
+            gatewayScreen.style.opacity = "1";
+        }
     }
 });
 
@@ -743,19 +742,27 @@ function initIdentityTrackingVerification() {
         .then(dbData => {
             // 🚨 CRITICAL LOCK: Agar Firebase mein data NULL hai (yaani tumne delete kar diya hai)
             if (!dbData) {
-                console.log("Identity revoked by admin. Force resetting client portal memory...");
-                // Poori local memory mita do aur form dikhao
-                localStorage.removeItem("student_verified_profile");
-                localStorage.removeItem("student_tracked_name");
-                localStorage.removeItem("student_tracked_college");
-                localStorage.removeItem("student_tracked_sem");
-                localStorage.removeItem("student_portal_uid");
-                
-                if (document.getElementById("studentTrackingPopup")) {
-                    document.getElementById("studentTrackingPopup").style.display = "flex";
-                }
-                return;
-            }
+    console.log("Identity revoked by admin. Force resetting client portal memory...");
+    // Poori local memory aur bypass token ko clean karein
+    localStorage.removeItem("student_verified_profile");
+    localStorage.removeItem("student_tracked_name");
+    localStorage.removeItem("student_tracked_college");
+    localStorage.removeItem("student_tracked_sem");
+    localStorage.removeItem("student_portal_uid");
+    localStorage.removeItem("portal_already_entered"); // 👈 Yeh nayi line add hui hai memory flush karne ke liye
+
+    // 🚀 ENTER PORTAL WALI SCREEN KO DOBARA UTPAAN (SHOW) KAREIN
+    const gatewayScreen = document.getElementById("brand-gateway-screen");
+    if (gatewayScreen) {
+        gatewayScreen.style.display = "flex";
+        gatewayScreen.style.opacity = "1";
+    }
+
+    if (document.getElementById("studentTrackingPopup")) {
+        document.getElementById("studentTrackingPopup").style.display = "flex";
+    }
+    return;
+}
 
             // 🔄 CASE B: Agar data database mein HAI, toh welcome back process karo (Only Telegram Alert)
             const savedName = dbData.studentName || "Existing Student";
