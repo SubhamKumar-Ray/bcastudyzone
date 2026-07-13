@@ -692,31 +692,32 @@ function handleEnglishVoiceAndOpen() {
     }
 }
 
-// ⚡ SECURE HANDSHAKE: GATEWAY SYNC AUTO-CONTROLLER
+// ⚡ SECURE ANTI-FLICKER HANDSHAKE: GATEWAY SYNC AUTO-CONTROLLER (FIXED)
 document.addEventListener("DOMContentLoaded", () => {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
     const loaderNode = document.getElementById("loader");
     const mainPageNode = document.getElementById("mainPage");
 
-    // Default states clean state me rakhein
+    // Pre-load cleanups
     if (loaderNode) loaderNode.style.display = "none";
-    if (mainPageNode) mainPageNode.style.display = "none";
 
-    // Agar bacha verified hai, toh jab tak Firebase confirm nahi karega, tab tak hum 'Enter Portal' screen dikha kar rakhenge
+    // 🔥 SMART CHECK: Agar bacha verified hai, toh screen load hote hi pehle main content area ko bypass karke show kar do taaki flicker na ho!
     if (localStorage.getItem("student_verified_profile") === "true" && localStorage.getItem("student_portal_uid")) {
-        if (gatewayScreen) {
-            gatewayScreen.style.display = "flex";
-            gatewayScreen.style.opacity = "1";
-        }
+        
+        if (gatewayScreen) gatewayScreen.style.display = "none"; // Refresh par jhatka roko (Hide gateway instantly)
+        if (mainPageNode) mainPageNode.style.display = "block";  // Seedhe website ka main page kholo
+        
+        // Background me chupchaap check lagayein ki kahin admin ne data delete toh nahi kiya
         if (typeof initIdentityTrackingVerification === "function") {
             initIdentityTrackingVerification();
         }
     } else {
-        // Agar naya bacha hai ya admin ne data delete kar diya hai
+        // Agar naya student hai ya browser clear hai, toh pure gateway animations ke sath launch karein
         if (gatewayScreen) {
             gatewayScreen.style.display = "flex";
             gatewayScreen.style.opacity = "1";
         }
+        if (mainPageNode) mainPageNode.style.display = "none";
     }
 });
 
