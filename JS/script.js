@@ -929,3 +929,32 @@ function proceedToVoicePopupHandover() {
         }
     }
 }
+
+// =========================================================================
+// 🧠 DASHBOARD CORE FLOW INTERACTIVE FILTER ENGINE (NO ANNOTATION MIX)
+// =========================================================================
+
+function filterSemesterDashboard(selectedSem) {
+    // 1. Saare tab buttons se active class hatao aur selected wale par add karo
+    const tabs = document.querySelectorAll('.sem-tab-btn');
+    tabs.forEach((tab, index) => {
+        if (index === (selectedSem - 1)) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
+    // 2. Pehle purane cards se animate class hatao aur unhe hide karne ka space do
+    const cards = document.querySelectorAll('.sem-display-card');
+    cards.forEach(card => {
+        card.classList.remove('show-card');
+        
+        // Animation smooth lage isliye micro-timeout injection lagaya hai
+        setTimeout(() => {
+            if (parseInt(card.getAttribute('data-sem')) === selectedSem) {
+                card.classList.add('show-card');
+            }
+        }, 150);
+    });
+}
