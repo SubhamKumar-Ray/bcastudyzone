@@ -223,10 +223,9 @@ function openPyqPopup(sem) {
                     <a href="${getWaShareLink('Semester 3 PYQ (2023-2026)', 'PYQ/sem3/2023_26.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
                 </div>
                 <div class="swal-link-container">
-				    <a href="PYQ/sem3/2024_27.html" target="_blank" class="swal-link-btn swal-pyq-active">2024-2027</a>
-                    <a href="${getWaShareLink('Semester 3 PYQ (2024-2027)', 'PYQ/sem3/2024_27.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            
+					<a class="swal-link-btn swal-res-cs">2024-2027</a>
+				</div>
+            `
         };
     } else if(sem === 4) {
         pyqData = { 
