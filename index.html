@@ -2755,5 +2755,32 @@ onValue(ref(db, "activePortalUsers"), (snapshot) => {
    class="call-float">
     <i class="fas fa-phone-alt"></i>
 </a>
+<!-- 🚀 CYBERPUNK ROCKET SCROLL-TO-TOP BUTTON START -->
+<button id="cyber-rocket-btn" onclick="scrollToTopMatrix()" aria-label="Scroll to top">
+    <i class="fas fa-rocket"></i>
+</button>
+
+<script>
+window.addEventListener("scroll", () => {
+    const rocketBtn = document.getElementById("cyber-rocket-btn");
+    if (!rocketBtn) return;
+
+    // 400 पिक्सेल नीचे जाने पर रॉकेट बटन दिखेगा
+    if (window.scrollY > 400) {
+        rocketBtn.classList.add("show-rocket");
+    } else {
+        rocketBtn.classList.remove("show-rocket");
+    }
+});
+
+// क्लिक करने पर स्मूथली ऊपर जाने का फंक्शन
+function scrollToTopMatrix() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+</script>
+<!-- 🚀 CYBERPUNK ROCKET SCROLL-TO-TOP BUTTON END -->
 </body>
 </html>
