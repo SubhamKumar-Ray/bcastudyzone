@@ -2553,20 +2553,44 @@ const db = getDatabase(app);
 const visitorId = localStorage.getItem("visitorId") || "user_" + Math.random().toString(36).substr(2, 9);
 localStorage.setItem("visitorId", visitorId);
 
-// 2. LIVE DIGITAL CLOCK LOOP
+// 2. LIVE DIGITAL CLOCK LOOP (STRICT IST TIMEZONE & MIDNIGHT AUTO-UPDATE)
 function updateClock(){
     const now = new Date();
-    document.getElementById("liveClock").innerHTML = now.toLocaleTimeString("en-US", {
-        hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true
+
+    // 🇮🇳 भारत (IST) के समय अनुसार टाइम
+    const timeString = now.toLocaleTimeString("en-US", {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit", 
+        minute: "2-digit", 
+        second: "2-digit", 
+        hour12: true
     });
-    const day = now.toLocaleDateString("en-US", { weekday: "long" });
-    document.getElementById("currentDay").innerHTML = day;
-    const date = now.toLocaleDateString("en-GB");
-    document.getElementById("todayDate").innerHTML = date;
+    document.getElementById("liveClock").innerHTML = timeString;
+
+    // 🇮🇳 भारत के समय अनुसार दिन (Monday, Tuesday, etc.)
+    const dayString = now.toLocaleDateString("en-US", {
+        timeZone: "Asia/Kolkata",
+        weekday: "long"
+    });
+    document.getElementById("currentDay").innerHTML = dayString;
+
+    // 🇮🇳 भारत के समय अनुसार तारीख (DD/MM/YYYY)
+    const dateString = now.toLocaleDateString("en-GB", {
+        timeZone: "Asia/Kolkata",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+
+    document.getElementById("todayDate").innerHTML = dateString;
 
     const bottom = document.getElementById("todayDateBottom");
-    if(bottom) { bottom.innerHTML = date; }
+    if(bottom) { 
+        bottom.innerHTML = dateString; 
+    }
 }
+
+// तुरंत चलाएँ और हर 1 सेकंड में सिंक रखें
 updateClock();
 setInterval(updateClock, 1000);
 
