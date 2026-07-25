@@ -1727,58 +1727,6 @@
     .sem-tab-btn { padding: 10px 22px; font-size: 1.3rem; }
     .sem-display-card { padding: 3rem 2rem 2rem 2rem; }
 }
-/* ==================== PROFESSIONAL COLORFUL TICKER ALERT BAR ==================== */
-.global-ticker-bar {
-    position: fixed;
-    top: 68px; /* डेस्कटॉप हेडर के ठीक नीचे */
-    left: 0;
-    width: 100%;
-    background: #111827; /* प्रीमियम डार्क बैकग्राउंड ताकि कलर्स निखर कर दिखें */
-    z-index: 999;
-    height: 38px; /* ऊंचाई हल्की सी बढ़ाई ताकि स्पेस मिले */
-    display: flex !important;
-    align-items: center !important; /* 🎯 टेक्स्ट को वर्टिकली बिल्कुल बीच में रखने के लिए */
-    justify-content: center;
-    overflow: hidden;
-    border-bottom: 2px solid #00f7ff; /* नीचे पतली नियॉन बॉर्डर */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.ticker-content-wrapper {
-    display: flex;
-    align-items: center; /* 🎯 रैपर के अंदर भी परफेक्ट सेंटर लॉक */
-    white-space: nowrap;
-    animation: tickerLoop 28s linear infinite;
-    line-height: 38px; /* 🎯 ऊंचाई के बराबर लाइन हाइट ताकि टेक्स्ट ऊपर-नीचे न भागे */
-}
-
-.ticker-content-wrapper:hover {
-    animation-play-state: paused;
-    cursor: pointer;
-}
-
-.ticker-text {
-    font-size: 1.45rem; /* 💡 डेस्कटॉप पर हल्का बड़ा और साफ़ लुक */
-    font-weight: 600;
-    padding-right: 60px;
-    letter-spacing: 0.5px;
-    display: inline-block;
-}
-
-/* 🎨 अलग-अलग टेक्स्ट के लिए आकर्षक कलर्स */
-.ticker-text .t-gold { color: #ffd700; font-weight: 700; }
-.ticker-text .t-white { color: #ffffff; }
-.ticker-text .t-yellow { color: #ffff00; font-weight: 700; }
-.ticker-text .t-cyan { color: #00f7ff; }
-.ticker-text .t-orange { color: #ff9800; }
-.ticker-text .t-lightgreen { color: #00ff88; }
-
-/* 🔄 लूप एनीमेशन */
-@keyframes tickerLoop {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-50%, 0, 0); }
-}
-
 /* ==================== 📱 100% मोबाइल और टैबलेट रिस्पॉन्सिव फिक्स ==================== */
 @media (max-width: 768px) {
     .global-ticker-bar {
@@ -1800,14 +1748,15 @@
     }
 }
 
-/* 🚨 आपके नोटिस बॉक्स और कंटेंट का नया सुरक्षित मार्जिन (ताकि कुछ भी न छुपे) */
+/* ✅ नोटिस सेक्शन के लिए यह सिंपल मार्जिन सेट करें */
 .notice-section {
-    margin-top: 145px !important; /* डेस्कटॉप के लिए सुरक्षित दूरी */
+    margin-top: 90px !important;
+    margin-bottom: 30px !important;
 }
 
 @media (max-width: 768px) {
     .notice-section {
-        margin-top: 130px !important; /* मोबाइल पर परफेक्ट गैप बनाए रखेगा */
+        margin-top: 80px !important;
     }
 }
 /* ==================== 🚀 CYBERPUNK ROCKET BUTTON STYLE ==================== */
