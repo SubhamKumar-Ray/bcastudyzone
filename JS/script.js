@@ -38,7 +38,6 @@ if (slides.length > 0) {
     setInterval(showNextMember, 3000);
 }
 
-
 // ==================== SWEETALERT INLINE CUSTOM STYLES ====================
 const styleTag = document.createElement('style');
 styleTag.innerHTML = `
@@ -937,18 +936,19 @@ function completeTrackingSequence() {
 }
 
 function proceedToVoicePopupHandover() {
-    if (localStorage.getItem("notification_registered") === "true") {
-        if (document.getElementById("voicePopup")) {
-            document.getElementById("voicePopup").style.display = "flex";
-        } else if (document.getElementById("mainPage")) {
-            document.getElementById("mainPage").style.display = "block";
-        }
-    } else {
-        if (document.getElementById("notificationRequestPopup")) {
-            document.getElementById("notificationRequestPopup").style.display = "flex";
-        } else if (document.getElementById("voicePopup")) {
-            document.getElementById("voicePopup").style.display = "flex";
-        }
+    // ❌ वॉइस पॉपअप को पूरी तरह छिपा दिया गया है
+    if (document.getElementById("voicePopup")) {
+        document.getElementById("voicePopup").style.display = "none";
+    }
+    
+    // 🚀 यूजर सीधे मुख्य वेबसाइट (Main Page) पर पहुँच जाएगा
+    if (document.getElementById("mainPage")) {
+        document.getElementById("mainPage").style.display = "block";
+    }
+
+    // अगर कोई VBU नोटिस अलर्ट पॉपअप है तो वो ट्रिगर हो जाएगा
+    if (typeof triggerVbuNoticePopupMetrics === "function") {
+        triggerVbuNoticePopupMetrics();
     }
 }
 
