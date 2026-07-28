@@ -332,7 +332,10 @@ function openPyqPopup(sem) {
 					<a href="PYQ/sem6/2018_21.html" target="_blank" class="swal-link-btn swal-pyq-active">2018-2021</a>
 					<a href="${getWaShareLink('Semester 6 PYQ (2018-2021)', 'PYQ/sem6/2018_21.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
 				</div>
-				<div class="swal-link-container"><a class="swal-link-btn swal-res-na">2019-2022</a></div>
+				<div class="swal-link-container">
+					<a href="PYQ/sem6/2019_22.html" target="_blank" class="swal-link-btn swal-pyq-active">2019-2022</a>
+					<a href="${getWaShareLink('Semester 6 PYQ (2019-2022)', 'PYQ/sem6/2017_20.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
+				</div>
 				<div class="swal-link-container">
 					<a href="PYQ/sem6/2020_23.html" target="_blank" class="swal-link-btn swal-pyq-active">2020-2023</a>
 					<a href="${getWaShareLink('Semester 6 PYQ (2020-2023)', 'PYQ/sem6/2020_23.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
@@ -987,10 +990,11 @@ function filterSemesterDashboard(selectedSem) {
 // 🎯 AAPKA CONTROL NODE: Jab bhi aap 1 din me 2-3 cheezein change ya add karein, 
 // Bas neeche LATEST_SYSTEM_UPDATES ke andar details badal dein.
 const LATEST_SYSTEM_UPDATES = {
-    versionID: "v5.2.3_pyq_sem3", // 🔴 1. Version ID badal di (v5.2.0 se badal kar v5.2.1 kar diya)
-    updateDate: "16-07-2026",     // 🔴 2. Aaj ki date
+    versionID: "v5.2.4_pyq_sem6", // 🔴 1. Version ID badal di (v5.2.0 se badal kar v5.2.1 kar diya)
+	updateDate: "28-07-2026",     // 🔴 2. Aaj ki date
     items: [
         { type: "ADDED", text: "BCA Semester-III PYQ Paper for Session: 2024–2027 is now available." }, // 🔴 3. Jo aapne aaj add kiya!
+		{ type: "ADDED", text: "BCA Semester-VI PYQ Paper for Session: 2019–2022 is now available." },
     ]
 };
 
