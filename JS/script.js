@@ -334,7 +334,7 @@ function openPyqPopup(sem) {
 				</div>
 				<div class="swal-link-container">
 					<a href="PYQ/sem6/2019_22.html" target="_blank" class="swal-link-btn swal-pyq-active">2019-2022</a>
-					<a href="${getWaShareLink('Semester 6 PYQ (2019-2022)', 'PYQ/sem6/2017_20.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
+					<a href="${getWaShareLink('Semester 6 PYQ (2019-2022)', 'PYQ/sem6/2019_22.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
 				</div>
 				<div class="swal-link-container">
 					<a href="PYQ/sem6/2020_23.html" target="_blank" class="swal-link-btn swal-pyq-active">2020-2023</a>
