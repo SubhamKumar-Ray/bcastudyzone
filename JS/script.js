@@ -932,9 +932,7 @@ function completeTrackingSequence() {
     if (document.getElementById("studentTrackingPopup")) {
         document.getElementById("studentTrackingPopup").style.display = "none";
     }
-	
-	// 📢 NEW ALERT: Register hone wale naye students ko automatic update popup dikhega
-    triggerPortalUpdateNotification();
+
     proceedToVoicePopupHandover();
 }
 
@@ -983,77 +981,3 @@ function filterSemesterDashboard(selectedSem) {
         }, 150);
     });
 }
-// =========================================================================
-// 🚀 REALTIME LIVE PORTAL UPDATES & CHANGELOG NOTIFICATION SYSTEM
-// =========================================================================
-
-// 🎯 AAPKA CONTROL NODE: Jab bhi aap 1 din me 2-3 cheezein change ya add karein, 
-// Bas neeche LATEST_SYSTEM_UPDATES ke andar details badal dein.
-const LATEST_SYSTEM_UPDATES = {
-    versionID: "v5.2.4_pyq_sem6", // 🔴 1. Version ID badal di (v5.2.0 se badal kar v5.2.1 kar diya)
-	updateDate: "28-07-2026",     // 🔴 2. Aaj ki date
-    items: [
-        { type: "ADDED", text: "BCA Semester-III PYQ Paper for Session: 2024–2027 is now available." }, // 🔴 3. Jo aapne aaj add kiya!
-		{ type: "ADDED", text: "BCA Semester-VI PYQ Paper for Session: 2019–2022 is now available." },
-    ]
-};
-
-// 🧠 AUTOMATED VERIFICATION ENGINE
-function triggerPortalUpdateNotification() {
-    const savedVersion = localStorage.getItem("last_seen_portal_version");
-
-    // Agar student ka versionID match nahi khata, matlab aapne site par kuch naya badla hai!
-    if (savedVersion !== LATEST_SYSTEM_UPDATES.versionID) {
-        
-        // Dynamic badges and HTML compilation array
-        let updatesHtml = `<div style="text-align: left; max-height: 280px; overflow-y: auto; padding-right: 5px; font-family: 'Poppins', sans-serif;">
-            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px; font-weight: 500; text-align: center;">
-                📅 Release Date: <b>${LATEST_SYSTEM_UPDATES.updateDate}</b> ( BCA Study Zone Portal )
-            </p>`;
-
-        LATEST_SYSTEM_UPDATES.items.forEach(update => {
-            let badgeColor = update.type === "ADDED" ? "#00c853" : "#2563eb"; // Green for added, Blue for updated
-            
-            updatesHtml += `
-                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; border-bottom: 1px dashed rgba(0,0,0,0.06); padding-bottom: 8px;">
-                    <span style="background: ${badgeColor}; color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: inline-block; min-width: 65px; text-align: center;">
-                        ${update.type}
-                    </span>
-                    <p style="font-size: 13.5px; color: inherit; font-weight: 500; margin: 0; line-height: 1.4;">
-                        ${update.text}
-                    </p>
-                </div>`;
-        });
-
-        updatesHtml += `</div>`;
-
-        // Launch Premium SweetAlert2 Dynamic Popup
-        setTimeout(() => {
-            Swal.fire({
-                title: '⚡ What\'s New & System Updates',
-                html: updatesHtml,
-                icon: 'info',
-                confirmButtonText: 'Got It, Access Dashboard 🚀',
-                confirmButtonColor: '#009dff',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                background: document.body.classList.contains('dark-mode') ? '#1e293b' : '#ffffff',
-                color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#130f40',
-                customClass: {
-                    popup: 'premium-changelog-modal'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Student ne dekh liya, ab local storage me save kar lo taaki baar-baar disturb na kare
-                    localStorage.setItem("last_seen_portal_version", LATEST_SYSTEM_UPDATES.versionID);
-                }
-            });
-        }, 1500); // 1.5 Second ka buffer
-    }
-}
-// Puraane verified students ke browser me page load hote hi checking engine active karein
-document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("student_verified_profile") === "true") {
-        triggerPortalUpdateNotification();
-    }
-});
