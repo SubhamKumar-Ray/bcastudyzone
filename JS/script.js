@@ -981,3 +981,41 @@ function filterSemesterDashboard(selectedSem) {
         }, 150);
     });
 }
+// 🚀 DYNAMIC COACHING POSTER ROTATOR
+const coachingPostersList = [
+    "Gallary/randhir_sir_coaching2.png",
+    "Gallary/randhir_sir_coaching3.png"
+];
+
+function showCoachingAdPopup() {
+    const coachingModal = document.getElementById("coachingAdModal");
+    const posterElement = document.getElementById("coachingDynamicPoster");
+
+    if (coachingModal && posterElement) {
+        // दोनों फोटो में से एक रैंडम फोटो चुनेगा
+        const randomIndex = Math.floor(Math.random() * coachingPostersList.length);
+        posterElement.src = coachingPostersList[randomIndex];
+
+        // पॉपअप को डिस्प्ले करेगा
+        coachingModal.style.display = "flex";
+    }
+}
+
+function closeCoachingAd() {
+    const coachingModal = document.getElementById("coachingAdModal");
+    if (coachingModal) {
+        coachingModal.style.display = "none";
+    }
+}
+
+// ESC बटन दबाने पर बंद करें
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+        closeCoachingAd();
+    }
+});
+
+// 1.5 सेकंड बाद एड ट्रिगर करें
+setTimeout(() => {
+    showCoachingAdPopup();
+}, 1500);
