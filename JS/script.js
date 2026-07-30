@@ -981,22 +981,30 @@ function filterSemesterDashboard(selectedSem) {
         }, 150);
     });
 }
-// 🚀 DYNAMIC COACHING POSTER ROTATOR
+// 🚀 DYNAMIC COACHING POSTER ROTATOR WITH MOBILE ADMIN CONTROL
 const coachingPostersList = [
     "Gallary/randhir_sir_coaching2.png",
     "Gallary/randhir_sir_coaching3.png"
 ];
 
+// डिफ़ॉल्ट रूप से एड ON रहेगा जब तक आप इसे कंट्रोल पैनल से OFF न कर दें
+if (localStorage.getItem("coaching_ad_enabled") === null) {
+    localStorage.setItem("coaching_ad_enabled", "true");
+}
+
 function showCoachingAdPopup() {
+    // अगर एडमिन ने मोबाइल से एड OFF किया है तो एड नहीं दिखेगा
+    if (localStorage.getItem("coaching_ad_enabled") === "false") {
+        console.log("Coaching Ad is currently DISABLED by Owner.");
+        return;
+    }
+
     const coachingModal = document.getElementById("coachingAdModal");
     const posterElement = document.getElementById("coachingDynamicPoster");
 
     if (coachingModal && posterElement) {
-        // दोनों फोटो में से एक रैंडम फोटो चुनेगा
         const randomIndex = Math.floor(Math.random() * coachingPostersList.length);
         posterElement.src = coachingPostersList[randomIndex];
-
-        // पॉपअप को डिस्प्ले करेगा
         coachingModal.style.display = "flex";
     }
 }
@@ -1008,14 +1016,68 @@ function closeCoachingAd() {
     }
 }
 
-// ESC बटन दबाने पर बंद करें
+// 🔐 SECRET ADMIN CONTROL PANEL FUNCTIONS
+const ADMIN_SECRET_PIN = "SUBHAM2023VBU"; // 👈 यहाँ अपना मनपसंद 4-डिजिट पासवर्ड डालें
+
+function openAdminControlPanel() {
+    const enteredPin = prompt("🔑 Enter Owner Admin Password:");
+    if (enteredPin === ADMIN_SECRET_PIN) {
+        const adminModal = document.getElementById("adminAdControlModal");
+        if (adminModal) {
+            updateAdminPanelUI();
+            adminModal.style.display = "flex";
+        }
+    } else if (enteredPin !== null) {
+        alert("❌ Incorrect Password!");
+    }
+}
+
+function closeAdminControlPanel() {
+    const adminModal = document.getElementById("adminAdControlModal");
+    if (adminModal) {
+        adminModal.style.display = "none";
+    }
+}
+
+function updateAdminPanelUI() {
+    const btn = document.getElementById("toggleAdStatusBtn");
+    const msg = document.getElementById("adminStatusMsg");
+    const isEnabled = localStorage.getItem("coaching_ad_enabled") === "true";
+
+    if (isEnabled) {
+        btn.innerText = "🟢 AD STATUS: ACTIVE (Click to Turn OFF)";
+        btn.style.background = "#00c853";
+        btn.style.color = "#ffffff";
+        msg.innerText = "Ad is currently SHOWING to all users.";
+        msg.style.color = "#00ff88";
+    } else {
+        btn.innerText = "🔴 AD STATUS: DISABLED (Click to Turn ON)";
+        btn.style.background = "#ff3838";
+        btn.style.color = "#ffffff";
+        msg.innerText = "Ad is currently HIDDEN from all users.";
+        msg.style.color = "#ff4d4d";
+    }
+}
+
+function toggleAdStatusFromAdmin() {
+    const isEnabled = localStorage.getItem("coaching_ad_enabled") === "true";
+    if (isEnabled) {
+        localStorage.setItem("coaching_ad_enabled", "false");
+    } else {
+        localStorage.setItem("coaching_ad_enabled", "true");
+    }
+    updateAdminPanelUI();
+}
+
+// ESC की से पॉपअप क्लोज करने का सपोर्ट
 document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
         closeCoachingAd();
+        closeAdminControlPanel();
     }
 });
 
-// 1.5 सेकंड बाद एड ट्रिगर करें
+// 1.5 सेकंड बाद एड ट्रिगर होगा
 setTimeout(() => {
     showCoachingAdPopup();
 }, 1500);
