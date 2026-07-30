@@ -2030,7 +2030,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <section class="footer1">
                 <div class="credit" id="contact">
-                        <p>version 5.0.0</p>
+                        <!-- 🔑 version 5.0.0 पर क्लिक करते ही एडमिन पैनल खुल जाएगा -->
+						<p onclick="openAdminControlPanel()" style="cursor: pointer; display: inline-block;" title="Click for Admin Control">version 5.0.0 ⚙️</p>
                         <p>Last update: 06-07-2026</p>
                         BCA Study <span>Zone</span><br>
                         &#169; copyright 2026 All Rights Reserved<br>
@@ -2794,6 +2795,7 @@ function scrollToTopMatrix() {
 </script>
 <!-- 🚀 CYBERPUNK ROCKET SCROLL-TO-TOP BUTTON END -->
 <!-- 🚀 TALENT HUNT SOFTWARE SOLUTION (RANDHIR SIR) DYNAMIC COACHING POPUP AD -->
+<!-- 🚀 TALENT HUNT SOFTWARE SOLUTION (RANDHIR SIR) DYNAMIC COACHING POPUP AD -->
 <div id="coachingAdModal" class="coaching-modal-overlay">
     <div class="coaching-modal-card">
         <!-- Close Button -->
@@ -2804,7 +2806,6 @@ function scrollToTopMatrix() {
 
         <!-- Dynamic Poster Image Container -->
         <div class="coaching-poster-wrapper">
-            <!-- यहाँ src खाली रहेगा, JS अपने आप रीफ्रेश पर इमेज बदलेगा -->
             <img id="coachingDynamicPoster" src="" alt="Talent Hunt Software Solution - Computer Science for BCA">
         </div>
 
@@ -2820,6 +2821,22 @@ function scrollToTopMatrix() {
                 <i class="fas fa-map-marker-alt"></i> Location
             </a>
         </div>
+    </div>
+</div>
+
+<!-- 🔐 SECRET ADMIN CONTROL PANEL POPUP (केवल आपके लिए) -->
+<div id="adminAdControlModal" class="coaching-modal-overlay">
+    <div class="coaching-modal-card" style="max-width: 360px; border-color: #ffd700;">
+        <button class="coaching-modal-close" onclick="closeAdminControlPanel()">&times;</button>
+        <h3 style="color:#ffd700; font-size: 2rem; margin-bottom: 10px;">👑 Owner Control</h3>
+        <p style="color:#fff; font-size:1.3rem; margin-bottom: 20px;">Coaching Ad Status Manage Karein:</p>
+        
+        <div style="margin-bottom: 20px;">
+            <button id="toggleAdStatusBtn" onclick="toggleAdStatusFromAdmin()" style="width:100%; padding: 12px; font-size: 1.5rem; font-weight: bold; border-radius: 10px; border:none; cursor:pointer;">
+                Loading Status...
+            </button>
+        </div>
+        <p id="adminStatusMsg" style="color:#00ff88; font-size:1.2rem; font-weight:bold;"></p>
     </div>
 </div>
 </body>
