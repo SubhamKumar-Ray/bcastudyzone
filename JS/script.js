@@ -982,37 +982,35 @@ function filterSemesterDashboard(selectedSem) {
     });
 }
 // =========================================================================
-// 🚀 TALENT HUNT SOFTWARE SOLUTION - GLOBAL FIREBASE AD CONTROL ENGINE
+// 🚀 TALENT HUNT SOFTWARE SOLUTION - DYNAMIC ADMIN & AD CONTROL ENGINE
 // =========================================================================
 
-// 1. दोनों पोस्टर्स की पाथ लिस्ट (रीफ्रेश करने पर रैंडमली चुनेंगे)
+// 1. दोनों पोस्टर इमेजेस की पाथ लिस्ट (रीफ्रेश करने पर रैंडमली बदलेंगी)
 const coachingPostersList = [
     "Gallary/randhir_sir_coaching2.png",
     "Gallary/randhir_sir_coaching3.png"
 ];
 
-// 2. 🔑 आपका एडमिन पासवर्ड (यहाँ आप अपना नया पासवर्ड बदल सकते हैं)
-const ADMIN_SECRET_PIN = "1234"; 
+// 2. Firebase Cloud Realtime Database Nodes
+const FIREBASE_AD_SETTINGS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/coachingAdSettings.json";
+const FIREBASE_ADMIN_AUTH_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/ownerAdminAuth.json";
 
-// 3. Firebase Cloud Realtime Database Link (ग्लोबल स्टेटस स्टोर करने के लिए)
-const FIREBASE_AD_STATUS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/coachingAdSettings.json";
+// 3. डिफ़ॉल्ट सिक्योरिटी सीक्रेट की (Forget Password के वक्त काम आएगी)
+const OWNER_RECOVERY_EMAIL = "subham"; // रिसेट करने के लिए सीक्रेट रिकवरी की
 
 /**
- * 🎯 1. SHOW AD POPUP FUNCTION (सभी छात्रों के लिए)
- * यह फ़ंक्शन सर्वर से चेक करता है कि एड ON है या नहीं।
- * अगर एड ON है तभी यह रैंडमली एक पोस्टर सिलेक्ट करके स्क्रीन पर दिखाता है।
+ * 🎯 1. SHOW AD POPUP (छात्रों के लिए एड प्रदर्शित करना)
  */
 function showCoachingAdPopup() {
-    fetch(FIREBASE_AD_STATUS_URL)
+    fetch(FIREBASE_AD_SETTINGS_URL)
         .then(response => response.json())
         .then(data => {
-            // अगर सर्वर पर ओनर (आप) ने एड OFF किया हुआ है, तो किसी को भी एड नहीं दिखेगा
+            // अगर एडमिन (आप) ने क्लाउड सर्वर से एड OFF किया है तो किसी को नहीं दिखेगा
             if (data && data.enabled === false) {
                 console.log("🚫 Coaching Ad is globally DISABLED by Owner for all users.");
                 return;
             }
 
-            // अगर एड ON है, तो रैंडम पोस्टर सिलेक्ट करके दिखाओ
             const coachingModal = document.getElementById("coachingAdModal");
             const posterElement = document.getElementById("coachingDynamicPoster");
 
@@ -1027,10 +1025,6 @@ function showCoachingAdPopup() {
         });
 }
 
-/**
- * ❌ 2. CLOSE AD FUNCTION
- * यह पॉपअप के ऊपर बने लाल 'X' बटन पर क्लिक करने पर एड बंद करता है।
- */
 function closeCoachingAd() {
     const coachingModal = document.getElementById("coachingAdModal");
     if (coachingModal) {
@@ -1039,26 +1033,41 @@ function closeCoachingAd() {
 }
 
 /**
- * 🔐 3. OPEN ADMIN CONTROL PANEL (केवल आपके लिए)
- * फ़ुटर में 'version 5.0.0 ⚙️' पर क्लिक करने पर पासवर्ड पूछता है।
+ * 🔐 2. OPEN ADMIN CONTROL PANEL & LOGIN
  */
 function openAdminControlPanel() {
-    const enteredPin = prompt("🔑 Enter Owner Admin Password:");
-    if (enteredPin === ADMIN_SECRET_PIN) {
-        const adminModal = document.getElementById("adminAdControlModal");
-        if (adminModal) {
-            fetchAdminAdStatusFromFirebase();
-            adminModal.style.display = "flex";
-        }
-    } else if (enteredPin !== null) {
-        alert("❌ Incorrect Password!");
-    }
+    // सर्वर से वर्तमान पासवर्ड प्राप्त करें
+    fetch(FIREBASE_ADMIN_AUTH_URL)
+        .then(res => res.json())
+        .then(authData => {
+            const currentMasterPin = (authData && authData.pin) ? authData.pin : "1234";
+            
+            const enteredPin = prompt("🔑 Enter Owner Admin Password:\n(अगर पासवर्ड भूल गए हैं तो 'forget' लिखें)");
+
+            if (enteredPin === null) return; // कैंसिल करने पर रुक जाएं
+
+            // पासवर्ड भूल जाने का केस
+            if (enteredPin.trim().toLowerCase() === "forget" || enteredPin.trim().toLowerCase() === "forgot") {
+                handleForgotPasswordProcess();
+                return;
+            }
+
+            // सही पासवर्ड डालने का केस
+            if (enteredPin === currentMasterPin) {
+                const adminModal = document.getElementById("adminAdControlModal");
+                if (adminModal) {
+                    fetchAdminAdStatusFromFirebase();
+                    adminModal.style.display = "flex";
+                }
+            } else {
+                alert("❌ Incorrect Password!\n\nअगर आप पासवर्ड भूल गए हैं तो पासवर्ड बॉक्स में 'forget' लिखें।");
+            }
+        })
+        .catch(() => {
+            alert("⚠️ Connection error! Please verify your internet settings.");
+        });
 }
 
-/**
- * 🛑 4. CLOSE ADMIN CONTROL PANEL
- * ओनर कंट्रोल पैनल को बंद करने के लिए।
- */
 function closeAdminControlPanel() {
     const adminModal = document.getElementById("adminAdControlModal");
     if (adminModal) {
@@ -1067,14 +1076,80 @@ function closeAdminControlPanel() {
 }
 
 /**
- * 🔄 5. FETCH ADMIN STATUS FROM FIREBASE
- * यह चेक करता है कि वर्तमान में सर्वर पर एड का स्टेटस ON है या OFF।
+ * 🔑 3. CHANGE PASSWORD FUNCTION (बिना कोड छुए वेबसाइट से ही)
+ */
+function changeAdminPasswordOnline() {
+    fetch(FIREBASE_ADMIN_AUTH_URL)
+        .then(res => res.json())
+        .then(authData => {
+            const currentMasterPin = (authData && authData.pin) ? authData.pin : "1234";
+            const oldPinInput = prompt("🔑 पुराना Password डालें:");
+
+            if (oldPinInput === currentMasterPin) {
+                const newPinInput = prompt("✨ नया 4-Digit Password लिखें:");
+                if (newPinInput && newPinInput.trim().length >= 4) {
+                    
+                    // नया पासवर्ड सीधे Firebase पर अपडेट करें
+                    fetch(FIREBASE_ADMIN_AUTH_URL, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            pin: newPinInput.trim(),
+                            updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+                        })
+                    })
+                    .then(() => {
+                        alert("🎉 Congratulations!\n\nआपका नया Password सफलतापूर्वक अपडेट हो गया है: " + newPinInput.trim());
+                    });
+
+                } else {
+                    alert("❌ पासवर्ड कम से कम 4 अंकों का होना चाहिए!");
+                }
+            } else if (oldPinInput !== null) {
+                alert("❌ पुराना पासवर्ड गलत है!");
+            }
+        });
+}
+
+/**
+ * 🆘 4. FORGET PASSWORD RECOVERY SYSTEM (पासवर्ड भूल जाने पर)
+ */
+function handleForgotPasswordProcess() {
+    const recoveryKeyInput = prompt("🛡️ Password Recovery Verification:\n\nअपना सीक्रेट ओनर रिकवरी कोड (Username/Key) लिखें:");
+
+    if (recoveryKeyInput && recoveryKeyInput.trim().toLowerCase() === OWNER_RECOVERY_EMAIL.toLowerCase()) {
+        const resetNewPin = prompt("✅ Verification Successful!\n\nअपना नया Admin Password सेट करें (Min 4 Digits):");
+
+        if (resetNewPin && resetNewPin.trim().length >= 4) {
+            
+            fetch(FIREBASE_ADMIN_AUTH_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pin: resetNewPin.trim(),
+                    updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+                })
+            })
+            .then(() => {
+                alert("🎉 Password Successfully Reset!\n\nआपका नया पासवर्ड है: " + resetNewPin.trim() + "\n\nअब आप इस नए पासवर्ड से लॉगिन कर सकते हैं।");
+            });
+
+        } else {
+            alert("❌ अमान्य पासवर्ड! पासवर्ड कम से कम 4 अंकों का होना चाहिए।");
+        }
+    } else if (recoveryKeyInput !== null) {
+        alert("❌ अमान्य सिक्योरिटी की (Security Key)! रिकवरी रद्द की गई।");
+    }
+}
+
+/**
+ * 🔄 5. FETCH & UPDATE ADMIN PANEL UI
  */
 function fetchAdminAdStatusFromFirebase() {
     const btn = document.getElementById("toggleAdStatusBtn");
     if(btn) btn.innerText = "⏳ Checking Cloud Server Status...";
 
-    fetch(FIREBASE_AD_STATUS_URL)
+    fetch(FIREBASE_AD_SETTINGS_URL)
         .then(res => res.json())
         .then(data => {
             const isEnabled = (data && data.enabled !== undefined) ? data.enabled : true;
@@ -1083,10 +1158,6 @@ function fetchAdminAdStatusFromFirebase() {
         .catch(() => updateAdminPanelUI(true));
 }
 
-/**
- * 🎨 6. UPDATE ADMIN PANEL UI
- * स्टेटस के हिसाब से बटन का रंग हरा (ACTIVE) या लाल (DISABLED) करता है।
- */
 function updateAdminPanelUI(isEnabled) {
     const btn = document.getElementById("toggleAdStatusBtn");
     const msg = document.getElementById("adminStatusMsg");
@@ -1108,21 +1179,19 @@ function updateAdminPanelUI(isEnabled) {
 }
 
 /**
- * ⚡ 7. TOGGLE GLOBAL AD STATUS (ON/OFF बटन दबाने पर)
- * जब आप बटन दबाएंगे तो यह पूरे Firebase Server पर स्टेटस ऑन या ऑफ बदल देगा।
+ * ⚡ 6. TOGGLE GLOBAL AD STATUS (ON/OFF)
  */
 function toggleAdStatusFromAdmin() {
     const btn = document.getElementById("toggleAdStatusBtn");
     if(btn) btn.innerText = "⏳ Updating Server Settings...";
 
-    fetch(FIREBASE_AD_STATUS_URL)
+    fetch(FIREBASE_AD_SETTINGS_URL)
         .then(res => res.json())
         .then(data => {
             const currentStatus = (data && data.enabled !== undefined) ? data.enabled : true;
             const newStatus = !currentStatus;
 
-            // क्लाउड सर्वर (Firebase) पर नया ऑन/ऑफ स्टेटस भेजना
-            fetch(FIREBASE_AD_STATUS_URL, {
+            fetch(FIREBASE_AD_SETTINGS_URL, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1138,7 +1207,7 @@ function toggleAdStatusFromAdmin() {
         });
 }
 
-// ⌨️ ESC Key प्रेस करने पर दोनों पॉपअप बंद हो जाएंगे
+// ⌨️ ESC Key प्रेस करने पर क्लोज
 document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
         closeCoachingAd();
@@ -1146,7 +1215,7 @@ document.addEventListener("keydown", function(e) {
     }
 });
 
-// ⏱️ वेबसाइट लोड होने के 1.5 सेकंड बाद एड चेक करके ट्रिगर होगा
+// ⏱️ 1.5 सेकंड बाद एड ट्रिगर
 setTimeout(() => {
     showCoachingAdPopup();
 }, 1500);
