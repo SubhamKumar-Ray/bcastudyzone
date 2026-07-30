@@ -1814,3 +1814,129 @@
         right: 15px;[cite: 3]
     }
 }
+/* ──────────────────────────────────────────────────────────
+   🚀 TALENT HUNT SOFTWARE SOLUTION POPUP AD CSS
+   ────────────────────────────────────────────────────────── */
+.coaching-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 6, 17, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 999999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.coaching-modal-card {
+    position: relative;
+    max-width: 580px;
+    width: 100%;
+    background: #0f172a;
+    border: 2px solid #00f7ff;
+    border-radius: 20px;
+    padding: 20px 15px 15px 15px;
+    box-shadow: 0 20px 50px rgba(0, 247, 255, 0.25);
+    text-align: center;
+    animation: coachingEntrance 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    box-sizing: border-box;
+}
+
+@keyframes coachingEntrance {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.coaching-modal-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 36px;
+    height: 36px;
+    background: #ff3838;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 10;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.coaching-modal-close:hover {
+    background: #d63031;
+    transform: scale(1.1);
+}
+
+.coaching-ad-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff3838, #ffd700);
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.coaching-poster-wrapper {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.coaching-poster-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.coaching-action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.coaching-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 5px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.coaching-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.coaching-call-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.coaching-wa-btn { background: linear-gradient(135deg, #25d366, #128c7e); }
+.coaching-map-btn { background: linear-gradient(135deg, #ea580c, #c2410c); }
+
+@media (max-width: 480px) {
+    .coaching-modal-card { padding: 15px 10px 10px 10px; }
+    .coaching-ad-badge { font-size: 0.95rem; }
+    .coaching-btn { font-size: 1.05rem; padding: 8px 3px; }
+}
