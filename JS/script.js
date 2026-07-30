@@ -981,34 +981,56 @@ function filterSemesterDashboard(selectedSem) {
         }, 150);
     });
 }
-// 🚀 DYNAMIC COACHING POSTER ROTATOR WITH MOBILE ADMIN CONTROL
+// =========================================================================
+// 🚀 TALENT HUNT SOFTWARE SOLUTION - GLOBAL FIREBASE AD CONTROL ENGINE
+// =========================================================================
+
+// 1. दोनों पोस्टर्स की पाथ लिस्ट (रीफ्रेश करने पर रैंडमली चुनेंगे)
 const coachingPostersList = [
     "Gallary/randhir_sir_coaching2.png",
     "Gallary/randhir_sir_coaching3.png"
 ];
 
-// डिफ़ॉल्ट रूप से एड ON रहेगा जब तक आप इसे कंट्रोल पैनल से OFF न कर दें
-if (localStorage.getItem("coaching_ad_enabled") === null) {
-    localStorage.setItem("coaching_ad_enabled", "true");
-}
+// 2. 🔑 आपका एडमिन पासवर्ड (यहाँ आप अपना नया पासवर्ड बदल सकते हैं)
+const ADMIN_SECRET_PIN = "1234"; 
 
+// 3. Firebase Cloud Realtime Database Link (ग्लोबल स्टेटस स्टोर करने के लिए)
+const FIREBASE_AD_STATUS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/coachingAdSettings.json";
+
+/**
+ * 🎯 1. SHOW AD POPUP FUNCTION (सभी छात्रों के लिए)
+ * यह फ़ंक्शन सर्वर से चेक करता है कि एड ON है या नहीं।
+ * अगर एड ON है तभी यह रैंडमली एक पोस्टर सिलेक्ट करके स्क्रीन पर दिखाता है।
+ */
 function showCoachingAdPopup() {
-    // अगर एडमिन ने मोबाइल से एड OFF किया है तो एड नहीं दिखेगा
-    if (localStorage.getItem("coaching_ad_enabled") === "false") {
-        console.log("Coaching Ad is currently DISABLED by Owner.");
-        return;
-    }
+    fetch(FIREBASE_AD_STATUS_URL)
+        .then(response => response.json())
+        .then(data => {
+            // अगर सर्वर पर ओनर (आप) ने एड OFF किया हुआ है, तो किसी को भी एड नहीं दिखेगा
+            if (data && data.enabled === false) {
+                console.log("🚫 Coaching Ad is globally DISABLED by Owner for all users.");
+                return;
+            }
 
-    const coachingModal = document.getElementById("coachingAdModal");
-    const posterElement = document.getElementById("coachingDynamicPoster");
+            // अगर एड ON है, तो रैंडम पोस्टर सिलेक्ट करके दिखाओ
+            const coachingModal = document.getElementById("coachingAdModal");
+            const posterElement = document.getElementById("coachingDynamicPoster");
 
-    if (coachingModal && posterElement) {
-        const randomIndex = Math.floor(Math.random() * coachingPostersList.length);
-        posterElement.src = coachingPostersList[randomIndex];
-        coachingModal.style.display = "flex";
-    }
+            if (coachingModal && posterElement) {
+                const randomIndex = Math.floor(Math.random() * coachingPostersList.length);
+                posterElement.src = coachingPostersList[randomIndex];
+                coachingModal.style.display = "flex";
+            }
+        })
+        .catch(err => {
+            console.log("Firebase sync latency, bypassing ad popup:", err);
+        });
 }
 
+/**
+ * ❌ 2. CLOSE AD FUNCTION
+ * यह पॉपअप के ऊपर बने लाल 'X' बटन पर क्लिक करने पर एड बंद करता है।
+ */
 function closeCoachingAd() {
     const coachingModal = document.getElementById("coachingAdModal");
     if (coachingModal) {
@@ -1016,15 +1038,16 @@ function closeCoachingAd() {
     }
 }
 
-// 🔐 SECRET ADMIN CONTROL PANEL FUNCTIONS
-const ADMIN_SECRET_PIN = "SUBHAM2023VBU"; // 👈 यहाँ अपना मनपसंद 4-डिजिट पासवर्ड डालें
-
+/**
+ * 🔐 3. OPEN ADMIN CONTROL PANEL (केवल आपके लिए)
+ * फ़ुटर में 'version 5.0.0 ⚙️' पर क्लिक करने पर पासवर्ड पूछता है।
+ */
 function openAdminControlPanel() {
     const enteredPin = prompt("🔑 Enter Owner Admin Password:");
     if (enteredPin === ADMIN_SECRET_PIN) {
         const adminModal = document.getElementById("adminAdControlModal");
         if (adminModal) {
-            updateAdminPanelUI();
+            fetchAdminAdStatusFromFirebase();
             adminModal.style.display = "flex";
         }
     } else if (enteredPin !== null) {
@@ -1032,6 +1055,10 @@ function openAdminControlPanel() {
     }
 }
 
+/**
+ * 🛑 4. CLOSE ADMIN CONTROL PANEL
+ * ओनर कंट्रोल पैनल को बंद करने के लिए।
+ */
 function closeAdminControlPanel() {
     const adminModal = document.getElementById("adminAdControlModal");
     if (adminModal) {
@@ -1039,37 +1066,79 @@ function closeAdminControlPanel() {
     }
 }
 
-function updateAdminPanelUI() {
+/**
+ * 🔄 5. FETCH ADMIN STATUS FROM FIREBASE
+ * यह चेक करता है कि वर्तमान में सर्वर पर एड का स्टेटस ON है या OFF।
+ */
+function fetchAdminAdStatusFromFirebase() {
+    const btn = document.getElementById("toggleAdStatusBtn");
+    if(btn) btn.innerText = "⏳ Checking Cloud Server Status...";
+
+    fetch(FIREBASE_AD_STATUS_URL)
+        .then(res => res.json())
+        .then(data => {
+            const isEnabled = (data && data.enabled !== undefined) ? data.enabled : true;
+            updateAdminPanelUI(isEnabled);
+        })
+        .catch(() => updateAdminPanelUI(true));
+}
+
+/**
+ * 🎨 6. UPDATE ADMIN PANEL UI
+ * स्टेटस के हिसाब से बटन का रंग हरा (ACTIVE) या लाल (DISABLED) करता है।
+ */
+function updateAdminPanelUI(isEnabled) {
     const btn = document.getElementById("toggleAdStatusBtn");
     const msg = document.getElementById("adminStatusMsg");
-    const isEnabled = localStorage.getItem("coaching_ad_enabled") === "true";
+    if (!btn || !msg) return;
 
     if (isEnabled) {
-        btn.innerText = "🟢 AD STATUS: ACTIVE (Click to Turn OFF)";
+        btn.innerText = "🟢 GLOBAL AD STATUS: ACTIVE (Click to Turn OFF)";
         btn.style.background = "#00c853";
         btn.style.color = "#ffffff";
-        msg.innerText = "Ad is currently SHOWING to all users.";
+        msg.innerText = "Ad is currently SHOWING to ALL users globally.";
         msg.style.color = "#00ff88";
     } else {
-        btn.innerText = "🔴 AD STATUS: DISABLED (Click to Turn ON)";
+        btn.innerText = "🔴 GLOBAL AD STATUS: DISABLED (Click to Turn ON)";
         btn.style.background = "#ff3838";
         btn.style.color = "#ffffff";
-        msg.innerText = "Ad is currently HIDDEN from all users.";
+        msg.innerText = "Ad is currently HIDDEN from ALL users globally.";
         msg.style.color = "#ff4d4d";
     }
 }
 
+/**
+ * ⚡ 7. TOGGLE GLOBAL AD STATUS (ON/OFF बटन दबाने पर)
+ * जब आप बटन दबाएंगे तो यह पूरे Firebase Server पर स्टेटस ऑन या ऑफ बदल देगा।
+ */
 function toggleAdStatusFromAdmin() {
-    const isEnabled = localStorage.getItem("coaching_ad_enabled") === "true";
-    if (isEnabled) {
-        localStorage.setItem("coaching_ad_enabled", "false");
-    } else {
-        localStorage.setItem("coaching_ad_enabled", "true");
-    }
-    updateAdminPanelUI();
+    const btn = document.getElementById("toggleAdStatusBtn");
+    if(btn) btn.innerText = "⏳ Updating Server Settings...";
+
+    fetch(FIREBASE_AD_STATUS_URL)
+        .then(res => res.json())
+        .then(data => {
+            const currentStatus = (data && data.enabled !== undefined) ? data.enabled : true;
+            const newStatus = !currentStatus;
+
+            // क्लाउड सर्वर (Firebase) पर नया ऑन/ऑफ स्टेटस भेजना
+            fetch(FIREBASE_AD_STATUS_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    enabled: newStatus,
+                    updatedBy: "Subham Kumar Ray",
+                    lastUpdated: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+                })
+            })
+            .then(() => {
+                updateAdminPanelUI(newStatus);
+                alert(newStatus ? "✅ Coaching Ad is now LIVE for ALL students!" : "🛑 Coaching Ad is now DISABLED for ALL students!");
+            });
+        });
 }
 
-// ESC की से पॉपअप क्लोज करने का सपोर्ट
+// ⌨️ ESC Key प्रेस करने पर दोनों पॉपअप बंद हो जाएंगे
 document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
         closeCoachingAd();
@@ -1077,7 +1146,7 @@ document.addEventListener("keydown", function(e) {
     }
 });
 
-// 1.5 सेकंड बाद एड ट्रिगर होगा
+// ⏱️ वेबसाइट लोड होने के 1.5 सेकंड बाद एड चेक करके ट्रिगर होगा
 setTimeout(() => {
     showCoachingAdPopup();
 }, 1500);
