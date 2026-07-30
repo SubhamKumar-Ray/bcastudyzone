@@ -2824,19 +2824,26 @@ function scrollToTopMatrix() {
     </div>
 </div>
 
-<!-- 🔐 SECRET ADMIN CONTROL PANEL POPUP (केवल आपके लिए) -->
+<!-- 🔐 SECRET ADMIN CONTROL PANEL POPUP -->
 <div id="adminAdControlModal" class="coaching-modal-overlay">
-    <div class="coaching-modal-card" style="max-width: 360px; border-color: #ffd700;">
+    <div class="coaching-modal-card" style="max-width: 380px; border-color: #ffd700;">
         <button class="coaching-modal-close" onclick="closeAdminControlPanel()">&times;</button>
-        <h3 style="color:#ffd700; font-size: 2rem; margin-bottom: 10px;">👑 Owner Control</h3>
-        <p style="color:#fff; font-size:1.3rem; margin-bottom: 20px;">Coaching Ad Status Manage Karein:</p>
+        <h3 style="color:#ffd700; font-size: 2rem; margin-bottom: 5px;">👑 Owner Control Panel</h3>
+        <p style="color:#bcd3e8; font-size:1.2rem; margin-bottom: 20px;">Coaching Ad Status Manage Karein:</p>
         
-        <div style="margin-bottom: 20px;">
-            <button id="toggleAdStatusBtn" onclick="toggleAdStatusFromAdmin()" style="width:100%; padding: 12px; font-size: 1.5rem; font-weight: bold; border-radius: 10px; border:none; cursor:pointer;">
+        <!-- 1. ON / OFF BUTTON -->
+        <div style="margin-bottom: 15px;">
+            <button id="toggleAdStatusBtn" onclick="toggleAdStatusFromAdmin()" style="width:100%; padding: 12px; font-size: 1.4rem; font-weight: bold; border-radius: 10px; border:none; cursor:pointer;">
                 Loading Status...
             </button>
         </div>
-        <p id="adminStatusMsg" style="color:#00ff88; font-size:1.2rem; font-weight:bold;"></p>
+
+        <p id="adminStatusMsg" style="color:#00ff88; font-size:1.2rem; font-weight:bold; margin-bottom: 20px;"></p>
+
+        <!-- 2. CHANGE PASSWORD BUTTON -->
+        <button onclick="changeAdminPasswordOnline()" style="width:100%; padding: 10px; font-size: 1.3rem; font-weight: 600; background: #3b82f6; color: #fff; border:none; border-radius: 8px; cursor:pointer;">
+            🔑 Change Password
+        </button>
     </div>
 </div>
 </body>
