@@ -1266,39 +1266,22 @@ window.proceedToVoicePopupHandover = function() {
     }
 };
 
-// 🎯 3. STRICT REAL-TIME BLOCK & UNBLOCK SECURITY CHECKER
+// 🎯 3. STRICT UNIQUE UID-BASED SECURITY CHECKER (NO NAME CLASH)
 window.verifyStudentAccessStatus = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
-    const localName = localStorage.getItem("student_tracked_name");
-    const localCollege = localStorage.getItem("student_tracked_college");
+    
+    // Agar portal enter hi nahi kiya toh normal access rehne do
+    if (!studentUID) return;
 
-    if (!studentUID && !localName) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}.json`)
+    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
         .then(res => res.json())
-        .then(allUsersData => {
-            if (!allUsersData) return;
-
-            let isBlocked = false;
-
-            Object.keys(allUsersData).forEach(uid => {
-                const user = allUsersData[uid];
-                if (user && typeof user === 'object') {
-                    const isUidMatch = (uid === studentUID);
-                    const isNameMatch = (user.studentName && localName && user.studentName.toLowerCase() === localName.toLowerCase()) &&
-                                        (user.collegeName && localCollege && user.collegeName.toLowerCase() === localCollege.toLowerCase());
-
-                    if ((isUidMatch || isNameMatch) && user.status === "banned") {
-                        isBlocked = true;
-                    }
-                }
-            });
-
+        .then(userData => {
             const banScreen = document.getElementById("bannedAccessScreen");
             const gateway = document.getElementById("brand-gateway-screen");
             const mainPage = document.getElementById("mainPage");
 
-            if (isBlocked) {
+            // Strictly check if THIS SPECIFIC UID status is "banned"
+            if (userData && userData.status === "banned") {
                 if (banScreen) banScreen.style.display = "flex";
                 document.body.style.overflow = "hidden";
                 if (gateway) gateway.style.display = "none";
@@ -1314,7 +1297,7 @@ window.verifyStudentAccessStatus = function() {
         .catch(err => console.log("Security sync active..."));
 };
 
-// 🎯 4. REAL-TIME WELCOME BACK & GAP CALCULATOR
+// 🎯 4. REAL-TIME WELCOME BACK & ACCURATE GAP CALCULATOR
 window.initIdentityTrackingVerification = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
 
@@ -1323,7 +1306,7 @@ window.initIdentityTrackingVerification = function() {
         fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
         .then(response => response.json())
         .then(dbData => {
-            // Case A: Record Deleted by Admin -> Reset to Gateway
+            // Case A: Record Deleted by Admin -> Reset to Gateway & Form
             if (!dbData) {
                 localStorage.clear();
                 const gatewayScreen = document.getElementById("brand-gateway-screen");
@@ -1342,7 +1325,7 @@ window.initIdentityTrackingVerification = function() {
                 return;
             }
 
-            // Case C: Returning Student Gap Calculator
+            // Case C: Returning Student -> Real-Time Gap Calculation
             const savedName = dbData.studentName || "Existing Student";
             const savedCollege = dbData.collegeName || "Saved College";
             const savedSem = dbData.currentSemester || "Saved Semester";
@@ -1357,6 +1340,7 @@ window.initIdentityTrackingVerification = function() {
 
             const lastVisitTimeStr = localStorage.getItem("student_last_visit_readable") || dbData.entryTime || "Initial Registration";
 
+            // Real-Time Gap Calculation (Days, Hours, Minutes, Seconds)
             const diffInMilliseconds = Math.max(0, currentTimestamp - lastVisitTs);
             const totalSeconds = Math.floor(diffInMilliseconds / 1000);
             const totalMinutes = Math.floor(totalSeconds / 60);
@@ -1586,7 +1570,7 @@ function renderStudentCards(studentsList) {
 
 window.toggleUserBanStatus = function(targetUID, newStatus) {
     const actionText = newStatus === "banned" ? "Block/Ban" : "Unblock";
-    if (!confirm(`Are you sure you want to ${actionText} this student?`)) return;
+    if (!confirm(`Are you sure you want to ${actionText} Student ID: ${targetUID}?`)) return;
 
     fetch(`${FIREBASE_USERS_NODE_URL}/${targetUID}.json`, {
         method: 'PATCH',
@@ -1597,22 +1581,33 @@ window.toggleUserBanStatus = function(targetUID, newStatus) {
         })
     })
     .then(() => {
-        alert(`🎉 Student has been successfully ${newStatus === "banned" ? "BLOCKED" : "UNBLOCKED"}!`);
+        alert(`🎉 Student ID [${targetUID}] has been successfully ${newStatus === "banned" ? "BLOCKED" : "UNBLOCKED"}!`);
         loadLiveStudentsList();
         window.verifyStudentAccessStatus();
     })
     .catch(err => alert("❌ Network Error! Unable to update student status."));
 };
 
-window.searchStudentUserMatrix = function() {
-    const query = (document.getElementById("adminStudentSearch").value || "").toLowerCase();
-    const filtered = globalStudentsCache.filter(student => {
-        const name = (student.studentName || "").toLowerCase();
-        const college = (student.collegeName || "").toLowerCase();
-        const uid = (student.uid || "").toLowerCase();
-        return name.includes(query) || college.includes(query) || uid.includes(query);
+// 🎯 6. MULTI-FILTER ENGINE (NAME SEARCH + COLLEGE DROPDOWN + SEMESTER DROPDOWN)
+window.filterStudentUserMatrix = function() {
+    const nameQuery = (document.getElementById("adminStudentSearch").value || "").toLowerCase().trim();
+    const selectedCollege = document.getElementById("adminCollegeFilter").value;
+    const selectedSem = document.getElementById("adminSemFilter").value;
+
+    const filteredList = globalStudentsCache.filter(student => {
+        const matchesName = (student.studentName || "").toLowerCase().includes(nameQuery) || (student.uid || "").toLowerCase().includes(nameQuery);
+        const matchesCollege = selectedCollege === "" || (student.collegeName || "") === selectedCollege;
+        const matchesSem = selectedSem === "" || (student.currentSemester || "") === selectedSem;
+
+        return matchesName && matchesCollege && matchesSem;
     });
-    renderStudentCards(filtered);
+
+    const countSpan = document.getElementById("totalStudentsCount");
+    if (countSpan) {
+        countSpan.innerText = filteredList.length.toString();
+    }
+
+    renderStudentCards(filteredList);
 };
 
 // Clear session helper for local development testing
