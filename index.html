@@ -2833,7 +2833,7 @@ function scrollToTopMatrix() {
     <div class="coaching-modal-card" style="max-width: 380px; border-color: #ffd700;">
         <button class="coaching-modal-close" onclick="closeAdminControlPanel()">&times;</button>
         <h3 style="color:#ffd700; font-size: 2rem; margin-bottom: 5px;">👑 Owner Control Panel</h3>
-        <p style="color:#bcd3e8; font-size:1.2rem; margin-bottom: 20px;">Coaching Ad Status Manage Karein:</p>
+        <p style="color:#bcd3e8; font-size:1.2rem; margin-bottom: 20px;">Coaching Ad & Student Matrix Manage Karein:</p>
         
         <!-- 1. ON / OFF BUTTON -->
         <div style="margin-bottom: 15px;">
@@ -2842,12 +2842,63 @@ function scrollToTopMatrix() {
             </button>
         </div>
 
-        <p id="adminStatusMsg" style="color:#00ff88; font-size:1.2rem; font-weight:bold; margin-bottom: 20px;"></p>
+        <p id="adminStatusMsg" style="color:#00ff88; font-size:1.2rem; font-weight:bold; margin-bottom: 15px;"></p>
 
         <!-- 2. CHANGE PASSWORD BUTTON -->
-        <button onclick="changeAdminPasswordOnline()" style="width:100%; padding: 10px; font-size: 1.3rem; font-weight: 600; background: #3b82f6; color: #fff; border:none; border-radius: 8px; cursor:pointer;">
+        <button onclick="changeAdminPasswordOnline()" style="width:100%; padding: 10px; font-size: 1.3rem; font-weight: 600; background: #3b82f6; color: #fff; border:none; border-radius: 8px; cursor:pointer; margin-bottom: 12px;">
             🔑 Change Password
         </button>
+
+        <!-- 3. DIRECT STUDENT MANAGEMENT & BAN LIST BUTTON -->
+        <button onclick="openAdminUserMatrixDirectly()" style="width:100%; padding: 12px; font-size: 1.3rem; font-weight: bold; background: linear-gradient(135deg, #00f7ff, #009dff); color: #000; border:none; border-radius: 8px; cursor:pointer; box-shadow: 0 4px 12px rgba(0, 247, 255, 0.3);">
+            👥 Manage Active Students & Ban List
+        </button>
+    </div>
+</div>
+
+<!-- 🔐 UPGRADED ADMIN USER CONTROL MATRIX MODAL -->
+<div id="adminUserMatrixModal" class="coaching-modal-overlay">
+    <div class="coaching-modal-card" style="max-width: 650px; border-color: #00f7ff; padding: 25px 20px;">
+        <button class="coaching-modal-close" onclick="closeAdminUserMatrix()">&times;</button>
+        <h3 style="color:#00f7ff; font-size: 2.2rem; margin-bottom: 5px;">👥 Active Student Directory & Control</h3>
+        <p style="color:#bcd3e8; font-size:1.3rem; margin-bottom: 15px;">Monitor, Manage, Block, or Unblock Registered Portal Students</p>
+
+        <!-- Stats Bar & Search Input -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <input type="text" id="adminStudentSearch" onkeyup="searchStudentUserMatrix()" placeholder="🔍 Search by Name, College or ID..." style="flex: 1; min-width: 200px; padding: 10px 15px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.3rem;">
+            <div style="background: #1e293b; padding: 10px 15px; border-radius: 10px; border: 1px solid #00f7ff; color: #00f7ff; font-weight: bold; font-size: 1.3rem; display: flex; align-items: center; justify-content: center;">
+                Total: <span id="totalStudentsCount" style="margin-left: 5px; color: #fff;">0</span>
+            </div>
+        </div>
+
+        <!-- Student Cards Scrollable Container -->
+        <div id="adminStudentCardsContainer" style="max-height: 380px; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 12px;">
+            <p style="color: #94a3b8; font-size: 1.3rem;">Loading live student directory...</p>
+        </div>
+    </div>
+</div>
+
+<!-- 🚨 BANNED / ACCESS SUSPENDED SCREEN (ONLY FOR BLOCKED USERS) -->
+<div id="bannedAccessScreen" style="position: fixed; inset: 0; background: rgba(3, 6, 17, 0.98); z-index: 99999999; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 25px; font-family: 'Poppins', sans-serif;">
+    <div style="max-width: 500px; width: 100%; background: #1e1b4b; border: 2px solid #ff3838; border-radius: 24px; padding: 35px 25px; box-shadow: 0 0 40px rgba(255, 56, 56, 0.4); box-sizing: border-box;">
+        <div style="font-size: 5rem; margin-bottom: 10px;">🚨</div>
+        <h2 style="color: #ff3838; font-size: 2.6rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Access Suspended</h2>
+        <h4 style="color: #ffd700; font-size: 1.6rem; font-weight: 600; margin-bottom: 20px;">अकादमिक पोर्टल एक्सेस निलंबित कर दिया गया है</h4>
+        
+        <div style="background: rgba(255, 56, 56, 0.1); border-left: 4px solid #ff3838; padding: 15px; text-align: left; border-radius: 8px; margin-bottom: 25px;">
+            <p style="color: #f8fafc; font-size: 1.35rem; line-height: 1.6; margin-bottom: 8px;">
+                <b>Notice:</b> Your profile access has been restricted by the administrator due to incorrect identity submission or policy violation.
+            </p>
+            <p style="color: #cbd5e1; font-size: 1.2rem; line-height: 1.5; margin: 0;">
+                <b>सूचना:</b> गलत जानकारी सबमिट करने या नीति उल्लंघन के कारण व्यवस्थापक (Admin) द्वारा आपका एक्सेस रोक दिया गया है।
+            </p>
+        </div>
+
+        <p style="color: #94a3b8; font-size: 1.2rem; margin-bottom: 20px;">Think this was a mistake? Contact Admin for account review & unblock request.</p>
+        
+        <a href="https://wa.me/917061637118?text=Hello%20Subham%20Sir,%20My%20BCA%20Study%20Zone%20portal%20access%20has%20been%20suspended.%20Please%20review%20my%20profile%20and%20unblock%20my%20account." target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 25px; background: linear-gradient(135deg, #25d366, #128c7e); color: #fff; font-size: 1.4rem; font-weight: 700; border-radius: 50px; text-decoration: none; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);">
+            <i class="fab fa-whatsapp" style="font-size: 1.8rem;"></i> Appeal Unblock on WhatsApp
+        </a>
     </div>
 </div>
 </body>
