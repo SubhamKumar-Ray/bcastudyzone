@@ -1219,3 +1219,418 @@ document.addEventListener("keydown", function(e) {
 setTimeout(() => {
     showCoachingAdPopup();
 }, 1500);
+
+// =========================================================================
+// 🚀 MASTER PRODUCTION ENGINE: GATEWAY, TELEGRAM ALERTS, GAP TRACKER & BAN MATRIX
+// =========================================================================
+
+const FIREBASE_USERS_NODE_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers";
+
+// 🎯 1. ENTER PORTAL BUTTON HANDSHAKE
+window.startPortalHandshakeSequence = function() {
+    const gatewayScreen = document.getElementById("brand-gateway-screen");
+    const loaderNode = document.getElementById("loader");
+
+    if (!gatewayScreen) return;
+
+    localStorage.removeItem("portal_already_entered");
+
+    gatewayScreen.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+    gatewayScreen.style.opacity = "0";
+    gatewayScreen.style.transform = "scale(1.03)";
+
+    setTimeout(() => {
+        gatewayScreen.style.display = "none";
+        
+        if (typeof executeDynamicGatewayLoader === "function") {
+            executeDynamicGatewayLoader();
+        } else if (loaderNode) {
+            loaderNode.style.display = "none";
+            window.initIdentityTrackingVerification();
+        } else {
+            window.initIdentityTrackingVerification();
+        }
+    }, 400);
+};
+
+// 🎯 2. SCREEN HANDOVER HELPER
+window.proceedToVoicePopupHandover = function() {
+    const voicePopup = document.getElementById("voicePopup");
+    const mainPage = document.getElementById("mainPage");
+
+    if (voicePopup) voicePopup.style.display = "none";
+    if (mainPage) mainPage.style.display = "block";
+
+    if (typeof triggerVbuNoticePopupMetrics === "function") {
+        triggerVbuNoticePopupMetrics();
+    }
+};
+
+// 🎯 3. STRICT REAL-TIME BLOCK & UNBLOCK SECURITY CHECKER
+window.verifyStudentAccessStatus = function() {
+    const studentUID = localStorage.getItem("student_portal_uid");
+    const localName = localStorage.getItem("student_tracked_name");
+    const localCollege = localStorage.getItem("student_tracked_college");
+
+    if (!studentUID && !localName) return;
+
+    fetch(`${FIREBASE_USERS_NODE_URL}.json`)
+        .then(res => res.json())
+        .then(allUsersData => {
+            if (!allUsersData) return;
+
+            let isBlocked = false;
+
+            Object.keys(allUsersData).forEach(uid => {
+                const user = allUsersData[uid];
+                if (user && typeof user === 'object') {
+                    const isUidMatch = (uid === studentUID);
+                    const isNameMatch = (user.studentName && localName && user.studentName.toLowerCase() === localName.toLowerCase()) &&
+                                        (user.collegeName && localCollege && user.collegeName.toLowerCase() === localCollege.toLowerCase());
+
+                    if ((isUidMatch || isNameMatch) && user.status === "banned") {
+                        isBlocked = true;
+                    }
+                }
+            });
+
+            const banScreen = document.getElementById("bannedAccessScreen");
+            const gateway = document.getElementById("brand-gateway-screen");
+            const mainPage = document.getElementById("mainPage");
+
+            if (isBlocked) {
+                if (banScreen) banScreen.style.display = "flex";
+                document.body.style.overflow = "hidden";
+                if (gateway) gateway.style.display = "none";
+                if (mainPage) mainPage.style.display = "none";
+            } else {
+                if (banScreen) banScreen.style.display = "none";
+                document.body.style.overflow = "auto";
+                if (mainPage && localStorage.getItem("student_verified_profile") === "true") {
+                    mainPage.style.display = "block";
+                }
+            }
+        })
+        .catch(err => console.log("Security sync active..."));
+};
+
+// 🎯 4. REAL-TIME WELCOME BACK & GAP CALCULATOR
+window.initIdentityTrackingVerification = function() {
+    const studentUID = localStorage.getItem("student_portal_uid");
+
+    if (localStorage.getItem("student_verified_profile") === "true" && studentUID) {
+        
+        fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
+        .then(response => response.json())
+        .then(dbData => {
+            // Case A: Record Deleted by Admin -> Reset to Gateway
+            if (!dbData) {
+                localStorage.clear();
+                const gatewayScreen = document.getElementById("brand-gateway-screen");
+                if (gatewayScreen) {
+                    gatewayScreen.style.display = "flex";
+                    gatewayScreen.style.opacity = "1";
+                }
+                const trackingPopup = document.getElementById("studentTrackingPopup");
+                if (trackingPopup) trackingPopup.style.display = "flex";
+                return;
+            }
+
+            // Case B: Banned Check
+            if (dbData.status === "banned") {
+                window.verifyStudentAccessStatus();
+                return;
+            }
+
+            // Case C: Returning Student Gap Calculator
+            const savedName = dbData.studentName || "Existing Student";
+            const savedCollege = dbData.collegeName || "Saved College";
+            const savedSem = dbData.currentSemester || "Saved Semester";
+            
+            const currentTimestamp = Date.now();
+            const formattedCurrentDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+            let lastVisitTs = parseInt(localStorage.getItem("student_last_visit_timestamp"));
+            if (!lastVisitTs || isNaN(lastVisitTs)) {
+                lastVisitTs = dbData.timestamp || currentTimestamp;
+            }
+
+            const lastVisitTimeStr = localStorage.getItem("student_last_visit_readable") || dbData.entryTime || "Initial Registration";
+
+            const diffInMilliseconds = Math.max(0, currentTimestamp - lastVisitTs);
+            const totalSeconds = Math.floor(diffInMilliseconds / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
+
+            let gapString = "";
+            if (totalDays > 0) gapString += `${totalDays} Days, `;
+            if ((totalHours % 24) > 0 || totalDays > 0) gapString += `${totalHours % 24} Hours, `;
+            if ((totalMinutes % 60) > 0 || totalHours > 0) gapString += `${totalMinutes % 60} Minutes, `;
+            gapString += `${totalSeconds % 60} Seconds`;
+
+            localStorage.setItem("student_last_visit_timestamp", currentTimestamp.toString());
+            localStorage.setItem("student_last_visit_readable", formattedCurrentDate);
+
+            // Telegram Return Notification
+            const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
+            const chatId = '@bca_dashboard_subham'; 
+            
+            const telegramRevisitMessage = `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
+                                         `👤 *Student Name:* ${savedName}\n` +
+                                         `🏫 *College:* ${savedCollege}\n` +
+                                         `📚 *Semester:* ${savedSem}\n\n` +
+                                         `🕒 *Current Return:* ${formattedCurrentDate}\n` +
+                                         `⏮️ *Last Active Was:* ${lastVisitTimeStr}\n` +
+                                         `⏳ *Total Offline Gap:* _${gapString}_\n\n` +
+                                         `📱 *Device:* ${navigator.platform}`;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: telegramRevisitMessage, parse_mode: 'Markdown' }) 
+            }).catch(tErr => console.log("Telegram alert bypassed."));
+
+            window.proceedToVoicePopupHandover();
+        })
+        .catch(err => window.proceedToVoicePopupHandover());
+
+    } else {
+        const popup = document.getElementById("studentTrackingPopup");
+        if (popup) popup.style.display = "flex";
+    }
+};
+
+// 🎯 5. NEW STUDENT SUBMISSION (PORTAL ACCESS DETECTED)
+window.submitStudentMetadataPipeline = function() {
+    const nameInput = document.getElementById("track-student-name");
+    const collegeSelect = document.getElementById("track-student-college");
+    const semSelect = document.getElementById("track-student-sem");
+    const verifyBtn = document.getElementById("trackVerifyBtn");
+
+    if (!nameInput || !collegeSelect || !semSelect) return;
+
+    const name = nameInput.value.trim();
+    const college = collegeSelect.value;
+    const semester = semSelect.value;
+
+    if (!name || !college || !semester) {
+        alert("⚠️ Please fill all details to proceed!\n\nपोर्टल अनलॉक करने के लिए कृपया नाम, कॉलेज और सेमेस्टर चुनें।");
+        return;
+    }
+
+    if (verifyBtn) {
+        verifyBtn.disabled = true;
+        verifyBtn.innerText = "VERIFYING ACCESS...";
+    }
+
+    const currentTs = Date.now();
+    const currentTimestampStr = currentTs.toString();
+    const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
+
+    localStorage.setItem("student_tracked_name", structuredName);
+    localStorage.setItem("student_tracked_college", college);
+    localStorage.setItem("student_tracked_sem", semester);
+    localStorage.setItem("student_portal_uid", currentTimestampStr);
+    localStorage.setItem("student_verified_profile", "true");
+    localStorage.setItem("student_last_visit_timestamp", currentTs.toString());
+    localStorage.setItem("student_last_visit_readable", formattedDate);
+
+    // Telegram Alert Notification
+    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
+    const chatId = '@bca_dashboard_subham'; 
+    
+    const telegramAlertMessage = `🎓 *PORTAL ACCESS DETECTED* 🎓\n\n` +
+                                 `👤 *Student Name:* ${structuredName}\n` +
+                                 `🏫 *College:* ${college}\n` +
+                                 `📚 *Semester:* ${semester}\n` +
+                                 `🕒 *Active Time:* ${formattedDate}\n` +
+                                 `📱 *Device Sync:* ${navigator.platform}`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
+    }).catch(err => console.log("Telegram alert bypassed."));
+
+    // Firebase Storage Sync
+    fetch(`${FIREBASE_USERS_NODE_URL}/${currentTimestampStr}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            studentName: structuredName,
+            collegeName: college,
+            currentSemester: semester,
+            entryTime: formattedDate,
+            timestamp: currentTs,
+            status: "active",
+            platform: navigator.platform
+        })
+    })
+    .then(() => completeStudentEntrySequence())
+    .catch(() => completeStudentEntrySequence());
+};
+
+function completeStudentEntrySequence() {
+    const popup = document.getElementById("studentTrackingPopup");
+    const mainPage = document.getElementById("mainPage");
+
+    if (popup) popup.style.display = "none";
+    if (mainPage) mainPage.style.display = "block";
+
+    if (typeof triggerVbuNoticePopupMetrics === "function") {
+        triggerVbuNoticePopupMetrics();
+    }
+}
+
+// 🎯 6. ADMIN DIRECTORY & BAN TOGGLES
+window.openAdminUserMatrixDirectly = function() {
+    if (typeof closeAdminControlPanel === "function") closeAdminControlPanel();
+    openAdminUserMatrix();
+};
+
+let globalStudentsCache = [];
+
+window.openAdminUserMatrix = function() {
+    const userModal = document.getElementById("adminUserMatrixModal");
+    if (userModal) userModal.style.display = "flex";
+    loadLiveStudentsList();
+};
+
+window.closeAdminUserMatrix = function() {
+    const userModal = document.getElementById("adminUserMatrixModal");
+    if (userModal) userModal.style.display = "none";
+};
+
+window.loadLiveStudentsList = function() {
+    const container = document.getElementById("adminStudentCardsContainer");
+    const countSpan = document.getElementById("totalStudentsCount");
+
+    if (!container) return;
+    container.innerHTML = `<p style="color: #00f7ff; font-size: 1.3rem;">⏳ Fetching live student records...</p>`;
+
+    fetch(`${FIREBASE_USERS_NODE_URL}.json`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data || Object.keys(data).length === 0) {
+                container.innerHTML = `<p style="color: #94a3b8; font-size: 1.3rem;">No registered students found in database.</p>`;
+                if (countSpan) countSpan.innerText = "0";
+                return;
+            }
+
+            globalStudentsCache = [];
+            Object.keys(data).forEach(uid => {
+                const record = data[uid];
+                if (record && typeof record === 'object') {
+                    globalStudentsCache.push({
+                        uid: uid,
+                        studentName: record.studentName || record.NAME || "Registered Student",
+                        collegeName: record.collegeName || record.COLLEGE || "N/A",
+                        currentSemester: record.currentSemester || record.SEMESTER || "N/A",
+                        entryTime: record.entryTime || "N/A",
+                        status: record.status || "active"
+                    });
+                }
+            });
+
+            if (countSpan) countSpan.innerText = globalStudentsCache.length.toString();
+            renderStudentCards(globalStudentsCache);
+        })
+        .catch(err => {
+            container.innerHTML = `<p style="color: #ff3838; font-size: 1.3rem;">❌ Failed to load directory. Check connection.</p>`;
+        });
+};
+
+function renderStudentCards(studentsList) {
+    const container = document.getElementById("adminStudentCardsContainer");
+    if (!container) return;
+
+    if (studentsList.length === 0) {
+        container.innerHTML = `<p style="color: #94a3b8; font-size: 1.3rem;">No matching students found.</p>`;
+        return;
+    }
+
+    let html = "";
+    studentsList.slice().reverse().forEach(student => {
+        const isBanned = student.status === "banned";
+        const cardBg = isBanned ? "rgba(255, 56, 56, 0.15)" : "#1e293b";
+        const borderCol = isBanned ? "#ff3838" : "#334155";
+        const statusBadge = isBanned 
+            ? `<span style="background: #ff3838; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; font-weight: bold;">BANNED 🚫</span>`
+            : `<span style="background: #00c853; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; font-weight: bold;">ACTIVE 🟢</span>`;
+
+        const actionBtn = isBanned
+            ? `<button onclick="toggleUserBanStatus('${student.uid}', 'active')" style="padding: 8px 14px; font-size: 1.2rem; font-weight: bold; background: #00c853; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🟢 UNBLOCK USER</button>`
+            : `<button onclick="toggleUserBanStatus('${student.uid}', 'banned')" style="padding: 8px 14px; font-size: 1.2rem; font-weight: bold; background: #ff3838; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🚫 BLOCK / BAN USER</button>`;
+
+        html += `
+            <div class="student-matrix-card" style="background: ${cardBg}; border: 1px solid ${borderCol}; padding: 14px; border-radius: 12px; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 220px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                        <h4 style="color: #fff; font-size: 1.5rem; margin: 0; font-weight: 700;">${student.studentName}</h4>
+                        ${statusBadge}
+                    </div>
+                    <p style="color: #00f7ff; font-size: 1.2rem; margin: 0 0 4px 0;">🏫 ${student.collegeName} • 📚 ${student.currentSemester}</p>
+                    <p style="color: #94a3b8; font-size: 1.1rem; margin: 0;">🕒 Joined: ${student.entryTime} | ID: ${student.uid}</p>
+                </div>
+                <div>
+                    ${actionBtn}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+window.toggleUserBanStatus = function(targetUID, newStatus) {
+    const actionText = newStatus === "banned" ? "Block/Ban" : "Unblock";
+    if (!confirm(`Are you sure you want to ${actionText} this student?`)) return;
+
+    fetch(`${FIREBASE_USERS_NODE_URL}/${targetUID}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            status: newStatus,
+            updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        })
+    })
+    .then(() => {
+        alert(`🎉 Student has been successfully ${newStatus === "banned" ? "BLOCKED" : "UNBLOCKED"}!`);
+        loadLiveStudentsList();
+        window.verifyStudentAccessStatus();
+    })
+    .catch(err => alert("❌ Network Error! Unable to update student status."));
+};
+
+window.searchStudentUserMatrix = function() {
+    const query = (document.getElementById("adminStudentSearch").value || "").toLowerCase();
+    const filtered = globalStudentsCache.filter(student => {
+        const name = (student.studentName || "").toLowerCase();
+        const college = (student.collegeName || "").toLowerCase();
+        const uid = (student.uid || "").toLowerCase();
+        return name.includes(query) || college.includes(query) || uid.includes(query);
+    });
+    renderStudentCards(filtered);
+};
+
+// Clear session helper for local development testing
+window.clearLocalTestingSession = function() {
+    localStorage.clear();
+    location.reload();
+};
+
+// Attach Listeners and Continuous Security Checks
+document.addEventListener("DOMContentLoaded", function() {
+    const enterBtn = document.querySelector("#brand-gateway-screen button");
+    if (enterBtn) {
+        enterBtn.onclick = function(e) {
+            e.preventDefault();
+            window.startPortalHandshakeSequence();
+        };
+    }
+    window.verifyStudentAccessStatus();
+});
+
+setInterval(window.verifyStudentAccessStatus, 1500);
