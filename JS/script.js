@@ -1226,6 +1226,8 @@ setTimeout(() => {
 
 const FIREBASE_USERS_NODE_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers";
 
+let globalStudentsCache = [];
+
 // 🎯 1. ENTER PORTAL BUTTON HANDSHAKE
 window.startPortalHandshakeSequence = function() {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
@@ -1266,7 +1268,7 @@ window.proceedToVoicePopupHandover = function() {
     }
 };
 
-// 🎯 3. STRICT UNIQUE UID-BASED SECURITY CHECKER (NO NAME CLASH)
+// 🎯 3. STRICT UNIQUE UID-BASED SECURITY CHECKER (SHOWS CUSTOM BAN REASON)
 window.verifyStudentAccessStatus = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
     
@@ -1279,9 +1281,15 @@ window.verifyStudentAccessStatus = function() {
             const banScreen = document.getElementById("bannedAccessScreen");
             const gateway = document.getElementById("brand-gateway-screen");
             const mainPage = document.getElementById("mainPage");
+            const reasonElement = document.getElementById("displayBanReasonText");
 
             // Strictly check if THIS SPECIFIC UID status is "banned"
             if (userData && userData.status === "banned") {
+                // Display Custom Reason on Ban Screen
+                if (reasonElement) {
+                    reasonElement.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
+                }
+
                 if (banScreen) banScreen.style.display = "flex";
                 document.body.style.overflow = "hidden";
                 if (gateway) gateway.style.display = "none";
@@ -1468,13 +1476,11 @@ function completeStudentEntrySequence() {
     }
 }
 
-// 🎯 6. ADMIN DIRECTORY & BAN TOGGLES
+// 🎯 6. ADMIN DIRECTORY & MODAL CONTROLLERS
 window.openAdminUserMatrixDirectly = function() {
     if (typeof closeAdminControlPanel === "function") closeAdminControlPanel();
     openAdminUserMatrix();
 };
-
-let globalStudentsCache = [];
 
 window.openAdminUserMatrix = function() {
     const userModal = document.getElementById("adminUserMatrixModal");
@@ -1513,7 +1519,8 @@ window.loadLiveStudentsList = function() {
                         collegeName: record.collegeName || record.COLLEGE || "N/A",
                         currentSemester: record.currentSemester || record.SEMESTER || "N/A",
                         entryTime: record.entryTime || "N/A",
-                        status: record.status || "active"
+                        status: record.status || "active",
+                        banReason: record.banReason || ""
                     });
                 }
             });
@@ -1548,6 +1555,10 @@ function renderStudentCards(studentsList) {
             ? `<button onclick="toggleUserBanStatus('${student.uid}', 'active')" style="padding: 8px 14px; font-size: 1.2rem; font-weight: bold; background: #00c853; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🟢 UNBLOCK USER</button>`
             : `<button onclick="toggleUserBanStatus('${student.uid}', 'banned')" style="padding: 8px 14px; font-size: 1.2rem; font-weight: bold; background: #ff3838; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🚫 BLOCK / BAN USER</button>`;
 
+        const reasonDisplay = isBanned && student.banReason 
+            ? `<p style="color: #ffd700; font-size: 1.1rem; margin: 4px 0 0 0;">⚠️ Reason: ${student.banReason}</p>` 
+            : ``;
+
         html += `
             <div class="student-matrix-card" style="background: ${cardBg}; border: 1px solid ${borderCol}; padding: 14px; border-radius: 12px; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 220px;">
@@ -1557,6 +1568,7 @@ function renderStudentCards(studentsList) {
                     </div>
                     <p style="color: #00f7ff; font-size: 1.2rem; margin: 0 0 4px 0;">🏫 ${student.collegeName} • 📚 ${student.currentSemester}</p>
                     <p style="color: #94a3b8; font-size: 1.1rem; margin: 0;">🕒 Joined: ${student.entryTime} | ID: ${student.uid}</p>
+                    ${reasonDisplay}
                 </div>
                 <div>
                     ${actionBtn}
@@ -1568,15 +1580,15 @@ function renderStudentCards(studentsList) {
     container.innerHTML = html;
 }
 
-// 🎯 ADMIN BAN / UNBAN WITH CUSTOM REASON
+// 🎯 7. ADMIN BAN / UNBAN WITH CUSTOM REASON PROMPT
 window.toggleUserBanStatus = function(targetUID, newStatus) {
     let banReason = "";
 
     if (newStatus === "banned") {
-        // Student ko block karne ka karan puchhein
+        // Prompt Admin to enter a ban reason
         banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Incorrect identity details / Policy violation");
         
-        // Agar admin ne Cancel dabaya ya khali chhoda
+        // Handle Cancel or Empty prompt input
         if (banReason === null) return; 
         if (banReason.trim() === "") banReason = "Incorrect identity submission or policy violation.";
     }
@@ -1589,7 +1601,7 @@ window.toggleUserBanStatus = function(targetUID, newStatus) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             status: newStatus,
-            banReason: banReason, // Firebase me reason save hoga
+            banReason: banReason,
             updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
         })
     })
@@ -1601,240 +1613,15 @@ window.toggleUserBanStatus = function(targetUID, newStatus) {
     .catch(err => alert("❌ Network Error! Unable to update student status."));
 };
 
-// 🎯 STRICT REAL-TIME SECURITY CHECK (SHOWS REASON TO BANNED STUDENT)
-window.verifyStudentAccessStatus = function() {
-    const studentUID = localStorage.getItem("student_portal_uid");
-    if (!studentUID) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
-        .then(res => res.json())
-        .then(userData => {
-            const banScreen = document.getElementById("bannedAccessScreen");
-            const gateway = document.getElementById("brand-gateway-screen");
-            const mainPage = document.getElementById("mainPage");
-            const reasonElement = document.getElementById("displayBanReasonText");
-
-            if (userData && userData.status === "banned") {
-                // Display Custom Reason on Ban Screen
-                if (reasonElement) {
-                    reasonElement.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
-                }
-
-                if (banScreen) banScreen.style.display = "flex";
-                document.body.style.overflow = "hidden";
-                if (gateway) gateway.style.display = "none";
-                if (mainPage) mainPage.style.display = "none";
-            } else {
-                if (banScreen) banScreen.style.display = "none";
-                document.body.style.overflow = "auto";
-                if (mainPage && localStorage.getItem("student_verified_profile") === "true") {
-                    mainPage.style.display = "block";
-                }
-            }
-        })
-        .catch(err => console.log("Security sync active..."));
-};// 🎯 ADMIN BAN / UNBAN WITH CUSTOM REASON
-window.toggleUserBanStatus = function(targetUID, newStatus) {
-    let banReason = "";
-
-    if (newStatus === "banned") {
-        // Student ko block karne ka karan puchhein
-        banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Incorrect identity details / Policy violation");
-        
-        // Agar admin ne Cancel dabaya ya khali chhoda
-        if (banReason === null) return; 
-        if (banReason.trim() === "") banReason = "Incorrect identity submission or policy violation.";
-    }
-
-    const actionText = newStatus === "banned" ? "Block/Ban" : "Unblock";
-    if (!confirm(`Are you sure you want to ${actionText} Student ID: ${targetUID}?`)) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${targetUID}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            status: newStatus,
-            banReason: banReason, // Firebase me reason save hoga
-            updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-        })
-    })
-    .then(() => {
-        alert(`🎉 Student ID [${targetUID}] has been successfully ${newStatus === "banned" ? "BLOCKED" : "UNBLOCKED"}!`);
-        if (typeof loadLiveStudentsList === "function") loadLiveStudentsList();
-        window.verifyStudentAccessStatus();
-    })
-    .catch(err => alert("❌ Network Error! Unable to update student status."));
-};
-
-// 🎯 STRICT REAL-TIME SECURITY CHECK (SHOWS REASON TO BANNED STUDENT)
-window.verifyStudentAccessStatus = function() {
-    const studentUID = localStorage.getItem("student_portal_uid");
-    if (!studentUID) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
-        .then(res => res.json())
-        .then(userData => {
-            const banScreen = document.getElementById("bannedAccessScreen");
-            const gateway = document.getElementById("brand-gateway-screen");
-            const mainPage = document.getElementById("mainPage");
-            const reasonElement = document.getElementById("displayBanReasonText");
-
-            if (userData && userData.status === "banned") {
-                // Display Custom Reason on Ban Screen
-                if (reasonElement) {
-                    reasonElement.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
-                }
-
-                if (banScreen) banScreen.style.display = "flex";
-                document.body.style.overflow = "hidden";
-                if (gateway) gateway.style.display = "none";
-                if (mainPage) mainPage.style.display = "none";
-            } else {
-                if (banScreen) banScreen.style.display = "none";
-                document.body.style.overflow = "auto";
-                if (mainPage && localStorage.getItem("student_verified_profile") === "true") {
-                    mainPage.style.display = "block";
-                }
-            }
-        })
-        .catch(err => console.log("Security sync active..."));
-};// 🎯 ADMIN BAN / UNBAN WITH CUSTOM REASON
-window.toggleUserBanStatus = function(targetUID, newStatus) {
-    let banReason = "";
-
-    if (newStatus === "banned") {
-        // Student ko block karne ka karan puchhein
-        banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Incorrect identity details / Policy violation");
-        
-        // Agar admin ne Cancel dabaya ya khali chhoda
-        if (banReason === null) return; 
-        if (banReason.trim() === "") banReason = "Incorrect identity submission or policy violation.";
-    }
-
-    const actionText = newStatus === "banned" ? "Block/Ban" : "Unblock";
-    if (!confirm(`Are you sure you want to ${actionText} Student ID: ${targetUID}?`)) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${targetUID}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            status: newStatus,
-            banReason: banReason, // Firebase me reason save hoga
-            updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-        })
-    })
-    .then(() => {
-        alert(`🎉 Student ID [${targetUID}] has been successfully ${newStatus === "banned" ? "BLOCKED" : "UNBLOCKED"}!`);
-        if (typeof loadLiveStudentsList === "function") loadLiveStudentsList();
-        window.verifyStudentAccessStatus();
-    })
-    .catch(err => alert("❌ Network Error! Unable to update student status."));
-};
-
-// 🎯 STRICT REAL-TIME SECURITY CHECK (SHOWS REASON TO BANNED STUDENT)
-window.verifyStudentAccessStatus = function() {
-    const studentUID = localStorage.getItem("student_portal_uid");
-    if (!studentUID) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
-        .then(res => res.json())
-        .then(userData => {
-            const banScreen = document.getElementById("bannedAccessScreen");
-            const gateway = document.getElementById("brand-gateway-screen");
-            const mainPage = document.getElementById("mainPage");
-            const reasonElement = document.getElementById("displayBanReasonText");
-
-            if (userData && userData.status === "banned") {
-                // Display Custom Reason on Ban Screen
-                if (reasonElement) {
-                    reasonElement.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
-                }
-
-                if (banScreen) banScreen.style.display = "flex";
-                document.body.style.overflow = "hidden";
-                if (gateway) gateway.style.display = "none";
-                if (mainPage) mainPage.style.display = "none";
-            } else {
-                if (banScreen) banScreen.style.display = "none";
-                document.body.style.overflow = "auto";
-                if (mainPage && localStorage.getItem("student_verified_profile") === "true") {
-                    mainPage.style.display = "block";
-                }
-            }
-        })
-        .catch(err => console.log("Security sync active..."));
-};// 🎯 ADMIN BAN / UNBAN WITH CUSTOM REASON
-window.toggleUserBanStatus = function(targetUID, newStatus) {
-    let banReason = "";
-
-    if (newStatus === "banned") {
-        // Student ko block karne ka karan puchhein
-        banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Incorrect identity details / Policy violation");
-        
-        // Agar admin ne Cancel dabaya ya khali chhoda
-        if (banReason === null) return; 
-        if (banReason.trim() === "") banReason = "Incorrect identity submission or policy violation.";
-    }
-
-    const actionText = newStatus === "banned" ? "Block/Ban" : "Unblock";
-    if (!confirm(`Are you sure you want to ${actionText} Student ID: ${targetUID}?`)) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${targetUID}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            status: newStatus,
-            banReason: banReason, // Firebase me reason save hoga
-            updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-        })
-    })
-    .then(() => {
-        alert(`🎉 Student ID [${targetUID}] has been successfully ${newStatus === "banned" ? "BLOCKED" : "UNBLOCKED"}!`);
-        if (typeof loadLiveStudentsList === "function") loadLiveStudentsList();
-        window.verifyStudentAccessStatus();
-    })
-    .catch(err => alert("❌ Network Error! Unable to update student status."));
-};
-
-// 🎯 STRICT REAL-TIME SECURITY CHECK (SHOWS REASON TO BANNED STUDENT)
-window.verifyStudentAccessStatus = function() {
-    const studentUID = localStorage.getItem("student_portal_uid");
-    if (!studentUID) return;
-
-    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
-        .then(res => res.json())
-        .then(userData => {
-            const banScreen = document.getElementById("bannedAccessScreen");
-            const gateway = document.getElementById("brand-gateway-screen");
-            const mainPage = document.getElementById("mainPage");
-            const reasonElement = document.getElementById("displayBanReasonText");
-
-            if (userData && userData.status === "banned") {
-                // Display Custom Reason on Ban Screen
-                if (reasonElement) {
-                    reasonElement.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
-                }
-
-                if (banScreen) banScreen.style.display = "flex";
-                document.body.style.overflow = "hidden";
-                if (gateway) gateway.style.display = "none";
-                if (mainPage) mainPage.style.display = "none";
-            } else {
-                if (banScreen) banScreen.style.display = "none";
-                document.body.style.overflow = "auto";
-                if (mainPage && localStorage.getItem("student_verified_profile") === "true") {
-                    mainPage.style.display = "block";
-                }
-            }
-        })
-        .catch(err => console.log("Security sync active..."));
-};
-
-// 🎯 6. MULTI-FILTER ENGINE (NAME SEARCH + COLLEGE DROPDOWN + SEMESTER DROPDOWN)
+// 🎯 8. MULTI-FILTER ENGINE (SEARCH INPUT + COLLEGE DROPDOWN + SEMESTER DROPDOWN)
 window.filterStudentUserMatrix = function() {
-    const nameQuery = (document.getElementById("adminStudentSearch").value || "").toLowerCase().trim();
-    const selectedCollege = document.getElementById("adminCollegeFilter").value;
-    const selectedSem = document.getElementById("adminSemFilter").value;
+    const searchVal = document.getElementById("adminStudentSearch");
+    const collegeVal = document.getElementById("adminCollegeFilter");
+    const semVal = document.getElementById("adminSemFilter");
+
+    const nameQuery = searchVal ? searchVal.value.toLowerCase().trim() : "";
+    const selectedCollege = collegeVal ? collegeVal.value : "";
+    const selectedSem = semVal ? semVal.value : "";
 
     const filteredList = globalStudentsCache.filter(student => {
         const matchesName = (student.studentName || "").toLowerCase().includes(nameQuery) || (student.uid || "").toLowerCase().includes(nameQuery);
@@ -1852,13 +1639,13 @@ window.filterStudentUserMatrix = function() {
     renderStudentCards(filteredList);
 };
 
-// Clear session helper for local development testing
+// Local Development Reset Helper
 window.clearLocalTestingSession = function() {
     localStorage.clear();
     location.reload();
 };
 
-// Attach Listeners and Continuous Security Checks
+// DOM Event Bindings & Live Background Loop
 document.addEventListener("DOMContentLoaded", function() {
     const enterBtn = document.querySelector("#brand-gateway-screen button");
     if (enterBtn) {
