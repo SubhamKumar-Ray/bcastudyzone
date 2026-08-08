@@ -1268,27 +1268,44 @@ window.proceedToVoicePopupHandover = function() {
     }
 };
 
-// 🎯 3. STRICT UNIQUE UID-BASED SECURITY CHECKER (SHOWS CUSTOM BAN REASON)
+// 🎯 3. STRICT UNIQUE UID-BASED SECURITY CHECKER & BANNED SCREEN DATA BINDING
 window.verifyStudentAccessStatus = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
     
-    // Agar portal enter hi nahi kiya toh normal access rehne do
     if (!studentUID) return;
 
-    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
+    fetch(`${FIREBASE_USERS_NODE_URL}.json`)
         .then(res => res.json())
-        .then(userData => {
+        .then(allData => {
+            if (!allData) return;
+
+            const userData = allData[studentUID];
             const banScreen = document.getElementById("bannedAccessScreen");
             const gateway = document.getElementById("brand-gateway-screen");
             const mainPage = document.getElementById("mainPage");
-            const reasonElement = document.getElementById("displayBanReasonText");
 
-            // Strictly check if THIS SPECIFIC UID status is "banned"
             if (userData && userData.status === "banned") {
-                // Display Custom Reason on Ban Screen
-                if (reasonElement) {
-                    reasonElement.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
-                }
+                // Calculation of Student Position/Queue Number
+                const allKeys = Object.keys(allData).sort();
+                const queuePosition = allKeys.indexOf(studentUID) + 1;
+
+                // Elements Binding on Banned Screen
+                const uidElem = document.getElementById("banDisplayUid");
+                const queueElem = document.getElementById("banDisplayQueue");
+                const nameElem = document.getElementById("banDisplayName");
+                const collegeElem = document.getElementById("banDisplayCollege");
+                const semElem = document.getElementById("banDisplaySem");
+                const reasonElem = document.getElementById("displayBanReasonText");
+
+                if (uidElem) uidElem.innerText = studentUID;
+                if (queueElem) queueElem.innerText = `#${queuePosition} of ${allKeys.length}`;
+                if (nameElem) nameElem.innerText = userData.studentName || "-";
+                if (collegeElem) collegeElem.innerText = userData.collegeName || "-";
+                if (semElem) semElem.innerText = userData.currentSemester || "-";
+                if (reasonElem) reasonElem.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
+
+                // Generate WhatsApp Dynamic Appeal Link with Old & New Data Template
+                window.updateWhatsAppAppealLink(userData, studentUID, queuePosition);
 
                 if (banScreen) banScreen.style.display = "flex";
                 document.body.style.overflow = "hidden";
@@ -1305,6 +1322,137 @@ window.verifyStudentAccessStatus = function() {
         .catch(err => console.log("Security sync active..."));
 };
 
+// 🎯 3B. GENERATE DYNAMIC WHATSAPP APPEAL LINK
+window.updateWhatsAppAppealLink = function(userData, studentUID, queuePosition) {
+    const waLinkElem = document.getElementById("whatsappAppealDynamicLink");
+    if (!waLinkElem) return;
+
+    const oldName = userData.originalName || userData.studentName || "N/A";
+    const oldCollege = userData.originalCollege || userData.collegeName || "N/A";
+    const oldSem = userData.originalSem || userData.currentSemester || "N/A";
+
+    const currentName = userData.studentName || "N/A";
+    const currentCollege = userData.collegeName || "N/A";
+    const currentSem = userData.currentSemester || "N/A";
+
+    const isUpdated = userData.isProfileUpdated ? "YES (Updated)" : "NO (Pending Correction)";
+
+    const waText = `🚨 *BCA STUDY ZONE - UNBLOCK APPEAL REQUEST* 🚨\n\n` +
+                   `🆔 *User ID:* ${studentUID}\n` +
+                   `📊 *Registration Queue Number:* #${queuePosition}\n\n` +
+                   `📌 *OLD RECORD (Before Update):*\n` +
+                   `• Name: ${oldName}\n` +
+                   `• College: ${oldCollege}\n` +
+                   `• Semester: ${oldSem}\n\n` +
+                   `✨ *NEW RECORD (Updated Profile):*\n` +
+                   `• Name: ${currentName}\n` +
+                   `• College: ${currentCollege}\n` +
+                   `• Semester: ${currentSem}\n\n` +
+                   `📝 *Profile Updated Status:* ${isUpdated}\n` +
+                   `⚠️ *Ban Reason:* ${userData.banReason || "Policy Violation"}\n\n` +
+                   `Hello Subham Kumar Ray Sir, I have updated my profile details accurately. Please review my old vs new record and unblock my account access.`;
+
+    waLinkElem.href = `https://wa.me/917061637118?text=${encodeURIComponent(waText)}`;
+};
+
+// 🎯 3C. BANNED PROFILE UPDATE HANDLER (FIREBASE + TELEGRAM SYNC)
+window.submitBannedProfileUpdate = function() {
+    const studentUID = localStorage.getItem("student_portal_uid");
+    const nameInput = document.getElementById("bannedUpdateName");
+    const collegeSelect = document.getElementById("bannedUpdateCollege");
+    const semSelect = document.getElementById("bannedUpdateSem");
+    const updateBtn = document.getElementById("bannedUpdateBtn");
+
+    if (!studentUID || !nameInput || !collegeSelect || !semSelect) return;
+
+    const newName = nameInput.value.trim();
+    const newCollege = collegeSelect.value;
+    const newSem = semSelect.value;
+
+    if (!newName || !newCollege || !newSem) {
+        alert("⚠️ Please fill all fields correctly!\n\nसारे विवरण सही-सही भरें।");
+        return;
+    }
+
+    if (updateBtn) {
+        updateBtn.disabled = true;
+        updateBtn.innerText = "Saving & Syncing Matrix...";
+    }
+
+    fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
+        .then(res => res.json())
+        .then(oldData => {
+            const originalName = oldData.originalName || oldData.studentName || "N/A";
+            const originalCollege = oldData.originalCollege || oldData.collegeName || "N/A";
+            const originalSem = oldData.originalSem || oldData.currentSemester || "N/A";
+
+            const formattedNewName = newName.replace(/\b\w/g, char => char.toUpperCase());
+            const updateTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+            const payload = {
+                studentName: formattedNewName,
+                collegeName: newCollege,
+                currentSemester: newSem,
+                originalName: originalName,
+                originalCollege: originalCollege,
+                originalSem: originalSem,
+                isProfileUpdated: true,
+                lastUpdatedTime: updateTime
+            };
+
+            // 1. Firebase Node Update (Same UID Overwrite)
+            return fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                // Update Local Storage
+                localStorage.setItem("student_tracked_name", formattedNewName);
+                localStorage.setItem("student_tracked_college", newCollege);
+                localStorage.setItem("student_tracked_sem", newSem);
+
+                // 2. Telegram Notification (Old vs New Record Log)
+                const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
+                const chatId = '@bca_dashboard_subham';
+
+                const telegramUpdateLog = `🔄 *BANNED USER PROFILE UPDATED* 🔄\n\n` +
+                                          `🆔 *User ID:* \`${studentUID}\`\n` +
+                                          `🕒 *Update Time:* ${updateTime}\n\n` +
+                                          `❌ *OLD RECORD:*\n` +
+                                          `• Name: ${originalName}\n` +
+                                          `• College: ${originalCollege}\n` +
+                                          `• Semester: ${originalSem}\n\n` +
+                                          `✅ *NEW RECORD:*\n` +
+                                          `• Name: ${formattedNewName}\n` +
+                                          `• College: ${newCollege}\n` +
+                                          `• Semester: ${newSem}\n\n` +
+                                          `📌 *Ban Reason:* ${oldData.banReason || "N/A"}`;
+
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: telegramUpdateLog, parse_mode: 'Markdown' })
+                }).catch(err => console.log("Telegram update log bypassed."));
+
+                alert("🎉 Profile Updated Successfully!\n\nआपकी नई जानकारी सेव हो गई है। अब नीचे दिए गए WhatsApp बटन पर क्लिक करके Unblock की रिक्वेस्ट भेजें।");
+                
+                if (updateBtn) {
+                    updateBtn.disabled = false;
+                    updateBtn.innerText = "Save & Update Details 💾";
+                }
+
+                window.verifyStudentAccessStatus();
+            });
+        })
+        .catch(err => {
+            alert("❌ Connection Error! Unable to update profile.");
+            if (updateBtn) {
+                updateBtn.disabled = false;
+                updateBtn.innerText = "Save & Update Details 💾";
+            }
+        });
+};
+
 // 🎯 4. REAL-TIME WELCOME BACK & ACCURATE GAP CALCULATOR
 window.initIdentityTrackingVerification = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
@@ -1314,7 +1462,6 @@ window.initIdentityTrackingVerification = function() {
         fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
         .then(response => response.json())
         .then(dbData => {
-            // Case A: Record Deleted by Admin -> Reset to Gateway & Form
             if (!dbData) {
                 localStorage.clear();
                 const gatewayScreen = document.getElementById("brand-gateway-screen");
@@ -1327,13 +1474,11 @@ window.initIdentityTrackingVerification = function() {
                 return;
             }
 
-            // Case B: Banned Check
             if (dbData.status === "banned") {
                 window.verifyStudentAccessStatus();
                 return;
             }
 
-            // Case C: Returning Student -> Real-Time Gap Calculation
             const savedName = dbData.studentName || "Existing Student";
             const savedCollege = dbData.collegeName || "Saved College";
             const savedSem = dbData.currentSemester || "Saved Semester";
@@ -1348,7 +1493,6 @@ window.initIdentityTrackingVerification = function() {
 
             const lastVisitTimeStr = localStorage.getItem("student_last_visit_readable") || dbData.entryTime || "Initial Registration";
 
-            // Real-Time Gap Calculation (Days, Hours, Minutes, Seconds)
             const diffInMilliseconds = Math.max(0, currentTimestamp - lastVisitTs);
             const totalSeconds = Math.floor(diffInMilliseconds / 1000);
             const totalMinutes = Math.floor(totalSeconds / 60);
@@ -1364,7 +1508,6 @@ window.initIdentityTrackingVerification = function() {
             localStorage.setItem("student_last_visit_timestamp", currentTimestamp.toString());
             localStorage.setItem("student_last_visit_readable", formattedCurrentDate);
 
-            // Telegram Return Notification
             const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
             const chatId = '@bca_dashboard_subham'; 
             
@@ -1393,7 +1536,7 @@ window.initIdentityTrackingVerification = function() {
     }
 };
 
-// 🎯 5. NEW STUDENT SUBMISSION (PORTAL ACCESS DETECTED)
+// 🎯 5. NEW STUDENT SUBMISSION
 window.submitStudentMetadataPipeline = function() {
     const nameInput = document.getElementById("track-student-name");
     const collegeSelect = document.getElementById("track-student-college");
@@ -1429,7 +1572,6 @@ window.submitStudentMetadataPipeline = function() {
     localStorage.setItem("student_last_visit_timestamp", currentTs.toString());
     localStorage.setItem("student_last_visit_readable", formattedDate);
 
-    // Telegram Alert Notification
     const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
     const chatId = '@bca_dashboard_subham'; 
     
@@ -1446,7 +1588,6 @@ window.submitStudentMetadataPipeline = function() {
         body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
     }).catch(err => console.log("Telegram alert bypassed."));
 
-    // Firebase Storage Sync
     fetch(`${FIREBASE_USERS_NODE_URL}/${currentTimestampStr}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -1454,6 +1595,9 @@ window.submitStudentMetadataPipeline = function() {
             studentName: structuredName,
             collegeName: college,
             currentSemester: semester,
+            originalName: structuredName,
+            originalCollege: college,
+            originalSem: semester,
             entryTime: formattedDate,
             timestamp: currentTs,
             status: "active",
@@ -1509,15 +1653,22 @@ window.loadLiveStudentsList = function() {
                 return;
             }
 
+            const sortedKeys = Object.keys(data).sort();
+
             globalStudentsCache = [];
-            Object.keys(data).forEach(uid => {
+            sortedKeys.forEach((uid, index) => {
                 const record = data[uid];
                 if (record && typeof record === 'object') {
                     globalStudentsCache.push({
                         uid: uid,
+                        queuePos: index + 1,
                         studentName: record.studentName || record.NAME || "Registered Student",
                         collegeName: record.collegeName || record.COLLEGE || "N/A",
                         currentSemester: record.currentSemester || record.SEMESTER || "N/A",
+                        originalName: record.originalName || record.studentName || "N/A",
+                        originalCollege: record.originalCollege || record.collegeName || "N/A",
+                        originalSem: record.originalSem || record.currentSemester || "N/A",
+                        isProfileUpdated: record.isProfileUpdated || false,
                         entryTime: record.entryTime || "N/A",
                         status: record.status || "active",
                         banReason: record.banReason || ""
@@ -1533,6 +1684,7 @@ window.loadLiveStudentsList = function() {
         });
 };
 
+// 🎯 6B. RENDER CARDS WITH BAN/UNBLOCK + DELETE BUTTON
 function renderStudentCards(studentsList) {
     const container = document.getElementById("adminStudentCardsContainer");
     if (!container) return;
@@ -1547,31 +1699,48 @@ function renderStudentCards(studentsList) {
         const isBanned = student.status === "banned";
         const cardBg = isBanned ? "rgba(255, 56, 56, 0.15)" : "#1e293b";
         const borderCol = isBanned ? "#ff3838" : "#334155";
+        
         const statusBadge = isBanned 
             ? `<span style="background: #ff3838; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; font-weight: bold;">BANNED 🚫</span>`
             : `<span style="background: #00c853; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; font-weight: bold;">ACTIVE 🟢</span>`;
 
-        const actionBtn = isBanned
-            ? `<button onclick="toggleUserBanStatus('${student.uid}', 'active')" style="padding: 8px 14px; font-size: 1.2rem; font-weight: bold; background: #00c853; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🟢 UNBLOCK USER</button>`
-            : `<button onclick="toggleUserBanStatus('${student.uid}', 'banned')" style="padding: 8px 14px; font-size: 1.2rem; font-weight: bold; background: #ff3838; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🚫 BLOCK / BAN USER</button>`;
+        const updateBadge = student.isProfileUpdated 
+            ? `<span style="background: #00f7ff; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 0.95rem; font-weight: bold; margin-left: 5px;">UPDATED ✏️</span>` 
+            : ``;
+
+        const banBtn = isBanned
+            ? `<button onclick="toggleUserBanStatus('${student.uid}', 'active')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #00c853; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🟢 UNBLOCK</button>`
+            : `<button onclick="toggleUserBanStatus('${student.uid}', 'banned')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #ff3838; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🚫 BAN</button>`;
+
+        // MOBILE-FRIENDLY DELETE BUTTON
+        const deleteBtn = `<button onclick="deleteUserPermanently('${student.uid}', '${student.studentName}')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #dc2626; color: #fff; border: none; border-radius: 8px; cursor: pointer; margin-left: 6px;">🗑️ DELETE</button>`;
 
         const reasonDisplay = isBanned && student.banReason 
-            ? `<p style="color: #ffd700; font-size: 1.1rem; margin: 4px 0 0 0;">⚠️ Reason: ${student.banReason}</p>` 
+            ? `<p style="color: #ffd700; font-size: 1.1rem; margin: 4px 0 0 0;">⚠️ Ban Reason: ${student.banReason}</p>` 
             : ``;
+
+        let oldRecordDisplay = "";
+        if (student.isProfileUpdated) {
+            oldRecordDisplay = `<p style="color: #94a3b8; font-size: 1.05rem; margin: 3px 0 0 0; font-style: italic;">⏮️ Old Record: ${student.originalName} | ${student.originalCollege} | ${student.originalSem}</p>`;
+        }
 
         html += `
             <div class="student-matrix-card" style="background: ${cardBg}; border: 1px solid ${borderCol}; padding: 14px; border-radius: 12px; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 220px;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                        <h4 style="color: #fff; font-size: 1.5rem; margin: 0; font-weight: 700;">${student.studentName}</h4>
+                <div style="flex: 1; min-width: 200px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;">
+                        <span style="color: #ffd700; font-size: 1.2rem; font-weight: 800;">#${student.queuePos}</span>
+                        <h4 style="color: #fff; font-size: 1.45rem; margin: 0; font-weight: 700;">${student.studentName}</h4>
                         ${statusBadge}
+                        ${updateBadge}
                     </div>
                     <p style="color: #00f7ff; font-size: 1.2rem; margin: 0 0 4px 0;">🏫 ${student.collegeName} • 📚 ${student.currentSemester}</p>
-                    <p style="color: #94a3b8; font-size: 1.1rem; margin: 0;">🕒 Joined: ${student.entryTime} | ID: ${student.uid}</p>
+                    <p style="color: #94a3b8; font-size: 1.05rem; margin: 0;">🕒 Joined: ${student.entryTime} | ID: ${student.uid}</p>
+                    ${oldRecordDisplay}
                     ${reasonDisplay}
                 </div>
-                <div>
-                    ${actionBtn}
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: nowrap;">
+                    ${banBtn}
+                    ${deleteBtn}
                 </div>
             </div>
         `;
@@ -1580,15 +1749,13 @@ function renderStudentCards(studentsList) {
     container.innerHTML = html;
 }
 
-// 🎯 7. ADMIN BAN / UNBAN WITH CUSTOM REASON PROMPT
+// 🎯 7. ADMIN BAN / UNBAN WITH REASON PROMPT
 window.toggleUserBanStatus = function(targetUID, newStatus) {
     let banReason = "";
 
     if (newStatus === "banned") {
-        // Prompt Admin to enter a ban reason
         banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Incorrect identity details / Policy violation");
         
-        // Handle Cancel or Empty prompt input
         if (banReason === null) return; 
         if (banReason.trim() === "") banReason = "Incorrect identity submission or policy violation.";
     }
@@ -1613,7 +1780,24 @@ window.toggleUserBanStatus = function(targetUID, newStatus) {
     .catch(err => alert("❌ Network Error! Unable to update student status."));
 };
 
-// 🎯 8. MULTI-FILTER ENGINE (SEARCH INPUT + COLLEGE DROPDOWN + SEMESTER DROPDOWN)
+// 🎯 7B. PERMANENT DELETE USER RECORD (MOBILE FRIENDLY)
+window.deleteUserPermanently = function(targetUID, studentName) {
+    if (!confirm(`🚨 PERMANENT DELETE WARNING!\n\nKya aap truly Student "${studentName}" (ID: ${targetUID}) ko Database se permanently delete karna chahte hain?\n\nDelete hone ke baad ye student wapas portal login karega toh fir se form bharna padega.`)) {
+        return;
+    }
+
+    fetch(`${FIREBASE_USERS_NODE_URL}/${targetUID}.json`, {
+        method: 'DELETE'
+    })
+    .then(() => {
+        alert(`🗑️ Student "${studentName}" (ID: ${targetUID}) has been PERMANENTLY DELETED from Firebase Database!`);
+        if (typeof loadLiveStudentsList === "function") loadLiveStudentsList();
+        window.verifyStudentAccessStatus();
+    })
+    .catch(err => alert("❌ Network Error! Unable to delete record."));
+};
+
+// 🎯 8. MULTI-FILTER ENGINE
 window.filterStudentUserMatrix = function() {
     const searchVal = document.getElementById("adminStudentSearch");
     const collegeVal = document.getElementById("adminCollegeFilter");
@@ -1658,3 +1842,5 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 setInterval(window.verifyStudentAccessStatus, 1500);
+
+
