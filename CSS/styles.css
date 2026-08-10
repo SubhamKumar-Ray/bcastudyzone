@@ -1940,3 +1940,18 @@
     .coaching-ad-badge { font-size: 0.95rem; }
     .coaching-btn { font-size: 1.05rem; padding: 8px 3px; }
 }
+
+
+
+/* Close button Cut sign fix */
+.coaching-modal-card {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.coaching-modal-close {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 99999 !important;
+}
