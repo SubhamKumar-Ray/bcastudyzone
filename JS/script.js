@@ -1221,14 +1221,161 @@ setTimeout(() => {
 }, 1500);
 
 // =========================================================================
-// 🚀 MASTER PRODUCTION ENGINE: GATEWAY, TELEGRAM ALERTS, GAP TRACKER & BAN MATRIX
+// 🚀 MASTER PRODUCTION ENGINE: GATEWAY, VALIDATION, AUTO-BAN & AUTO-UNBLOCK MATRIX
 // =========================================================================
 
 const FIREBASE_USERS_NODE_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers";
+const FIREBASE_SEM_CONFIG_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activeSemestersConfig.json";
 
 let globalStudentsCache = [];
+let activeSemestersMap = {
+    "Semester 1": true,
+    "Semester 2": true,
+    "Semester 3": true,
+    "Semester 4": true,
+    "Semester 5": true,
+    "Semester 6": true
+};
 
+// -------------------------------------------------------------------------
+// 🧠 SMART NAME VALIDATION ENGINE (DETECTS SINGLE NAME, JUNK & FAKE PATTERNS)
+// -------------------------------------------------------------------------
+function validateStudentName(nameInput) {
+    if (!nameInput) return { isValid: false, reason: "Full Name is required." };
+    
+    const cleanName = nameInput.trim();
+    const parts = cleanName.split(/\s+/).filter(p => p.length > 0);
+
+    // 1. Single Name Check (Must have First + Last Name)
+    if (parts.length < 2) {
+        return { 
+            isValid: false, 
+            reason: "Single Name Provided: Both First Name and Last Name are mandatory (e.g., Subham Kumar Ray)." 
+        };
+    }
+
+    // 2. Alphabets Only Check
+    const alphaPattern = /^[a-zA-Z\s]+$/;
+    if (!alphaPattern.test(cleanName)) {
+        return { 
+            isValid: false, 
+            reason: "Invalid Characters: Name must contain English alphabets only (No numbers or special symbols)." 
+        };
+    }
+
+    // 3. Short Word Check
+    for (let p of parts) {
+        if (p.length < 2) {
+            return { 
+                isValid: false, 
+                reason: "Short Name Segment: Each part of the name must contain at least 2 letters." 
+            };
+        }
+    }
+
+    // 4. Junk & Keyboard Spam Pattern Matching
+    const lowerName = cleanName.toLowerCase();
+    const junkWords = ["test", "admin", "fake", "user", "abc", "xyz", "asdf", "qwerty", "student", "unknown", "none", "null"];
+    for (let word of junkWords) {
+        if (lowerName.includes(word)) {
+            return { 
+                isValid: false, 
+                reason: `Fake Name Keyword Detected: Word '${word}' is not permitted.` 
+            };
+        }
+    }
+
+    // 5. Repeated Character Spam (e.g., "Aaaaaa", "Ssssss")
+    const repeatPattern = /(.)\1{3,}/i;
+    if (repeatPattern.test(cleanName.replace(/\s/g, ''))) {
+        return { 
+            isValid: false, 
+            reason: "Spam Pattern Detected: Repeated character sequence in name." 
+        };
+    }
+
+    return { isValid: true, reason: "" };
+}
+
+// -------------------------------------------------------------------------
+// ⚙️ ADMIN SEMESTER CONFIGURATION (FETCH & SAVE TO FIREBASE)
+// -------------------------------------------------------------------------
+window.fetchActiveSemestersConfig = function() {
+    fetch(FIREBASE_SEM_CONFIG_URL)
+        .then(res => res.json())
+        .then(data => {
+            if (data && typeof data === 'object') {
+                activeSemestersMap = data;
+            }
+            window.syncSemesterDropdownsUI();
+        })
+        .catch(err => console.log("Sem config sync active..."));
+};
+
+window.syncSemesterDropdownsUI = function() {
+    const semDropdowns = [
+        document.getElementById("track-student-sem"),
+        document.getElementById("bannedUpdateSem"),
+        document.getElementById("adminSemFilter")
+    ];
+
+    semDropdowns.forEach(dropdown => {
+        if (!dropdown) return;
+        
+        // Populate Admin Config into checkboxes if modal is open
+        for (let i = 1; i <= 6; i++) {
+            const chk = document.getElementById(`adminSemCheck${i}`);
+            if (chk) {
+                chk.checked = activeSemestersMap[`Semester ${i}`] !== false;
+            }
+        }
+
+        // Disable or enable options in user forms
+        if (dropdown.id !== "adminSemFilter") {
+            Array.from(dropdown.options).forEach(option => {
+                if (option.value && option.value.startsWith("Semester")) {
+                    const isActive = activeSemestersMap[option.value] !== false;
+                    option.disabled = !isActive;
+                    if (!isActive) {
+                        if (!option.text.includes("(Inactive)")) {
+                            option.text = `${option.value} (Inactive / Disabled)`;
+                        }
+                    } else {
+                        option.text = option.value;
+                    }
+                }
+            });
+        }
+    });
+};
+
+window.saveActiveSemestersConfig = function() {
+    const newConfig = {};
+    for (let i = 1; i <= 6; i++) {
+        const chk = document.getElementById(`adminSemCheck${i}`);
+        newConfig[`Semester ${i}`] = chk ? chk.checked : true;
+    }
+
+    activeSemestersMap = newConfig;
+    window.syncSemesterDropdownsUI();
+
+    const statusElem = document.getElementById("semSaveStatus");
+    if (statusElem) statusElem.innerText = "⏳ Saving settings...";
+
+    fetch(FIREBASE_SEM_CONFIG_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newConfig)
+    })
+    .then(() => {
+        if (statusElem) statusElem.innerText = "✅ Saved successfully!";
+        setTimeout(() => { if (statusElem) statusElem.innerText = ""; }, 2000);
+    });
+};
+
+// -------------------------------------------------------------------------
 // 🎯 1. ENTER PORTAL BUTTON HANDSHAKE
+// -------------------------------------------------------------------------
 window.startPortalHandshakeSequence = function() {
     const gatewayScreen = document.getElementById("brand-gateway-screen");
     const loaderNode = document.getElementById("loader");
@@ -1255,7 +1402,9 @@ window.startPortalHandshakeSequence = function() {
     }, 400);
 };
 
+// -------------------------------------------------------------------------
 // 🎯 2. SCREEN HANDOVER HELPER
+// -------------------------------------------------------------------------
 window.proceedToVoicePopupHandover = function() {
     const voicePopup = document.getElementById("voicePopup");
     const mainPage = document.getElementById("mainPage");
@@ -1268,7 +1417,9 @@ window.proceedToVoicePopupHandover = function() {
     }
 };
 
-// 🎯 3. STRICT UNIQUE UID-BASED SECURITY CHECKER & BANNED SCREEN DATA BINDING
+// -------------------------------------------------------------------------
+// 🎯 3. UNIQUE UID SECURITY CHECKER & BANNED SCREEN DATA BINDING
+// -------------------------------------------------------------------------
 window.verifyStudentAccessStatus = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
     
@@ -1285,11 +1436,9 @@ window.verifyStudentAccessStatus = function() {
             const mainPage = document.getElementById("mainPage");
 
             if (userData && userData.status === "banned") {
-                // Calculation of Student Position/Queue Number
                 const allKeys = Object.keys(allData).sort();
                 const queuePosition = allKeys.indexOf(studentUID) + 1;
 
-                // Elements Binding on Banned Screen
                 const uidElem = document.getElementById("banDisplayUid");
                 const queueElem = document.getElementById("banDisplayQueue");
                 const nameElem = document.getElementById("banDisplayName");
@@ -1304,7 +1453,6 @@ window.verifyStudentAccessStatus = function() {
                 if (semElem) semElem.innerText = userData.currentSemester || "-";
                 if (reasonElem) reasonElem.innerText = userData.banReason || "Incorrect identity submission or policy violation.";
 
-                // Generate WhatsApp Dynamic Appeal Link with Old & New Data Template
                 window.updateWhatsAppAppealLink(userData, studentUID, queuePosition);
 
                 if (banScreen) banScreen.style.display = "flex";
@@ -1322,7 +1470,9 @@ window.verifyStudentAccessStatus = function() {
         .catch(err => console.log("Security sync active..."));
 };
 
+// -------------------------------------------------------------------------
 // 🎯 3B. GENERATE DYNAMIC WHATSAPP APPEAL LINK
+// -------------------------------------------------------------------------
 window.updateWhatsAppAppealLink = function(userData, studentUID, queuePosition) {
     const waLinkElem = document.getElementById("whatsappAppealDynamicLink");
     if (!waLinkElem) return;
@@ -1350,12 +1500,14 @@ window.updateWhatsAppAppealLink = function(userData, studentUID, queuePosition) 
                    `• Semester: ${currentSem}\n\n` +
                    `📝 *Profile Updated Status:* ${isUpdated}\n` +
                    `⚠️ *Ban Reason:* ${userData.banReason || "Policy Violation"}\n\n` +
-                   `Hello Subham Kumar Ray Sir, I have updated my profile details accurately. Please review my old vs new record and unblock my account access.`;
+                   `Hello Subham Kumar Ray Sir, I have updated my profile details accurately. Please review my record and unblock my access.`;
 
     waLinkElem.href = `https://wa.me/917061637118?text=${encodeURIComponent(waText)}`;
 };
 
-// 🎯 3C. BANNED PROFILE UPDATE HANDLER (FIREBASE + TELEGRAM SYNC)
+// -------------------------------------------------------------------------
+// 🎯 3C. BANNED PROFILE UPDATE HANDLER (WITH AUTOMATIC UNBLOCK EVALUATION)
+// -------------------------------------------------------------------------
 window.submitBannedProfileUpdate = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
     const nameInput = document.getElementById("bannedUpdateName");
@@ -1374,9 +1526,15 @@ window.submitBannedProfileUpdate = function() {
         return;
     }
 
+    // Check Name Validity
+    const nameValidation = validateStudentName(newName);
+    
+    // Check Semester Activity
+    const isSemActive = activeSemestersMap[newSem] !== false;
+
     if (updateBtn) {
         updateBtn.disabled = true;
-        updateBtn.innerText = "Saving & Syncing Matrix...";
+        updateBtn.innerText = "Evaluating Profile & Syncing...";
     }
 
     fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
@@ -1389,6 +1547,21 @@ window.submitBannedProfileUpdate = function() {
             const formattedNewName = newName.replace(/\b\w/g, char => char.toUpperCase());
             const updateTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
+            let newStatus = "banned";
+            let autoBanReason = "";
+
+            // AUTO-UNBLOCK EVALUATION LOGIC
+            if (!nameValidation.isValid) {
+                newStatus = "banned";
+                autoBanReason = `Auto-BAN: ${nameValidation.reason}`;
+            } else if (!isSemActive) {
+                newStatus = "banned";
+                autoBanReason = `Auto-BAN: Selected Semester (${newSem}) is currently inactive/disabled by Admin.`;
+            } else {
+                newStatus = "active";
+                autoBanReason = ""; // Clear ban reason upon successful unblock
+            }
+
             const payload = {
                 studentName: formattedNewName,
                 collegeName: newCollege,
@@ -1397,36 +1570,36 @@ window.submitBannedProfileUpdate = function() {
                 originalCollege: originalCollege,
                 originalSem: originalSem,
                 isProfileUpdated: true,
+                status: newStatus,
+                banReason: autoBanReason,
                 lastUpdatedTime: updateTime
             };
 
-            // 1. Firebase Node Update (Same UID Overwrite)
             return fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(() => {
-                // Update Local Storage
                 localStorage.setItem("student_tracked_name", formattedNewName);
                 localStorage.setItem("student_tracked_college", newCollege);
                 localStorage.setItem("student_tracked_sem", newSem);
 
-                // 2. Telegram Notification (Old vs New Record Log)
                 const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
                 const chatId = '@bca_dashboard_subham';
 
-                const telegramUpdateLog = `🔄 *BANNED USER PROFILE UPDATED* 🔄\n\n` +
+                const telegramUpdateLog = `🔄 *PROFILE UPDATE & AUTO-EVALUATION* 🔄\n\n` +
                                           `🆔 *User ID:* \`${studentUID}\`\n` +
-                                          `🕒 *Update Time:* ${updateTime}\n\n` +
+                                          `📊 *New Status:* ${newStatus === "active" ? "🟢 UNBLOCKED (Active)" : "🚫 BANNED"}\n` +
+                                          `🕒 *Time:* ${updateTime}\n\n` +
                                           `❌ *OLD RECORD:*\n` +
                                           `• Name: ${originalName}\n` +
                                           `• College: ${originalCollege}\n` +
                                           `• Semester: ${originalSem}\n\n` +
-                                          `✅ *NEW RECORD:*\n` +
+                                          `✅ *NEW SUBMISSION:*\n` +
                                           `• Name: ${formattedNewName}\n` +
                                           `• College: ${newCollege}\n` +
                                           `• Semester: ${newSem}\n\n` +
-                                          `📌 *Ban Reason:* ${oldData.banReason || "N/A"}`;
+                                          `📌 *Reason/Log:* ${autoBanReason || "Verified & Auto-Unblocked"}`;
 
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
@@ -1434,7 +1607,11 @@ window.submitBannedProfileUpdate = function() {
                     body: JSON.stringify({ chat_id: chatId, text: telegramUpdateLog, parse_mode: 'Markdown' })
                 }).catch(err => console.log("Telegram update log bypassed."));
 
-                alert("🎉 Profile Updated Successfully!\n\nआपकी नई जानकारी सेव हो गई है। अब नीचे दिए गए WhatsApp बटन पर क्लिक करके Unblock की रिक्वेस्ट भेजें।");
+                if (newStatus === "active") {
+                    alert("🎉 Profile Verified Successfully!\n\nसारे विवरण सही पाए गए हैं। आपका खाता स्वचालित रूप से UNBLOCK (सक्रिय) कर दिया गया है!");
+                } else {
+                    alert(`⚠️ Profile Submission Rejected!\n\n${autoBanReason}\n\nकृपया विवरण सही करके पुनः प्रयास करें।`);
+                }
                 
                 if (updateBtn) {
                     updateBtn.disabled = false;
@@ -1453,7 +1630,9 @@ window.submitBannedProfileUpdate = function() {
         });
 };
 
-// 🎯 4. REAL-TIME WELCOME BACK & ACCURATE GAP CALCULATOR
+// -------------------------------------------------------------------------
+// 🎯 4. REAL-TIME WELCOME BACK & GAP CALCULATOR
+// -------------------------------------------------------------------------
 window.initIdentityTrackingVerification = function() {
     const studentUID = localStorage.getItem("student_portal_uid");
 
@@ -1536,7 +1715,9 @@ window.initIdentityTrackingVerification = function() {
     }
 };
 
-// 🎯 5. NEW STUDENT SUBMISSION
+// -------------------------------------------------------------------------
+// 🎯 5. NEW STUDENT ENTRY SUBMISSION (WITH AUTO-BAN FILTER)
+// -------------------------------------------------------------------------
 window.submitStudentMetadataPipeline = function() {
     const nameInput = document.getElementById("track-student-name");
     const collegeSelect = document.getElementById("track-student-college");
@@ -1552,6 +1733,23 @@ window.submitStudentMetadataPipeline = function() {
     if (!name || !college || !semester) {
         alert("⚠️ Please fill all details to proceed!\n\nपोर्टल अनलॉक करने के लिए कृपया नाम, कॉलेज और सेमेस्टर चुनें।");
         return;
+    }
+
+    // Check Name Validity
+    const nameValidation = validateStudentName(name);
+
+    // Check Active Semester Status
+    const isSemActive = activeSemestersMap[semester] !== false;
+
+    let initialStatus = "active";
+    let autoBanReason = "";
+
+    if (!nameValidation.isValid) {
+        initialStatus = "banned";
+        autoBanReason = `Auto-BAN: ${nameValidation.reason}`;
+    } else if (!isSemActive) {
+        initialStatus = "banned";
+        autoBanReason = `Auto-BAN: Selected Semester (${semester}) is currently inactive/disabled by Admin.`;
     }
 
     if (verifyBtn) {
@@ -1575,10 +1773,12 @@ window.submitStudentMetadataPipeline = function() {
     const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
     const chatId = '@bca_dashboard_subham'; 
     
-    const telegramAlertMessage = `🎓 *PORTAL ACCESS DETECTED* 🎓\n\n` +
+    const telegramAlertMessage = `🎓 *NEW PORTAL ACCESS ENTRY* 🎓\n\n` +
                                  `👤 *Student Name:* ${structuredName}\n` +
                                  `🏫 *College:* ${college}\n` +
                                  `📚 *Semester:* ${semester}\n` +
+                                 `📊 *Initial Status:* ${initialStatus === "active" ? "🟢 ACTIVE" : "🚫 AUTO-BANNED"}\n` +
+                                 `📌 *Log Reason:* ${autoBanReason || "Passed Verification"}\n` +
                                  `🕒 *Active Time:* ${formattedDate}\n` +
                                  `📱 *Device Sync:* ${navigator.platform}`;
 
@@ -1600,27 +1800,34 @@ window.submitStudentMetadataPipeline = function() {
             originalSem: semester,
             entryTime: formattedDate,
             timestamp: currentTs,
-            status: "active",
+            status: initialStatus,
+            banReason: autoBanReason,
             platform: navigator.platform
         })
     })
-    .then(() => completeStudentEntrySequence())
-    .catch(() => completeStudentEntrySequence());
+    .then(() => completeStudentEntrySequence(initialStatus))
+    .catch(() => completeStudentEntrySequence(initialStatus));
 };
 
-function completeStudentEntrySequence() {
+function completeStudentEntrySequence(status) {
     const popup = document.getElementById("studentTrackingPopup");
-    const mainPage = document.getElementById("mainPage");
-
     if (popup) popup.style.display = "none";
-    if (mainPage) mainPage.style.display = "block";
 
-    if (typeof triggerVbuNoticePopupMetrics === "function") {
-        triggerVbuNoticePopupMetrics();
+    if (status === "banned") {
+        window.verifyStudentAccessStatus();
+    } else {
+        const mainPage = document.getElementById("mainPage");
+        if (mainPage) mainPage.style.display = "block";
+
+        if (typeof triggerVbuNoticePopupMetrics === "function") {
+            triggerVbuNoticePopupMetrics();
+        }
     }
 }
 
+// -------------------------------------------------------------------------
 // 🎯 6. ADMIN DIRECTORY & MODAL CONTROLLERS
+// -------------------------------------------------------------------------
 window.openAdminUserMatrixDirectly = function() {
     if (typeof closeAdminControlPanel === "function") closeAdminControlPanel();
     openAdminUserMatrix();
@@ -1684,7 +1891,9 @@ window.loadLiveStudentsList = function() {
         });
 };
 
-// 🎯 6B. RENDER CARDS WITH BAN/UNBLOCK + DELETE BUTTON
+// -------------------------------------------------------------------------
+// 🎯 6B. RENDER STUDENT CARDS
+// -------------------------------------------------------------------------
 function renderStudentCards(studentsList) {
     const container = document.getElementById("adminStudentCardsContainer");
     if (!container) return;
@@ -1712,7 +1921,6 @@ function renderStudentCards(studentsList) {
             ? `<button onclick="toggleUserBanStatus('${student.uid}', 'active')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #00c853; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🟢 UNBLOCK</button>`
             : `<button onclick="toggleUserBanStatus('${student.uid}', 'banned')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #ff3838; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🚫 BAN</button>`;
 
-        // MOBILE-FRIENDLY DELETE BUTTON
         const deleteBtn = `<button onclick="deleteUserPermanently('${student.uid}', '${student.studentName}')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #dc2626; color: #fff; border: none; border-radius: 8px; cursor: pointer; margin-left: 6px;">🗑️ DELETE</button>`;
 
         const reasonDisplay = isBanned && student.banReason 
@@ -1749,15 +1957,17 @@ function renderStudentCards(studentsList) {
     container.innerHTML = html;
 }
 
-// 🎯 7. ADMIN BAN / UNBAN WITH REASON PROMPT
+// -------------------------------------------------------------------------
+// 🎯 7. ADMIN MANUAL BAN / UNBAN
+// -------------------------------------------------------------------------
 window.toggleUserBanStatus = function(targetUID, newStatus) {
     let banReason = "";
 
     if (newStatus === "banned") {
-        banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Incorrect identity details / Policy violation");
+        banReason = prompt("⚠️ Please enter the reason for banning this student:\n(छात्र को ब्लॉक करने का कारण लिखें):", "Manual Admin Ban: Policy violation");
         
         if (banReason === null) return; 
-        if (banReason.trim() === "") banReason = "Incorrect identity submission or policy violation.";
+        if (banReason.trim() === "") banReason = "Manual Admin Ban: Policy violation";
     }
 
     const actionText = newStatus === "banned" ? "Block/Ban" : "Unblock";
@@ -1780,9 +1990,11 @@ window.toggleUserBanStatus = function(targetUID, newStatus) {
     .catch(err => alert("❌ Network Error! Unable to update student status."));
 };
 
-// 🎯 7B. PERMANENT DELETE USER RECORD (MOBILE FRIENDLY)
+// -------------------------------------------------------------------------
+// 🎯 7B. PERMANENT DELETE USER RECORD
+// -------------------------------------------------------------------------
 window.deleteUserPermanently = function(targetUID, studentName) {
-    if (!confirm(`🚨 PERMANENT DELETE WARNING!\n\nKya aap truly Student "${studentName}" (ID: ${targetUID}) ko Database se permanently delete karna chahte hain?\n\nDelete hone ke baad ye student wapas portal login karega toh fir se form bharna padega.`)) {
+    if (!confirm(`🚨 PERMANENT DELETE WARNING!\n\nKya aap truly Student "${studentName}" (ID: ${targetUID}) ko Database se permanently delete karna chahte hain?`)) {
         return;
     }
 
@@ -1790,14 +2002,16 @@ window.deleteUserPermanently = function(targetUID, studentName) {
         method: 'DELETE'
     })
     .then(() => {
-        alert(`🗑️ Student "${studentName}" (ID: ${targetUID}) has been PERMANENTLY DELETED from Firebase Database!`);
+        alert(`🗑️ Student "${studentName}" (ID: ${targetUID}) has been PERMANENTLY DELETED!`);
         if (typeof loadLiveStudentsList === "function") loadLiveStudentsList();
         window.verifyStudentAccessStatus();
     })
     .catch(err => alert("❌ Network Error! Unable to delete record."));
 };
 
+// -------------------------------------------------------------------------
 // 🎯 8. MULTI-FILTER ENGINE
+// -------------------------------------------------------------------------
 window.filterStudentUserMatrix = function() {
     const searchVal = document.getElementById("adminStudentSearch");
     const collegeVal = document.getElementById("adminCollegeFilter");
@@ -1823,13 +2037,15 @@ window.filterStudentUserMatrix = function() {
     renderStudentCards(filteredList);
 };
 
-// Local Development Reset Helper
+// Local Testing Reset Helper
 window.clearLocalTestingSession = function() {
     localStorage.clear();
     location.reload();
 };
 
-// DOM Event Bindings & Live Background Loop
+// -------------------------------------------------------------------------
+// 🧠 INITIALIZATION & AUTOMATIC POLLING
+// -------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function() {
     const enterBtn = document.querySelector("#brand-gateway-screen button");
     if (enterBtn) {
@@ -1838,9 +2054,9 @@ document.addEventListener("DOMContentLoaded", function() {
             window.startPortalHandshakeSequence();
         };
     }
+    
+    window.fetchActiveSemestersConfig();
     window.verifyStudentAccessStatus();
 });
 
 setInterval(window.verifyStudentAccessStatus, 1500);
-
-
