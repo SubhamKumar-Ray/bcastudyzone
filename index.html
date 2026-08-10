@@ -2139,31 +2139,66 @@ function scrollToTopMatrix() {
     </div>
 </div>
 
-<!-- 🔐 SECRET ADMIN CONTROL PANEL POPUP -->
+<!-- 🔐 SECRET ADMIN CONTROL PANEL POPUP (FIXED CLOSE BUTTON) -->
 <div id="adminAdControlModal" class="coaching-modal-overlay">
-    <div class="coaching-modal-card" style="max-width: 380px; border-color: #ffd700;">
-        <button class="coaching-modal-close" onclick="closeAdminControlPanel()">&times;</button>
-        <h3 style="color:#ffd700; font-size: 2rem; margin-bottom: 5px;">👑 Owner Control Panel</h3>
-        <p style="color:#bcd3e8; font-size:1.2rem; margin-bottom: 20px;">Coaching Ad & Student Matrix Manage Karein:</p>
+    <!-- Card par padding-top badha di hai aur overflow: visible kiya hai -->
+    <div class="coaching-modal-card" style="max-width: 420px; border-color: #ffd700; position: relative; overflow: visible; padding-top: 30px;">
         
-        <!-- 1. ON / OFF BUTTON -->
-        <div style="margin-bottom: 15px;">
-            <button id="toggleAdStatusBtn" onclick="toggleAdStatusFromAdmin()" style="width:100%; padding: 12px; font-size: 1.4rem; font-weight: bold; border-radius: 10px; border:none; cursor:pointer;">
-                Loading Status...
+        <!-- 🔴 FIXED CLOSE BUTTON (Card ke andar right-top corner par safe position) -->
+        <button class="coaching-modal-close" onclick="closeAdminControlPanel()" style="position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; font-size: 18px; z-index: 99999; background: #ff3838; color: #fff; border: 2px solid #fff; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.5);">&times;</button>
+        
+        <h3 style="color:#ffd700; font-size: 2rem; margin-bottom: 5px;">👑 Owner Control Panel</h3>
+        <p style="color:#bcd3e8; font-size:1.2rem; margin-bottom: 15px;">Coaching Ad & Active Semester Settings:</p>
+        
+        <!-- Inner Scrollable Content Box (Taaki agar content lamba ho toh card ke andar scroll bane, bahar cut button par farq na pade) -->
+        <div style="max-height: 70vh; overflow-y: auto; padding-right: 4px;">
+            
+            <!-- 1. GLOBAL AD ON / OFF BUTTON -->
+            <div style="margin-bottom: 15px;">
+                <button id="toggleAdStatusBtn" onclick="toggleAdStatusFromAdmin()" style="width:100%; padding: 12px; font-size: 1.3rem; font-weight: bold; border-radius: 10px; border:none; cursor:pointer;">
+                    Loading Status...
+                </button>
+            </div>
+
+            <p id="adminStatusMsg" style="color:#00ff88; font-size:1.1rem; font-weight:bold; margin-bottom: 15px;"></p>
+
+            <!-- 2. ACTIVE SEMESTERS SELECTION (ADMIN TICK / UNTICK CONTROL) -->
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 12px; margin-bottom: 15px; text-align: left;">
+                <h4 style="color: #ffd700; font-size: 1.2rem; margin: 0 0 8px 0; text-transform: uppercase;">🎓 Active Semesters (Tick = Active)</h4>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                    <label style="color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" id="adminSemCheck1" onchange="saveActiveSemestersConfig()" style="accent-color: #00f7ff; transform: scale(1.2);"> Semester 1
+                    </label>
+                    <label style="color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" id="adminSemCheck2" onchange="saveActiveSemestersConfig()" style="accent-color: #00f7ff; transform: scale(1.2);"> Semester 2
+                    </label>
+                    <label style="color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" id="adminSemCheck3" onchange="saveActiveSemestersConfig()" style="accent-color: #00f7ff; transform: scale(1.2);"> Semester 3
+                    </label>
+                    <label style="color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" id="adminSemCheck4" onchange="saveActiveSemestersConfig()" style="accent-color: #00f7ff; transform: scale(1.2);"> Semester 4
+                    </label>
+                    <label style="color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" id="adminSemCheck5" onchange="saveActiveSemestersConfig()" style="accent-color: #00f7ff; transform: scale(1.2);"> Semester 5
+                    </label>
+                    <label style="color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" id="adminSemCheck6" onchange="saveActiveSemestersConfig()" style="accent-color: #00f7ff; transform: scale(1.2);"> Semester 6
+                    </label>
+                </div>
+                <p id="semSaveStatus" style="color: #00f7ff; font-size: 1rem; margin: 6px 0 0 0; text-align: center;"></p>
+            </div>
+
+            <!-- 3. CHANGE PASSWORD BUTTON -->
+            <button onclick="changeAdminPasswordOnline()" style="width:100%; padding: 10px; font-size: 1.2rem; font-weight: 600; background: #3b82f6; color: #fff; border:none; border-radius: 8px; cursor:pointer; margin-bottom: 12px;">
+                🔑 Change Password
             </button>
+
+            <!-- 4. DIRECT STUDENT MANAGEMENT & BAN LIST BUTTON -->
+            <button onclick="openAdminUserMatrixDirectly()" style="width:100%; padding: 12px; font-size: 1.2rem; font-weight: bold; background: linear-gradient(135deg, #00f7ff, #009dff); color: #000; border:none; border-radius: 8px; cursor:pointer; box-shadow: 0 4px 12px rgba(0, 247, 255, 0.3);">
+                👥 Manage Active Students & Ban List
+            </button>
+            
         </div>
-
-        <p id="adminStatusMsg" style="color:#00ff88; font-size:1.2rem; font-weight:bold; margin-bottom: 15px;"></p>
-
-        <!-- 2. CHANGE PASSWORD BUTTON -->
-        <button onclick="changeAdminPasswordOnline()" style="width:100%; padding: 10px; font-size: 1.3rem; font-weight: 600; background: #3b82f6; color: #fff; border:none; border-radius: 8px; cursor:pointer; margin-bottom: 12px;">
-            🔑 Change Password
-        </button>
-
-        <!-- 3. DIRECT STUDENT MANAGEMENT & BAN LIST BUTTON -->
-        <button onclick="openAdminUserMatrixDirectly()" style="width:100%; padding: 12px; font-size: 1.3rem; font-weight: bold; background: linear-gradient(135deg, #00f7ff, #009dff); color: #000; border:none; border-radius: 8px; cursor:pointer; box-shadow: 0 4px 12px rgba(0, 247, 255, 0.3);">
-            👥 Manage Active Students & Ban List
-        </button>
     </div>
 </div>
 
