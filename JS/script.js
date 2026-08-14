@@ -983,49 +983,191 @@ function filterSemesterDashboard(selectedSem) {
     });
 }
 // =========================================================================
-// 🚀 TALENT HUNT SOFTWARE SOLUTION - DYNAMIC ADMIN & AD CONTROL ENGINE
+// 🚀 DYNAMIC COACHING & PROMOTIONAL ADS DATA MATRIX (Call & WhatsApp Only)
 // =========================================================================
 
-// 1. दोनों पोस्टर इमेजेस की पाथ लिस्ट (रीफ्रेश करने पर रैंडमली बदलेंगी)
-const coachingPostersList = [
-    "Gallary/randhir_sir_coaching2.png",
-    "Gallary/randhir_sir_coaching3.png",
-	"Gallary/poster1.jpeg",
-    "Gallary/Poster.png",
-	"Gallary/poster2.jpeg"
+// 👉 यहाँ आप जितने चाहें उतने Ads जोड़ सकते हैं (प्रत्येक Ad के नीचे उसी का नंबर और WhatsApp रहेगा)
+const coachingAdsList = [
+    // 1️⃣ POSTER 2: Dosti & Yaadein (Memories)
+    {
+        id: "bca_memories_poster",
+        badge: "❤️ BCA MEMORIES • BATCH 2023-2026",
+        badgeStyle: "badge-red",
+        poster: "Gallary/poster2.jpeg", //[cite: 6]
+        buttons: [
+            {
+                type: "call",
+                text: "Call Subham",
+                icon: "fas fa-phone-alt",
+                link: "tel:7061637118", //[cite: 6]
+                style: "background: linear-gradient(135deg, #2563eb, #1d4ed8);"
+            },
+            {
+                type: "whatsapp",
+                text: "Share Memories",
+                icon: "fab fa-whatsapp",
+                link: "https://wa.me/917061637118?text=" + encodeURIComponent("Hello Subham! I saw the BCA batch memory poster (2023-26) on BCA Study Zone. Great memories! ❤️"),
+                style: "background: linear-gradient(135deg, #25d366, #128c7e);"
+            }
+        ]
+    },
+
+    // 2️⃣ POSTER: Official Website Promo
+    {
+        id: "study_zone_promo",
+        badge: "📚 OFFICIAL BCA STUDY PORTAL",
+        badgeStyle: "badge-blue",
+        poster: "Gallary/Poster.png", //[cite: 6]
+        buttons: [
+            {
+                type: "link",
+                text: "Explore Notes",
+                icon: "fas fa-book-open",
+                link: "#footer", //[cite: 1]
+                style: "background: linear-gradient(135deg, #0284c7, #0369a1);"
+            },
+            {
+                type: "whatsapp",
+                text: "Get Study Help",
+                icon: "fab fa-whatsapp",
+                link: "https://wa.me/917061637118?text=" + encodeURIComponent("Hello Subham Sir, I want complete notes and PYQ study resources for BCA."),
+                style: "background: linear-gradient(135deg, #25d366, #128c7e);"
+            }
+        ]
+    },
+
+    // 3️⃣ POSTER 1: Official BCA Farewell Celebration
+    {
+        id: "bca_farewell_celebration",
+        badge: "🎓 BCA FAREWELL • 2023-2026",
+        badgeStyle: "badge-gold",
+        poster: "Gallary/poster1.jpeg", //[cite: 6]
+        buttons: [
+            {
+                type: "call",
+                text: "Contact Us",
+                icon: "fas fa-phone-alt",
+                link: "tel:7061637118", //[cite: 6]
+                style: "background: linear-gradient(135deg, #2563eb, #1d4ed8);"
+            },
+            {
+                type: "whatsapp",
+                text: "Send Wishes",
+                icon: "fab fa-whatsapp",
+                link: "https://wa.me/917061637118?text=" + encodeURIComponent("Hello Subham! I saw the BCA Farewell 2023-2026 poster on BCA Study Zone. Best of luck for the future! 🎓"),
+                style: "background: linear-gradient(135deg, #25d366, #128c7e);"
+            }
+        ]
+    },
+
+    // 4️⃣ Coaching Ad (Randhir Sir)
+    {
+        id: "randhir_coaching",
+        badge: "🎓 SPECIAL BCA COACHING ADMISSION OPEN", //[cite: 1]
+        badgeStyle: "badge-purple",
+        poster: "Gallary/randhir_sir_coaching2.png", //[cite: 6]
+        buttons: [
+            {
+                type: "call",
+                text: "Call Randhir Sir",
+                icon: "fas fa-phone-alt",
+                link: "tel:7004700161", //[cite: 1, 6]
+                style: "background: linear-gradient(135deg, #2563eb, #1d4ed8);"
+            },
+            {
+                type: "whatsapp",
+                text: "WhatsApp",
+                icon: "fab fa-whatsapp",
+                link: "https://wa.me/917004700161?text=" + encodeURIComponent("Hello Randhir Sir, I saw your coaching poster on BCA Study Zone. I would like to enquire about BCA Coaching classes and admission details."), //[cite: 1, 6]
+                style: "background: linear-gradient(135deg, #25d366, #128c7e);"
+            }
+        ]
+    },
+	
+	{
+        id: "randhir_coaching",
+        badge: "🎓 SPECIAL BCA COACHING ADMISSION OPEN", //[cite: 1]
+        badgeStyle: "badge-purple",
+        poster: "Gallary/randhir_sir_coaching3.png", //[cite: 6]
+        buttons: [
+            {
+                type: "call",
+                text: "Call Randhir Sir",
+                icon: "fas fa-phone-alt",
+                link: "tel:7004700161", //[cite: 1, 6]
+                style: "background: linear-gradient(135deg, #2563eb, #1d4ed8);"
+            },
+            {
+                type: "whatsapp",
+                text: "WhatsApp",
+                icon: "fab fa-whatsapp",
+                link: "https://wa.me/917004700161?text=" + encodeURIComponent("Hello Randhir Sir, I saw your coaching poster on BCA Study Zone. I would like to enquire about BCA Coaching classes and admission details."), //[cite: 1, 6]
+                style: "background: linear-gradient(135deg, #25d366, #128c7e);"
+            }
+        ]
+    }
 ];
 
-// 2. Firebase Cloud Realtime Database Nodes
+// Firebase Cloud Realtime Database Nodes
 const FIREBASE_AD_SETTINGS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/coachingAdSettings.json";
 const FIREBASE_ADMIN_AUTH_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/ownerAdminAuth.json";
-
-// 3. डिफ़ॉल्ट सिक्योरिटी सीक्रेट की (Forget Password के वक्त काम आएगी)
-const OWNER_RECOVERY_EMAIL = "subham"; // रिसेट करने के लिए सीक्रेट रिकवरी की
+const OWNER_RECOVERY_EMAIL = "subham";
 
 /**
- * 🎯 1. SHOW AD POPUP (छात्रों के लिए एड प्रदर्शित करना)
+ * 🎯 1. SHOW AD POPUP (Dynamic Poster + Same Owner Call & WhatsApp)
  */
 function showCoachingAdPopup() {
     fetch(FIREBASE_AD_SETTINGS_URL)
         .then(response => response.json())
         .then(data => {
-            // अगर एडमिन (आप) ने क्लाउड सर्वर से एड OFF किया है तो किसी को नहीं दिखेगा
             if (data && data.enabled === false) {
-                console.log("🚫 Coaching Ad is globally DISABLED by Owner for all users.");
+                console.log("🚫 Promotional Ads are globally DISABLED by Admin.");
                 return;
             }
 
             const coachingModal = document.getElementById("coachingAdModal");
-            const posterElement = document.getElementById("coachingDynamicPoster");
+            const badgeElem = document.getElementById("dynamicAdBadge");
+            const posterElem = document.getElementById("coachingDynamicPoster");
+            const actionGrid = document.getElementById("dynamicActionGrid");
 
-            if (coachingModal && posterElement) {
-                const randomIndex = Math.floor(Math.random() * coachingPostersList.length);
-                posterElement.src = coachingPostersList[randomIndex];
-                coachingModal.style.display = "flex";
+            if (!coachingModal || !posterElem || coachingAdsList.length === 0) return;
+
+            // 1. Pick a random ad
+            const randomIndex = Math.floor(Math.random() * coachingAdsList.length);
+            const ad = coachingAdsList[randomIndex];
+
+            // 2. Set dynamic badge text & theme color
+            if (badgeElem) {
+                badgeElem.innerText = ad.badge || "FEATURED PROMOTION";
+                badgeElem.className = "coaching-ad-badge " + (ad.badgeStyle || "badge-gold");
             }
+
+            // 3. Set dynamic poster
+            posterElem.src = ad.poster;
+
+            // 4. Generate dynamic action buttons
+            if (actionGrid && Array.isArray(ad.buttons)) {
+                actionGrid.innerHTML = ""; // Purane buttons clear karein
+                
+                ad.buttons.forEach(btn => {
+                    const btnAnchor = document.createElement("a");
+                    btnAnchor.href = btn.link;
+                    btnAnchor.className = "coaching-btn";
+                    btnAnchor.style.cssText = btn.style;
+                    if (btn.link.startsWith("http")) {
+                        btnAnchor.target = "_blank";
+                    }
+
+                    btnAnchor.innerHTML = `<i class="${btn.icon}"></i> ${btn.text}`;
+                    actionGrid.appendChild(btnAnchor);
+                });
+            }
+
+            // 5. Open Modal
+            coachingModal.style.display = "flex";
         })
         .catch(err => {
-            console.log("Firebase sync latency, bypassing ad popup:", err);
+            console.log("Ad sync latency fallback:", err);
         });
 }
 
@@ -2064,3 +2206,5 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 setInterval(window.verifyStudentAccessStatus, 1500);
+
+
