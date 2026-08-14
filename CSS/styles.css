@@ -1905,31 +1905,41 @@
     object-fit: contain;
 }
 
+/* Dynamic Button Base Styles */
 .coaching-action-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    display: flex;
+    gap: 12px;
     margin-top: 15px;
+    width: 100%;
 }
 
 .coaching-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 5px;
-    font-size: 1.25rem;
+    gap: 8px;
+    flex: 1;
+    padding: 12px 10px;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: #ffffff;
-    border-radius: 10px;
+    color: #ffffff !important;
+    border-radius: 12px;
     text-decoration: none;
     transition: transform 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .coaching-btn:hover {
     transform: translateY(-2px);
-    filter: brightness(1.1);
+    filter: brightness(1.15);
 }
+
+/* Dynamic Badge Colors */
+.badge-gold { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000 !important; }
+.badge-blue { background: linear-gradient(135deg, #00f7ff, #0072ff); color: #000 !important; }
+.badge-green { background: linear-gradient(135deg, #00ff88, #00b0ff); color: #000 !important; }
+.badge-red { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff !important; }
+.badge-purple { background: linear-gradient(135deg, #da22ff, #9733ee); color: #fff !important; }
 
 .coaching-call-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
 .coaching-wa-btn { background: linear-gradient(135deg, #25d366, #128c7e); }
@@ -1955,3 +1965,5 @@
     right: 10px !important;
     z-index: 99999 !important;
 }
+
+
