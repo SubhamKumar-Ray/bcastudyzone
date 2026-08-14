@@ -349,7 +349,8 @@ function openPyqPopup(sem) {
 					<a href="${getWaShareLink('Semester 6 PYQ (2022-2025)', 'PYQ/sem6/2022_25.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
 				</div>
 				<div class="swal-link-container">
-					<a class="swal-link-btn swal-res-cs">2023-2026</a>
+					<a href="PYQ/sem6/2023_26.html" target="_blank" class="swal-link-btn swal-pyq-active">2023-2026</a>
+					<a href="${getWaShareLink('Semester 6 PYQ (2023-2026)', 'PYQ/sem6/2023_26.html')}" target="_blank" class="swal-share-wa-btn"><i class="fab fa-whatsapp"></i></a>
 				</div>
 				<div class="swal-link-container">
 					<a class="swal-link-btn swal-res-cs">2024-2027</a>
@@ -988,7 +989,10 @@ function filterSemesterDashboard(selectedSem) {
 // 1. दोनों पोस्टर इमेजेस की पाथ लिस्ट (रीफ्रेश करने पर रैंडमली बदलेंगी)
 const coachingPostersList = [
     "Gallary/randhir_sir_coaching2.png",
-    "Gallary/randhir_sir_coaching3.png"
+    "Gallary/randhir_sir_coaching3.png",
+	"Gallary/poster1.jpeg",
+    "Gallary/Poster.png",
+	"Gallary/poster2.jpeg"
 ];
 
 // 2. Firebase Cloud Realtime Database Nodes
