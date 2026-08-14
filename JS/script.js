@@ -2208,3 +2208,189 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(window.verifyStudentAccessStatus, 1500);
 
 
+
+
+// =========================================================================
+// 🚀 SMART FEATURE 1: BROKEN LINK / 404 REAL-TIME ERROR DETECTOR
+// =========================================================================
+
+const TELEGRAM_ALERT_TOKEN = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
+const TELEGRAM_ALERT_CHAT_ID = '@bca_dashboard_subham';
+
+// Smart Link Click Inspector
+async function handleResourceLinkClick(event, resourceTitle, targetUrl) {
+    if (!targetUrl || targetUrl.trim() === "" || targetUrl === "#") return;
+
+    if (targetUrl.startsWith("http") && !targetUrl.includes("github.io/bcastudyzone")) {
+        return;
+    }
+
+    try {
+        const response = await fetch(targetUrl, { method: 'HEAD' });
+        
+        if (response.status === 404 || response.status >= 500) {
+            event.preventDefault(); // Broken link ko open hone se rokein
+            
+            const studentName = localStorage.getItem("student_tracked_name") || "Guest / Unverified Student";
+            const studentCollege = localStorage.getItem("student_tracked_college") || "Unknown College";
+            const studentSem = localStorage.getItem("student_tracked_sem") || "Unknown Sem";
+            const formattedTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+            // 1. Student Friendly Popup
+            Swal.fire({
+                title: 'Resource Updating',
+                text: 'This study resource is currently being updated by Subham Sir. Please check back in a few minutes.',
+                icon: 'info',
+                confirmButtonColor: '#009dff',
+                confirmButtonText: 'Understood'
+            });
+
+            // 2. Telegram Instant Broken Alert
+            const errorAlertMessage = `⚠️ *BROKEN LINK / 404 ERROR DETECTED* ⚠️\n\n` +
+                                     `👤 *Student Name:* ${studentName}\n` +
+                                     `🏫 *College:* ${studentCollege}\n` +
+                                     `📚 *Semester:* ${studentSem}\n\n` +
+                                     `📖 *Resource Title:* ${resourceTitle}\n` +
+                                     `🔗 *Broken URL:* \`${targetUrl}\`\n` +
+                                     `❌ *Error Code:* HTTP ${response.status} Not Found\n` +
+                                     `🕒 *Time:* ${formattedTime}\n` +
+                                     `📱 *Device:* ${navigator.platform}`;
+
+            fetch(`https://api.telegram.org/bot${TELEGRAM_ALERT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_ALERT_CHAT_ID,
+                    text: errorAlertMessage,
+                    parse_mode: 'Markdown'
+                })
+            }).catch(() => {});
+        }
+    } catch (err) {
+        console.log("Resource pre-check bypass:", err);
+    }
+}
+
+// SweetAlert ke links par click listener
+document.addEventListener("click", function(e) {
+    const targetAnchor = e.target.closest("a.swal-link-btn");
+    if (targetAnchor && targetAnchor.getAttribute("href")) {
+        const url = targetAnchor.getAttribute("href");
+        const title = targetAnchor.innerText.replace("✓", "").trim();
+        
+        // Activity count karein
+        trackDailyAnalyticsEvent(url.includes("PYQ") ? "pyq_views" : "notes_views", title);
+
+        // Pre-validate broken link
+        handleResourceLinkClick(e, title, url);
+    }
+});
+
+
+// =========================================================================
+// 📊 SMART FEATURE 2: 24-HOUR AUTOMATED DAILY REPORT ENGINE (12:00 AM SYNC)
+// =========================================================================
+
+const FIREBASE_ANALYTICS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/dailyAnalytics";
+
+// Date formatted as YYYY-MM-DD
+function getFormattedDateKey(d) {
+    const target = d || new Date();
+    return `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, '0')}-${String(target.getDate()).padStart(2, '0')}`;
+}
+
+// Track Clicks in Firebase under Date Folder
+function trackDailyAnalyticsEvent(eventType, itemName) {
+    const todayKey = getFormattedDateKey();
+    const cleanItemKey = itemName ? itemName.replace(/[\.\#\$\[\]\/]/g, "_") : "general";
+    
+    fetch(`${FIREBASE_ANALYTICS_URL}/${todayKey}/${eventType}/${cleanItemKey}.json`)
+        .then(res => res.json())
+        .then(currentCount => {
+            const newCount = (currentCount || 0) + 1;
+            fetch(`${FIREBASE_ANALYTICS_URL}/${todayKey}/${eventType}/${cleanItemKey}.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newCount)
+            });
+        })
+        .catch(() => {});
+}
+
+// 🕛 Auto-generate 24-Hour Report (Triggers at 12:00 AM Midnight)
+function processMidnightDailyAnalyticsReport() {
+    const now = new Date();
+    const todayKey = getFormattedDateKey(now);
+
+    // Kal ka date key (Yesterday)
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = getFormattedDateKey(yesterday);
+
+    // Check agar kal ka report ja chuka hai ya nahi
+    const lastSentReportDate = localStorage.getItem("bca_last_sent_report_date");
+
+    if (lastSentReportDate !== yesterdayKey) {
+        // Firebase se yesterday ka data fetch karein
+        fetch(`${FIREBASE_ANALYTICS_URL}/${yesterdayKey}.json`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data) {
+                    // Agar kal koi activity nahi thi
+                    localStorage.setItem("bca_last_sent_report_date", yesterdayKey);
+                    return;
+                }
+
+                let totalNotesViews = 0;
+                let topNoteName = "None";
+                let topNoteCount = 0;
+
+                if (data.notes_views) {
+                    for (let note in data.notes_views) {
+                        const count = data.notes_views[note];
+                        totalNotesViews += count;
+                        if (count > topNoteCount) {
+                            topNoteCount = count;
+                            topNoteName = note;
+                        }
+                    }
+                }
+
+                let totalPyqViews = 0;
+                if (data.pyq_views) {
+                    for (let pyq in data.pyq_views) {
+                        totalPyqViews += data.pyq_views[pyq];
+                    }
+                }
+
+                const dailySummaryTelegramText = 
+                    `📊 *BCA STUDY ZONE - 24 HOURS DAILY REPORT* 📊\n\n` +
+                    `📅 *Report Date:* ${yesterdayKey}\n` +
+                    `⏱️ *Time Window:* Full 24 Hours (12:00 AM to 11:59 PM)\n\n` +
+                    `📘 *Total Notes Opened:* ${totalNotesViews}\n` +
+                    `🔥 *Most Read Note:* ${topNoteName} (${topNoteCount} views)\n` +
+                    `📄 *Total PYQs Accessed:* ${totalPyqViews}\n\n` +
+                    `✅ *System Status:* All Cloud Database Matrix Synced Successfully.`;
+
+                fetch(`https://api.telegram.org/bot${TELEGRAM_ALERT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_ALERT_CHAT_ID,
+                        text: dailySummaryTelegramText,
+                        parse_mode: 'Markdown'
+                    })
+                }).then(() => {
+                    // Lock taaki kal ka report dubara send na ho
+                    localStorage.setItem("bca_last_sent_report_date", yesterdayKey);
+                });
+            })
+            .catch(() => {});
+    }
+}
+
+// Har 1 minute me auto-check karega (Jaise hi 12:00 AM honge, report send ho jayegi)
+setInterval(processMidnightDailyAnalyticsReport, 60000);
+document.addEventListener("DOMContentLoaded", processMidnightDailyAnalyticsReport);
+
+
