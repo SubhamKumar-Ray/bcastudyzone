@@ -1967,3 +1967,295 @@
 }
 
 
+
+
+
+
+/* =========================================================================
+   💎 ULTRA-PROFESSIONAL LAB PROGRAM VAULT STYLING (PERFECT CONTRAST)
+========================================================================= */
+
+/* Quick Navigation Card Styling */
+.code-vault-card {
+    border-top: 4px solid #00f7ff !important;
+}
+
+.code-vault-card .icon-box {
+    background: #edfaff !important;
+}
+
+.code-vault-card:hover {
+    box-shadow: 0 15px 30px rgba(0, 247, 255, 0.3) !important;
+    border-color: #00f7ff !important;
+}
+
+/* Vault List Container */
+.vault-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 6px 2px;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+/* Individual Interactive Card */
+.vault-program-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.vault-program-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    filter: brightness(1.12);
+}
+
+/* Left Icon & Text Layout */
+.vault-item-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+}
+
+.vault-icon-circle {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.vault-title-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff !important; /* 🎯 Ultra-Clean White (100% Readable) */
+    letter-spacing: 0.3px;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Status Badges */
+.vault-badge-status {
+    padding: 5px 12px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-active {
+    background: #00ff88;
+    color: #032b17 !important;
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+    border: 1px solid #ffffff;
+}
+
+.badge-pending {
+    background: rgba(15, 23, 42, 0.65);
+    color: #ffd700 !important;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+/* 🎨 Professional Color Palettes per Subject */
+.vault-theme-c {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+}
+
+.vault-theme-cpp {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.vault-theme-ds {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.vault-theme-java {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+}
+
+.vault-theme-web {
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+.vault-theme-python {
+    background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+/* Download Action Button in Inner Details */
+.swal-vault-download-btn {
+    background: linear-gradient(135deg, #00f7ff, #009dff) !important;
+    color: #041427 !important;
+    font-weight: 800 !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-shadow: 0 4px 15px rgba(0, 247, 255, 0.35) !important;
+}
+
+.swal-vault-download-btn:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+/* 🚀 MISSING PROGRAM REQUEST BUTTON STYLING */
+.vault-request-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(0, 247, 255, 0.5);
+    border-radius: 12px;
+    color: #00f7ff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.vault-request-btn:hover {
+    background: rgba(0, 247, 255, 0.15);
+    border-color: #00f7ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 247, 255, 0.2);
+}
+
+
+/* ================= ❓ REQUEST CODE CARD STYLING ================= */
+.req-code-card {
+    border-top: 4px solid #ff7b00 !important;
+}
+
+.req-code-card .icon-box {
+    background: #fff7eb !important;
+}
+
+.req-code-card:hover {
+    box-shadow: 0 15px 30px rgba(255, 123, 0, 0.3) !important;
+    border-color: #ff7b00 !important;
+}
+
+.dark-mode .req-code-card .icon-box {
+    background: rgba(255, 123, 0, 0.15) !important;
+}
+
+
+/* ================= 📐 COMPACT RECTANGULAR REQUEST MODAL ================= */
+.vault-compact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    text-align: left;
+}
+
+@media (max-width: 480px) {
+    .vault-compact-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}
+
+.vault-compact-field {
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+.vault-compact-label {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.vault-compact-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 1.15rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.vault-compact-input:focus {
+    border-color: #00f7ff;
+}
+
+/* 🖼️ SLIM RECTANGULAR UPLOAD STRIP */
+.vault-slim-upload-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    border: 1.5px dashed rgba(0, 247, 255, 0.6);
+    border-radius: 8px;
+    background: rgba(0, 247, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vault-slim-upload-box:hover {
+    background: rgba(0, 247, 255, 0.12);
+    border-color: #00ff88;
+}
+
+.vault-slim-upload-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Mini Thumbnail Preview */
+.vault-mini-preview {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 6px;
+    border: 1px solid #00f7ff;
+}
+
+.vault-mini-preview img {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
