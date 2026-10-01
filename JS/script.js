@@ -2399,64 +2399,81 @@ document.addEventListener("DOMContentLoaded", processMidnightDailyAnalyticsRepor
 
 
 // =========================================================================
-// 💻 SMART CODING LAB VAULT (WITH 1-CLICK REQUEST TO TELEGRAM/WHATSAPP)
+// 💻 MULTI-PART CODING LAB VAULT (AUTOMATIC LIST & DOWNLOAD ENGINE)
 // =========================================================================
 
-// 📁 YAHAN APNA PDF FILE PATH SET KAREIN:
 const programmingPdfVault = {
     c: {
         name: "C Language Master Code",
         icon: "fab fa-cuttlefish",
         themeClass: "vault-theme-c",
-        file: "", // ✅ Available
-        desc: "इस सिंगल PDF में बेसिक्स, लूप्स, पैटर्न्स, फंक्शन्स, एरेज़, पॉइंटर्स, स्ट्रक्चर्स और फाइल हैंडलिंग के सभी महत्वपूर्ण लैब कोड्स शामिल हैं।"
+        files: [
+            {
+                title: "Part 1: Basic Level to High Level code With Output (Q1 - Q79)",
+                path: "Program/c_part1.pdf" // ✅ Ready (Download Link)
+            },
+            {
+                title: "Part 2: Basic Level to High Level code With Output (Q79 - Q150)",
+                path: "" // ⏳ Khali path = Automatic Coming Soon
+            },
+            {
+                title: "Part 3: Basic Level to High Level code With Output (Q150 - Q250)",
+                path: "" // ⏳ Khali path = Automatic Coming Soon
+            },
+            {
+                title: "Part 4: Basic Level to High Level code With Output (Q250 - Q350)",
+                path: "" // ⏳ Khali path = Automatic Coming Soon
+            }
+        ],
+        desc: "इन PDFs में VBU BCA सेमेस्टर के सभी 300+ महत्वपूर्ण लैब प्रोग्राम्स टॉपिक-वाइज और आउटपुट के साथ दिए गए हैं।"
     },
     cpp: {
         name: "C++ & OOP Lab Codes",
         icon: "fas fa-code",
         themeClass: "vault-theme-cpp",
-        file: "", // ⏳ Soon
+        files: [
+		],
         desc: "Class, Object, Inheritance, Polymorphism aur Operator Overloading ke complete mix lab practical codes."
     },
     ds: {
         name: "Data Structures in C",
         icon: "fas fa-project-diagram",
         themeClass: "vault-theme-ds",
-        file: "", // ⏳ Soon
+        files: [],
         desc: "Stack, Queue, Linked List, Tree Traversal aur All Searching/Sorting Algorithms ke complete solutions."
     },
     java: {
         name: "Java Master Programming",
         icon: "fab fa-java",
         themeClass: "vault-theme-java",
-        file: "", // ⏳ Soon
+        files: [],
         desc: "Core Java OOPs, Multithreading, Exception Handling, Applet aur Swing UI practical programs."
     },
     web: {
         name: "Web Design (HTML/CSS/JS)",
         icon: "fab fa-html5",
         themeClass: "vault-theme-web",
-        file: "", // ⏳ Soon
+        files: [],
         desc: "Complete HTML5 Semantic Layouts, CSS3 Styling aur JavaScript Form Validation Projects."
     },
     python: {
         name: "Python & Linux Shell",
         icon: "fab fa-python",
         themeClass: "vault-theme-python",
-        file: "", // ⏳ Soon
+        files: [],
         desc: "Python Core Programming Data Structures aur Linux Bash Shell Scripting ke ready-to-run lab codes."
     }
 };
 
-// 1. Language Master Selection Screen
+// 1. Language Selection Menu Screen
 function openCodingVaultModal() {
     let listHtml = "";
 
     for (let key in programmingPdfVault) {
         let item = programmingPdfVault[key];
-        let isUploaded = item.file && item.file.trim() !== "";
+        let hasFiles = item.files && item.files.length > 0;
 
-        let badgeContent = isUploaded 
+        let badgeContent = hasFiles 
             ? `<span class="vault-badge-status badge-active"><i class="fas fa-check-circle"></i> AVAILABLE</span>`
             : `<span class="vault-badge-status badge-pending"><i class="fas fa-hourglass-half"></i> SOON</span>`;
 
@@ -2474,9 +2491,9 @@ function openCodingVaultModal() {
     }
 
     Swal.fire({
-        title: '💻 Programming Lab Vault',
+        title: '<span style="font-size:1.55rem; font-weight:800; color:#ffffff !important;">💻 Programming Lab Vault</span>',
         html: `
-            <p style="font-size: 1.25rem; color: #94a3b8; margin: 0 0 16px 0; font-weight: 500;">
+            <p style="font-size: 1.15rem; color: #94a3b8; margin: 0 0 14px 0; font-weight: 500;">
                 Subject select karein aur complete topic-wise mix code file prapt karein 📥
             </p>
             <div class="vault-cards-container">
@@ -2485,85 +2502,105 @@ function openCodingVaultModal() {
         `,
         showConfirmButton: false,
         showCloseButton: true,
-        background: document.body.classList.contains('dark-mode') ? '#0f172a' : '#1e293b',
+        width: '460px',
+        padding: '16px',
+        background: '#1e293b',
         color: '#ffffff'
     });
 }
 
-// 2. Language Detail & Action Screen
+// 2. Language Detail & Multi-PDF Download Screen
+// 2. Language Detail & Multi-PDF Download Screen
 function openLanguagePdfList(langKey) {
     let data = programmingPdfVault[langKey];
     if (!data) return;
 
-    let isUploaded = data.file && data.file.trim() !== "";
+    let hasAnyFile = data.files && data.files.length > 0;
     let contentHtml = "";
 
-    if (isUploaded) {
-        // ✅ JAB PDF UPLOADED HAI
+    if (hasAnyFile) {
+        let pdfLinksHtml = "";
+        
+        data.files.forEach((pdf) => {
+            const isReady = pdf.path && pdf.path.trim() !== "";
+
+            if (isReady) {
+                // ✅ JAB YE SPECIFIC PART READY HAI (Active Download + WhatsApp Share)
+                pdfLinksHtml += `
+                    <div class="swal-link-container" style="margin-bottom: 8px;">
+                        <a href="${pdf.path}" target="_blank" class="swal-link-btn swal-vault-download-btn" style="padding: 10px 14px !important; font-size: 1.15rem !important;">
+                            <span><i class="fas fa-file-pdf"></i> ${pdf.title}</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </a>
+                        <a href="${getWaShareLink(pdf.title, pdf.path)}" target="_blank" class="swal-share-wa-btn" title="Share on WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                `;
+            } else {
+                // ⏳ JAB YE PART READY NAHI HAI (Coming Soon Badge Button)
+                pdfLinksHtml += `
+                    <div class="swal-link-container" style="margin-bottom: 8px;">
+                        <div class="swal-link-btn swal-res-cs" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px !important; font-size: 1.15rem !important; border-radius: 8px; opacity: 0.85;">
+                            <span><i class="fas fa-clock" style="margin-right: 6px;"></i> ${pdf.title}</span>
+                            <span style="font-size: 0.95rem; color: #ffd700; font-weight: 700;">COMING SOON</span>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
         contentHtml = `
-            <div class="swal-link-container" style="margin-top: 10px;">
-                <a href="${data.file}" target="_blank" class="swal-link-btn swal-vault-download-btn">
-                    <span><i class="fas fa-file-pdf"></i> ${data.name} Complete PDF</span>
-                    <span><i class="fas fa-download"></i> Download</span>
-                </a>
-                <a href="${getWaShareLink(data.name + ' Complete Lab PDF', data.file)}" target="_blank" class="swal-share-wa-btn" title="Share on WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
+            <div style="max-height: 250px; overflow-y: auto; padding-right: 4px; margin-top: 8px;">
+                ${pdfLinksHtml}
             </div>
             
-            <div style="background: rgba(0, 255, 136, 0.08); border: 1px dashed #00ff88; padding: 14px; border-radius: 12px; margin-top: 14px; text-align: center;">
-                <p style="font-size: 1.3rem; color: #00ff88; font-weight: 700; margin: 0 0 6px 0;">
-                    🎉 आपके वेबसाइट पर इस विषय की PDF अपलोड कर दी गई है!
+            <div style="background: rgba(0, 255, 136, 0.08); border: 1px dashed #00ff88; padding: 12px; border-radius: 10px; margin-top: 12px; text-align: center;">
+                <p style="font-size: 1.2rem; color: #00ff88; font-weight: 700; margin: 0 0 5px 0;">
+                    🎉 C Language Lab Files
                 </p>
-                <p style="font-size: 1.15rem; color: #cbd5e1; margin: 0; line-height: 1.6;">
+                <p style="font-size: 1.05rem; color: #cbd5e1; margin: 0; line-height: 1.5;">
                     ${data.desc}
                 </p>
             </div>
         `;
     } else {
-        // ⏳ JAB PDF READY NAHI HAI (COMING SOON)
+        // ⏳ JAB PURE SUBJECT KI KOI BHI FILE NA HO
         contentHtml = `
             <div class="swal-link-container" style="margin-top: 10px;">
-                <a class="swal-link-btn swal-res-cs" style="width:100%; justify-content:center; padding:15px; font-size:1.35rem; border-radius:12px;">
+                <a class="swal-link-btn swal-res-cs" style="width:100%; justify-content:center; padding:12px; font-size:1.25rem; border-radius:10px;">
                     <i class="fas fa-clock" style="margin-right: 8px;"></i> ${data.name} Complete File (Coming Soon)
                 </a>
             </div>
             
-            <div style="background: rgba(245, 158, 11, 0.08); border: 1px dashed #f59e0b; padding: 14px; border-radius: 12px; margin-top: 14px; text-align: center;">
-                <p style="font-size: 1.25rem; color: #ffd700; font-weight: 700; margin: 0 0 5px 0;">
+            <div style="background: rgba(245, 158, 11, 0.08); border: 1px dashed #f59e0b; padding: 12px; border-radius: 10px; margin-top: 14px; text-align: center;">
+                <p style="font-size: 1.2rem; color: #ffd700; font-weight: 700; margin: 0 0 5px 0;">
                     ⏳ इस विषय की सम्पूर्ण मिक्स कोड PDF, शुभम कुमार राय द्वारा जल्द ही यहाँ अपलोड कर दी जाएगी!
                 </p>
-                <p style="font-size: 1.1rem; color: #94a3b8; margin: 0;">
+                <p style="font-size: 1.05rem; color: #94a3b8; margin: 0;">
                     कृपया जुड़े रहें, फाइल तैयार होते ही लिंक यहाँ सक्रिय हो जाएगा।
                 </p>
             </div>
         `;
     }
 
-    // 🚀 STUDENT CODE REQUEST BUTTON (HAR SUBJECT KE ANDAR RAHEGA)
-    contentHtml += `
-        <div style="margin-top: 14px; text-align: center;">
-            <button onclick="openProgramRequestForm('${data.name}')" class="vault-request-btn">
-                <i class="fas fa-question-circle"></i> Missing a Code? Request Specific Program
-            </button>
-        </div>
-    `;
-
     Swal.fire({
-        title: `📘 ${data.name}`,
+        title: `<span style="font-size:1.45rem; font-weight:800; color:#ffffff !important;">📘 ${data.name}</span>`,
         html: `
-            <div style="padding: 5px 0;">
+            <div style="padding: 2px 0;">
                 ${contentHtml}
             </div>
-            <div style="margin-top: 18px; text-align: center;">
-                <button onclick="openCodingVaultModal()" style="padding: 9px 22px; background: #334155; color: #fff; border: 1px solid #475569; border-radius: 10px; font-weight: 700; font-size: 1.25rem; cursor: pointer;">
+            <div style="margin-top: 16px; text-align: center;">
+                <button onclick="openCodingVaultModal()" style="padding: 8px 18px; background: #334155; color: #fff; border: 1px solid #475569; border-radius: 8px; font-weight: 700; font-size: 1.15rem; cursor: pointer;">
                     <i class="fas fa-arrow-left"></i> Back to Languages
                 </button>
             </div>
         `,
         showConfirmButton: false,
         showCloseButton: true,
-        background: document.body.classList.contains('dark-mode') ? '#0f172a' : '#1e293b',
+        width: '470px',
+        padding: '16px',
+        background: '#1e293b',
         color: '#ffffff'
     });
 }
