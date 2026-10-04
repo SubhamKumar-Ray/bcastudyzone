@@ -806,9 +806,6 @@ function initIdentityTrackingVerification() {
             localStorage.setItem("student_last_visit_timestamp", currentTimestamp.toString());
             localStorage.setItem("student_last_visit_readable", formattedDate);
             
-            const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
-            const chatId = '@bca_dashboard_subham'; 
-            
             const telegramRevisitMessage = `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
                                          `👤 *Student Name:* ${savedName}\n` +
                                          `🏫 *College:* ${savedCollege}\n` +
@@ -818,10 +815,14 @@ function initIdentityTrackingVerification() {
                                          `⏳ *Total Offline Gap:* _${gapString}_\n\n` +
                                          `📱 *Device:* ${navigator.platform}`;
 
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+            // 🚀 Secure Google Apps Script Proxy Call
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx761_6FchoKp05elYLPhg8q7muURLuwWGqND3TZKjVwi1YI62vOISFRHmqfG-A4BU3/exec';
+
+            fetch(SCRIPT_URL, { 
                 method: 'POST',
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: telegramRevisitMessage, parse_mode: 'Markdown' }) 
+                body: JSON.stringify({ text: telegramRevisitMessage }) 
             }).catch(tErr => console.log("Telegram buffer bypassed."));
 
             proceedToVoicePopupHandover();
@@ -839,7 +840,6 @@ function initIdentityTrackingVerification() {
         }
     }
 }
-
 function submitStudentMetadataPipeline() {
     const name = document.getElementById("track-student-name").value.trim();
     const college = document.getElementById("track-student-college").value;
