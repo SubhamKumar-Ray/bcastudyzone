@@ -2509,8 +2509,7 @@ function openCodingVaultModal() {
     });
 }
 
-// 2. Language Detail & Multi-PDF Download Screen
-// 2. Language Detail & Multi-PDF Download Screen
+// 2. Language Detail & Multi-PDF Download Screen (CLEAN & FREE VERSION)
 function openLanguagePdfList(langKey) {
     let data = programmingPdfVault[langKey];
     if (!data) return;
@@ -2525,12 +2524,12 @@ function openLanguagePdfList(langKey) {
             const isReady = pdf.path && pdf.path.trim() !== "";
 
             if (isReady) {
-                // ✅ JAB YE SPECIFIC PART READY HAI (Active Download + WhatsApp Share)
+                // ✅ READY FILE: Clean Dark-Cyan Theme + White Bold Text
                 pdfLinksHtml += `
-                    <div class="swal-link-container" style="margin-bottom: 8px;">
-                        <a href="${pdf.path}" target="_blank" class="swal-link-btn swal-vault-download-btn" style="padding: 10px 14px !important; font-size: 1.15rem !important;">
-                            <span><i class="fas fa-file-pdf"></i> ${pdf.title}</span>
-                            <span><i class="fas fa-download"></i></span>
+                    <div class="swal-link-container" style="margin-bottom: 10px;">
+                        <a href="${pdf.path}" target="_blank" class="vault-clean-download-btn">
+                            <span class="vault-btn-title"><i class="fas fa-file-pdf"></i> ${pdf.title}</span>
+                            <span class="vault-btn-icon"><i class="fas fa-download"></i></span>
                         </a>
                         <a href="${getWaShareLink(pdf.title, pdf.path)}" target="_blank" class="swal-share-wa-btn" title="Share on WhatsApp">
                             <i class="fab fa-whatsapp"></i>
@@ -2538,12 +2537,14 @@ function openLanguagePdfList(langKey) {
                     </div>
                 `;
             } else {
-                // ⏳ JAB YE PART READY NAHI HAI (Coming Soon Badge Button)
+                // ⏳ COMING SOON FILE: Dark Background + Gold Badge
                 pdfLinksHtml += `
-                    <div class="swal-link-container" style="margin-bottom: 8px;">
-                        <div class="swal-link-btn swal-res-cs" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px !important; font-size: 1.15rem !important; border-radius: 8px; opacity: 0.85;">
-                            <span><i class="fas fa-clock" style="margin-right: 6px;"></i> ${pdf.title}</span>
-                            <span style="font-size: 0.95rem; color: #ffd700; font-weight: 700;">COMING SOON</span>
+                    <div class="swal-link-container" style="margin-bottom: 10px;">
+                        <div class="vault-clean-cs-btn">
+                            <span class="vault-btn-title" style="color: #94a3b8 !important;">
+                                <i class="fas fa-clock" style="margin-right: 6px; color: #ffd700;"></i> ${pdf.title}
+                            </span>
+                            <span class="vault-cs-badge">COMING SOON</span>
                         </div>
                     </div>
                 `;
@@ -2551,56 +2552,46 @@ function openLanguagePdfList(langKey) {
         });
 
         contentHtml = `
-            <div style="max-height: 250px; overflow-y: auto; padding-right: 4px; margin-top: 8px;">
+            <div style="max-height: 270px; overflow-y: auto; padding-right: 4px; margin-top: 8px;">
                 ${pdfLinksHtml}
             </div>
             
-            <div style="background: rgba(0, 255, 136, 0.08); border: 1px dashed #00ff88; padding: 12px; border-radius: 10px; margin-top: 12px; text-align: center;">
-                <p style="font-size: 1.2rem; color: #00ff88; font-weight: 700; margin: 0 0 5px 0;">
-                    🎉 C Language Lab Files
+            <div style="background: rgba(0, 255, 136, 0.08); border: 1px dashed #00ff88; padding: 12px; border-radius: 12px; margin-top: 14px; text-align: center;">
+                <p style="font-size: 1.25rem; color: #00ff88; font-weight: 700; margin: 0 0 5px 0;">
+                    🎉 ${data.name} Lab Files
                 </p>
-                <p style="font-size: 1.05rem; color: #cbd5e1; margin: 0; line-height: 1.5;">
+                <p style="font-size: 1.1rem; color: #cbd5e1; margin: 0; line-height: 1.5;">
                     ${data.desc}
                 </p>
             </div>
         `;
     } else {
-        // ⏳ JAB PURE SUBJECT KI KOI BHI FILE NA HO
         contentHtml = `
             <div class="swal-link-container" style="margin-top: 10px;">
-                <a class="swal-link-btn swal-res-cs" style="width:100%; justify-content:center; padding:12px; font-size:1.25rem; border-radius:10px;">
-                    <i class="fas fa-clock" style="margin-right: 8px;"></i> ${data.name} Complete File (Coming Soon)
-                </a>
-            </div>
-            
-            <div style="background: rgba(245, 158, 11, 0.08); border: 1px dashed #f59e0b; padding: 12px; border-radius: 10px; margin-top: 14px; text-align: center;">
-                <p style="font-size: 1.2rem; color: #ffd700; font-weight: 700; margin: 0 0 5px 0;">
-                    ⏳ इस विषय की सम्पूर्ण मिक्स कोड PDF, शुभम कुमार राय द्वारा जल्द ही यहाँ अपलोड कर दी जाएगी!
-                </p>
-                <p style="font-size: 1.05rem; color: #94a3b8; margin: 0;">
-                    कृपया जुड़े रहें, फाइल तैयार होते ही लिंक यहाँ सक्रिय हो जाएगा।
-                </p>
+                <div class="vault-clean-cs-btn" style="width:100%; justify-content:center; padding:14px;">
+                    <i class="fas fa-clock" style="margin-right: 8px; color: #ffd700;"></i> ${data.name} Complete File (Coming Soon)
+                </div>
             </div>
         `;
     }
 
     Swal.fire({
-        title: `<span style="font-size:1.45rem; font-weight:800; color:#ffffff !important;">📘 ${data.name}</span>`,
+        title: `<span style="font-size:1.55rem; font-weight:800; color:#ffffff !important;">📘 ${data.name}</span>`,
         html: `
             <div style="padding: 2px 0;">
                 ${contentHtml}
             </div>
-            <div style="margin-top: 16px; text-align: center;">
-                <button onclick="openCodingVaultModal()" style="padding: 8px 18px; background: #334155; color: #fff; border: 1px solid #475569; border-radius: 8px; font-weight: 700; font-size: 1.15rem; cursor: pointer;">
+            <div style="margin-top: 18px; text-align: center;">
+                <button onclick="openCodingVaultModal()" class="vault-back-btn">
                     <i class="fas fa-arrow-left"></i> Back to Languages
                 </button>
             </div>
         `,
         showConfirmButton: false,
         showCloseButton: true,
-        width: '470px',
-        padding: '16px',
-        background: '#1e293b',
+        width: '480px',
+        padding: '18px',
+        background: '#0f172a',
         color: '#ffffff'
     });
 }
