@@ -123,33 +123,6 @@ form.addEventListener('submit', e => {
       nameInput.value = nameInput.value.trim().replace(/\b\w/g, char => char.toUpperCase()); //
   }
 
-  // ──────────────────────────────────────────────────────────
-  // 🚀 3. INSTANT TELEGRAM BOT ALERT SYSTEM
-  // ──────────────────────────────────────────────────────────
-  const telegramToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; //
-  
-  // ⚠️ IMPORTANT: Yahan quotes ke andar apni numerical User ID paste kar dein!
-  const telegramChatId = '1814896362'; //
-
-  const alertText = `🚨 *URGENT SUPPORT REQUEST* 🚨\n\n` +
-                    `👤 *Student:* ${nameInput ? nameInput.value : 'N/A'}\n` +
-                    `🎓 *Semester:* ${semesterInput ? semesterInput.value : 'N/A'}\n` +
-                    `🏫 *College:* ${collegeInput ? collegeInput.value : 'N/A'}\n` +
-                    `📱 *Mobile:* ${mobileInput}\n` +
-                    `📧 *Email:* ${emailInput}\n\n` +
-                    `💬 *Message Sent:* \n"${messageArea ? messageArea.value : 'No text content'}"`; //
-
-  fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, { //
-      method: 'POST', //
-      headers: { 'Content-Type': 'application/json' }, //
-      body: JSON.stringify({ //
-          chat_id: telegramChatId, //
-          text: alertText, //
-          parse_mode: 'Markdown' //
-      })
-  }).catch(err => console.log("Telegram alert bypassed. Processing master matrix database pipeline.")); //
-  // ──────────────────────────────────────────────────────────
-
   const formData = new FormData(form); //
 
   // Data Transmission to Google App Script Spreadsheet Engine
