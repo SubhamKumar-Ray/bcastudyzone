@@ -1,0 +1,271 @@
+/* =========================================================================
+   👑 ULTRA-PREMIUM STUDENT PROFILE STYLESHEET (style1.css)
+========================================================================= */
+
+/* Header Icons Bar */
+.header .icons {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    height: 100% !important;
+    line-height: normal !important;
+}
+
+/* Header Avatar Trigger */
+.custom-profile-trigger {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #00f7ff, #0066ff) !important;
+    color: #ffffff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0, 247, 255, 0.5) !important;
+    user-select: none !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transition: transform 0.2s ease !important;
+}
+
+.custom-profile-trigger:hover {
+    transform: scale(1.08) !important;
+}
+
+/* Background Dim Overlay */
+#profileModalOverlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(4px) !important;
+    z-index: 9999998 !important;
+    display: none;
+}
+
+/* 🎯 Main Luxury Floating Card */
+#profilePopupModal {
+    position: fixed !important;
+    top: 65px !important;
+    right: 20px !important;
+    width: 295px !important;
+    background-color: #0b1329 !important; /* 100% Solid Dark Navy */
+    border: 2px solid #00f7ff !important;
+    border-radius: 20px !important;
+    padding: 20px 16px !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 25px rgba(0, 247, 255, 0.3) !important;
+    z-index: 9999999 !important;
+    box-sizing: border-box !important;
+    display: none;
+    flex-direction: column !important;
+    gap: 12px !important;
+    text-align: center !important;
+    animation: popupSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes popupSlideDown {
+    from { opacity: 0; transform: translateY(-15px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Avatar Circle Inside Card */
+.modal-avatar-circle {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #00f7ff, #0052d4) !important;
+    color: #ffffff !important;
+    font-size: 2.4rem !important;
+    font-weight: 900 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 10px auto !important;
+    border: 2px solid #00f7ff !important;
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.4) !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+/* Student Name */
+#modalStudentName {
+    font-size: 1.55rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    margin: 0 0 6px 0 !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    word-break: break-word !important;
+}
+
+/* Verified Badge */
+.modal-verified-pill {
+    font-size: 1.05rem !important;
+    color: #00ff88 !important;
+    background: rgba(0, 255, 136, 0.12) !important;
+    border: 1px solid #00ff88 !important;
+    padding: 4px 14px !important;
+    border-radius: 30px !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin: 0 auto !important;
+}
+
+/* Multi-color Details Container */
+.modal-info-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+}
+
+/* College Item (Golden) */
+.modal-item-college {
+    background: rgba(255, 215, 0, 0.08) !important;
+    border: 1px solid rgba(255, 215, 0, 0.4) !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-align: left !important;
+}
+
+.modal-item-college i {
+    color: #ffd700 !important;
+    font-size: 1.4rem !important;
+    min-width: 20px !important;
+}
+
+.modal-item-college span {
+    color: #fffae6 !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+}
+
+/* Semester Item (Purple) */
+.modal-item-sem {
+    background: rgba(168, 85, 247, 0.1) !important;
+    border: 1px solid rgba(168, 85, 247, 0.45) !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-align: left !important;
+}
+
+.modal-item-sem i {
+    color: #c084fc !important;
+    font-size: 1.4rem !important;
+    min-width: 20px !important;
+}
+
+.modal-item-sem span {
+    color: #f3e8ff !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+}
+
+/* Action Buttons */
+.modal-actions-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-top: 6px !important;
+}
+
+.modal-btn-edit {
+    width: 100% !important;
+    padding: 11px 0 !important;
+    border-radius: 10px !important;
+    font-size: 1.3rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #00f7ff, #0072ff) !important;
+    color: #000000 !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.modal-btn-edit:hover {
+    transform: translateY(-2px) !important;
+}
+
+.modal-btn-logout {
+    width: 100% !important;
+    padding: 10px 0 !important;
+    border-radius: 10px !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    background: rgba(239, 68, 68, 0.18) !important;
+    color: #ff6b6b !important;
+    border: 1px solid #ef4444 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    transition: background 0.2s ease !important;
+}
+
+.modal-btn-logout:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+/* 💻 Laptop me Menu Button Hide Rule */
+@media screen and (min-width: 769px) {
+    #menu-btn,
+    .header .icons #menu-btn,
+    .header .icons .fa-bars {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* 📱 Mobile & Tablet Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    #menu-btn {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 4rem !important;
+        height: 4rem !important;
+    }
+
+    #profilePopupModal {
+        right: 12px !important;
+        top: 60px !important;
+        width: 275px !important;
+        padding: 16px 12px !important;
+    }
+}
+/* SweetAlert ko Tracking modal ke upar rakhne ke liye */
+.swal2-container {
+    z-index: 100000000 !important;
+}
