@@ -840,15 +840,26 @@ function initIdentityTrackingVerification() {
         }
     }
 }
+// =========================================================================
+// 🚀 STUDENT VERIFICATION & ENTRY PIPELINE (PHOTO 100% SAVE FIX)
+// =========================================================================
 function submitStudentMetadataPipeline() {
-    const name = document.getElementById("track-student-name").value.trim();
-    const college = document.getElementById("track-student-college").value;
-    const semester = document.getElementById("track-student-sem").value;
+    const nameInput = document.getElementById("track-student-name");
+    const collegeSelect = document.getElementById("track-student-college");
+    const semSelect = document.getElementById("track-student-sem");
+    const photoInput = document.getElementById("track-student-photo");
     const verifyBtn = document.getElementById("trackVerifyBtn");
 
-    // 🚨 ANTI-SPAM INPUT VALIDATION GUARDS
+    if (!nameInput || !collegeSelect || !semSelect) return;
+
+    const name = nameInput.value.trim();
+    const college = collegeSelect.value;
+    const semester = semSelect.value;
+    const photoFile = (photoInput && photoInput.files && photoInput.files[0]) ? photoInput.files[0] : null;
+
+    // 🚨 Validation
     if (!name || !college || !semester) {
-        alert("⚠️ Fields Cannot Be Empty!\n\nपोर्टल अनलॉक करने के लिए कृपया सभी डिटेल्स को सही से भरें।");
+        alert("⚠️ All fields are required!\n\nकृपया पोर्टल एक्सेस करने के लिए सभी जानकारी भरें।");
         return;
     }
     const nameParts = name.split(/\s+/).filter(word => word.length > 0);
@@ -856,72 +867,121 @@ function submitStudentMetadataPipeline() {
     const junkPatternRegex = /(.)\1{2,}/i; 
 
     if (!alphaOnlyRegex.test(name)) {
-        alert("⚠️ Invalid Name!\n\nName mein keval English letters allowed hain.");
+        alert("⚠️ Invalid Name!\n\nनाम में केवल English अक्षरों का उपयोग करें।");
         return;
     }
     if (nameParts.length < 2) {
-        alert("⚠️ Full Name Required!\n\nPlease enter your complete professional name (First Name & Last Name).");
+        alert("⚠️ Full Name Required!\n\nकृपया अपना पूरा नाम लिखें (First Name और Last Name दोनों)।");
         return;
     }
     if (junkPatternRegex.test(name.replace(/\s/g, ''))) {
-        alert("⚠️ Spam Pattern Detected!\n\nPlease enter your genuine real name.");
+        alert("⚠️ Spam Pattern Detected!\n\nकृपया अपना सही वास्तविक नाम लिखें।");
         return;
     }
 
-    verifyBtn.disabled = true;
-    verifyBtn.innerText = "VERIFYING MATRIX...";
+    if (verifyBtn) {
+        verifyBtn.disabled = true;
+        verifyBtn.innerText = "VERIFYING ACCESS... ⏳";
+    }
 
-    const currentTimestamp = Date.now().toString(); // This is the unique key
+    const currentTimestamp = Date.now().toString();
     const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
     const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
 
-    // 🔒 INITIAL SECURITY MEMORY RECORD
+    // Local Storage me basic details pehle save karein
     localStorage.setItem("student_tracked_name", structuredName);
     localStorage.setItem("student_tracked_college", college);
     localStorage.setItem("student_tracked_sem", semester);
     localStorage.setItem("student_last_visit_timestamp", currentTimestamp);
     localStorage.setItem("student_last_visit_readable", formattedDate);
-    localStorage.setItem("student_portal_uid", currentTimestamp); // Unique ID Lock
+    localStorage.setItem("student_portal_uid", currentTimestamp);
 
-    // 🚀 PIPELINE A: TELEGRAM FIRST TIMERS
-    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
-    const chatId = '@bca_dashboard_subham'; 
-    
-    const telegramAlertMessage = `🎓 *PORTAL ACCESS DETECTED* 🎓\n\n` +
-                                 `👤 *Student Name:* ${structuredName}\n` +
-                                 `🏫 *College:* ${college}\n` +
-                                 `📚 *Semester:* ${semester}\n` +
-                                 `🕒 *Active Time:* ${formattedDate}\n` +
-                                 `📱 *Device Sync:* ${navigator.platform}`;
+    // 🎯 MAIN DISPATCH FUNCTION (Photo save hone ke baad chalega)
+    function proceedWithDispatch() {
+        const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
+        const chatId = '@bca_dashboard_subham';
 
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
-    }).catch(err => console.log("Telegram fallback active."));
+        const telegramAlertMessage = 
+            `🎓 *NEW STUDENT ACCESS RECORD* 🎓\n\n` +
+            `👤 *Student Name:* ${structuredName}\n` +
+            `🏫 *College:* ${college}\n` +
+            `📚 *Semester:* ${semester}\n` +
+            `📸 *Photo Status:* ${photoFile ? "Photo Attached Above 📸" : "No Photo Uploaded"}\n` +
+            `🕒 *Joined Time:* ${formattedDate}\n` +
+            `📱 *Device:* ${navigator.platform}`;
 
-    // 🚀 PIPELINE B: FIREBASE SYNCHRONIZATION
-    const firebaseDatabaseUrl = `https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers/${currentTimestamp}.json`;
+        // 1. Telegram Dispatch
+        if (photoFile) {
+            const formData = new FormData();
+            formData.append("chat_id", chatId);
+            formData.append("photo", photoFile);
+            formData.append("caption", telegramAlertMessage);
+            formData.append("parse_mode", "Markdown");
 
-    fetch(firebaseDatabaseUrl, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            studentName: structuredName,
-            collegeName: college,
-            currentSemester: semester,
-            entryTime: formattedDate,
-            platform: navigator.platform
+            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            }).catch(() => console.log("Telegram alert bypassed."));
+        } else {
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
+            }).catch(() => console.log("Telegram alert bypassed."));
+        }
+
+        // 2. Firebase Database Sync (0 KB Photo)
+        const firebaseDatabaseUrl = `https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers/${currentTimestamp}.json`;
+
+        fetch(firebaseDatabaseUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                studentName: structuredName,
+                collegeName: college,
+                currentSemester: semester,
+                entryTime: formattedDate,
+                platform: navigator.platform
+            })
         })
-    })
-    .then(() => {
-        console.log("Registered to Firebase Sync Matrix successfully.");
-        completeTrackingSequence();
-    })
-    .catch((error) => {
-        console.error("Firebase connection latency bypass:", error);
-        completeTrackingSequence();
-    });
+        .then(() => completeTrackingSequence())
+        .catch(() => completeTrackingSequence());
+    }
+
+    // 📷 STEP: PEHLE PHOTO PROCESS HOGI, FIR HI DISPATCH HOGA
+    if (photoFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // LocalStorage me pakka save karein
+            localStorage.setItem("student_profile_photo_data", e.target.result);
+            
+            // Header icon me turant reflect karein
+            if (typeof updateStudentHeaderProfile === "function") {
+                updateStudentHeaderProfile();
+            }
+            // Ab Telegram aur Firebase ko dispatch karein
+            proceedWithDispatch();
+        };
+        reader.readAsDataURL(photoFile);
+    } else {
+        // Agar photo nahi hai to direct bhej do
+        proceedWithDispatch();
+    }
+}
+
+function completeTrackingSequence() {
+    localStorage.setItem("student_verified_profile", "true");
+    localStorage.setItem("portal_already_entered", "true");
+
+    if (document.getElementById("studentTrackingPopup")) {
+        document.getElementById("studentTrackingPopup").style.display = "none";
+    }
+
+    if (typeof updateStudentHeaderProfile === "function") {
+        updateStudentHeaderProfile();
+    }
+
+    proceedToVoicePopupHandover();
 }
 
 function completeTrackingSequence() {
