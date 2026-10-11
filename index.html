@@ -38,6 +38,8 @@
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="CSS/style.css?v=3.0">
+	<!-- 🌟 NAYA PROFILE CSS -->
+<link rel="stylesheet" href="CSS/style1.css?v=1.0">
     <link rel="stylesheet" href="CSS/styles.css?v=3.0">
     <link rel="stylesheet" href="CSS/footer.css?v=3.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -219,39 +221,53 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 </style>
 <!-- 🌪️ PHASE 2: UPGRADED STEADY LOGO CYBERPUNK GRAVITY ABSORBER LOADER END -->
-<!-- 📊 PHASE 2: ACTIVE STUDENT IDENTITY INTAKE MATRIX -->
-<div id="studentTrackingPopup" style="position: fixed; inset: 0; background: rgba(3, 6, 17, 0.96); display: none; align-items: center; justify-content: center; z-index: 9999999; font-family: 'Poppins', sans-serif; padding: 20px; box-sizing: border-box;">
-    <div style="background: #1e293b; color: #fff; padding: 30px 22px; border-radius: 24px; text-align: center; max-width: 380px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.6); border: 2px solid rgba(0, 247, 255, 0.3); animation: popupEntrance 0.4s ease;">
-        <div style="font-size: 3.2rem; margin-bottom: 12px;">🎓</div>
-        <h3 style="font-size: 2rem; font-weight: 700; margin: 0 0 8px 0; color: #00f7ff; text-transform: uppercase; letter-spacing: 0.5px;">Student Portal Verify</h3>
-        <p style="font-size: 1.3rem; line-height: 1.6; margin: 0 0 22px 0; text-align: center; font-family: 'Poppins', sans-serif;">
-    <!-- 🌐 Premium English Line -->
-    <span style="display: block; color: #f8fafc; font-weight: 500; letter-spacing: 0.3px; margin-bottom: 6px;">
-        Please submit your accurate profile details to activate portal access keys and secure your academic dashboard.
-    </span>
+<!-- 📊 PHASE 2: ACTIVE STUDENT IDENTITY INTAKE MATRIX (BIGGER RECTANGLE & PHOTO ON TOP) -->
+<div id="studentTrackingPopup" style="position: fixed; inset: 0; background: rgba(3, 7, 18, 0.94); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999999; font-family: 'Poppins', sans-serif; padding: 16px; box-sizing: border-box;">
     
-    <!-- 🇮🇳 Professional Hindi Line -->
-    <span style="display: block; color: #94a3b8; font-size: 1.15rem; font-weight: 400;">
-        पोर्टल एक्सेस कीज को सक्रिय करने और अपने अकादमिक डैशबोर्ड को सुरक्षित करने के लिए, कृपया अपनी सटीक प्रोफाइल डिटेल्स सबमिट करें।
-    </span>
-</p>
+    <!-- Outer Card: Bada Rectangle Box -->
+    <div style="background: linear-gradient(165deg, #0b1329 0%, #080d1a 100%); color: #fff; padding: 26px 28px; border-radius: 12px; text-align: center; max-width: 480px; width: 100%; box-shadow: 0 20px 55px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 247, 255, 0.2); border: 1.5px solid #1e293b; position: relative; box-sizing: border-box;">
+        
+        <!-- Top Multi-color Rainbow Bar -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00f7ff, #a855f7, #ff007a, #00ff88); border-radius: 12px 12px 0 0;"></div>
 
-        <!-- 1. Name Input -->
-        <div style="position: relative; margin-bottom: 15px; display: flex; align-items: center;">
-            <i class="fas fa-user" style="position: absolute; left: 15px; color: #00f7ff; font-size: 1.4rem;"></i>
-            <input type="text" id="track-student-name" placeholder="Full Name (Real Name)" style="width: 100%; padding: 12px 12px 12px 45px; border: 1px solid #334155; border-radius: 12px; font-size: 1.35rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500;">
+        <!-- Header Icon & Title -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 4px; margin-bottom: 6px;">
+            <span style="font-size: 2.3rem;">🎓</span>
+            <h3 style="font-size: 1.85rem; font-weight: 800; margin: 0; background: linear-gradient(90deg, #00f7ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 0.8px;">
+                Student Portal Verify
+            </h3>
+        </div>
+        
+        <!-- Subtitle -->
+        <p style="font-size: 1.15rem; line-height: 1.45; margin: 0 0 16px 0; color: #94a3b8;">
+            Enter accurate details to unlock academic dashboard.<br>
+            <span style="color: #64748b; font-size: 1.05rem;">सटीक जानकारी भरकर पोर्टल एक्सेस प्राप्त करें।</span>
+        </p>
+
+        <!-- 📷 1. PHOTO UPLOAD (NAME KE THEEK UPAR) -->
+        <div style="position: relative; margin-bottom: 14px; text-align: left; background: rgba(16, 185, 129, 0.06); border: 1.5px dashed rgba(52, 211, 153, 0.5); border-radius: 8px; padding: 10px 14px;">
+            <label style="color: #34d399; font-size: 1.15rem; font-weight: 700; display: block; margin-bottom: 5px;">
+                📷 Upload Profile Photo:
+            </label>
+            <input type="file" id="track-student-photo" accept="image/*" style="width: 100%; padding: 6px 8px; border-radius: 6px; background: #090e1a; color: #cbd5e1; font-size: 1.1rem; box-sizing: border-box; border: 1px solid #1e293b; cursor: pointer;">
         </div>
 
-        <!-- 2. College Dropdown -->
-        <div style="position: relative; margin-bottom: 15px; display: flex; align-items: center;">
-            <i class="fas fa-university" style="position: absolute; left: 15px; color: #00f7ff; font-size: 1.4rem;"></i>
-            <select id="track-student-college" style="width: 100%; padding: 12px 12px 12px 45px; border: 1px solid #334155; border-radius: 12px; font-size: 1.35rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; appearance: none; -webkit-appearance: none;">
+        <!-- 2. Full Name Input (Cyan Accent) -->
+        <div style="position: relative; margin-bottom: 12px; display: flex; align-items: center;">
+            <i class="fas fa-user" style="position: absolute; left: 16px; color: #00f7ff; font-size: 1.35rem;"></i>
+            <input type="text" id="track-student-name" placeholder="Full Name (Real Name)" style="width: 100%; padding: 12px 14px 12px 46px; border: 1.5px solid #1e293b; border-radius: 8px; font-size: 1.3rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; box-sizing: border-box; outline: none;">
+        </div>
+
+        <!-- 3. College Dropdown (Gold Accent) -->
+        <div style="position: relative; margin-bottom: 12px; display: flex; align-items: center;">
+            <i class="fas fa-university" style="position: absolute; left: 16px; color: #fbbf24; font-size: 1.35rem;"></i>
+            <select id="track-student-college" style="width: 100%; padding: 12px 14px 12px 46px; border: 1.5px solid #1e293b; border-radius: 8px; font-size: 1.3rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; appearance: none; -webkit-appearance: none; box-sizing: border-box; outline: none; cursor: pointer;">
                 <option value="" disabled selected>Select Your College</option>
                 <option value="Annada College, Hazaribag">Annada College, Hazaribag</option>
                 <option value="St. Columba's College, Hazaribag">St. Columba's College, Hazaribag</option>
                 <option value="Chatra College, Chatra">Chatra College, Chatra</option>
-				<option value="Ramgarh College, Ramgarh">Ramgarh College, Ramgarh</option>
-				<option value="J.J College, Jhumritelaiya, Koderma">J.J College, Jhumritelaiya, Koderma</option>
+                <option value="Ramgarh College, Ramgarh">Ramgarh College, Ramgarh</option>
+                <option value="J.J College, Jhumritelaiya, Koderma">J.J College, Jhumritelaiya, Koderma</option>
                 <option value="K.B. Women's College, Hazaribag">K.B. Women's College, Hazaribag</option>
                 <option value="Markham College of Commerce, Hazaribag">Markham College of Commerce, Hazaribag</option>
                 <option value="VBU University Department, Hazaribag">VBU University Department</option>
@@ -259,10 +275,10 @@ document.addEventListener("DOMContentLoaded", () => {
             </select>
         </div>
 
-        <!-- 3. Semester Dropdown -->
-        <div style="position: relative; margin-bottom: 25px; display: flex; align-items: center;">
-            <i class="fas fa-graduation-cap" style="position: absolute; left: 15px; color: #00f7ff; font-size: 1.4rem;"></i>
-            <select id="track-student-sem" style="width: 100%; padding: 12px 12px 12px 45px; border: 1px solid #334155; border-radius: 12px; font-size: 1.35rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; appearance: none; -webkit-appearance: none;">
+        <!-- 4. Semester Dropdown (Purple Accent) -->
+        <div style="position: relative; margin-bottom: 16px; display: flex; align-items: center;">
+            <i class="fas fa-graduation-cap" style="position: absolute; left: 16px; color: #c084fc; font-size: 1.35rem;"></i>
+            <select id="track-student-sem" style="width: 100%; padding: 12px 14px 12px 46px; border: 1.5px solid #1e293b; border-radius: 8px; font-size: 1.3rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; appearance: none; -webkit-appearance: none; box-sizing: border-box; outline: none; cursor: pointer;">
                 <option value="" disabled selected>Select Current Semester</option>
                 <option value="Semester 1">Semester 1</option>
                 <option value="Semester 2">Semester 2</option>
@@ -273,10 +289,21 @@ document.addEventListener("DOMContentLoaded", () => {
             </select>
         </div>
 
-        <!-- Submit Verify Button -->
-        <button id="trackVerifyBtn" onclick="submitStudentMetadataPipeline()" style="width: 100%; padding: 13px 0; font-size: 1.45rem; font-weight: 700; color: #000; background: linear-gradient(135deg, #00f7ff, #00ffd5); border: none; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 8px 20px rgba(0, 247, 255, 0.3);">
+        <!-- Verify Button (Bada Rectangle + Gradient) -->
+        <button id="trackVerifyBtn" onclick="submitStudentMetadataPipeline()" style="width: 100%; padding: 13px 0; font-size: 1.45rem; font-weight: 800; color: #000; background: linear-gradient(135deg, #00f7ff, #00ffa2); border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.6px; box-shadow: 0 4px 20px rgba(0, 247, 255, 0.4); transition: transform 0.2s ease;">
             Verify & Enter Portal 🚀
         </button>
+
+        <!-- 🔄 Re-Login Footer -->
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 1.15rem; color: #94a3b8; text-align: left;">
+                Already registered? 👉
+            </span>
+            <button type="button" onclick="openStudentReLoginModal()" style="background: rgba(0, 247, 255, 0.08); border: 1.5px solid #00f7ff; color: #00f7ff; padding: 7px 18px; border-radius: 8px; font-size: 1.15rem; font-weight: 700; cursor: pointer; white-space: nowrap;">
+                Sign In 🔑
+            </button>
+        </div>
+
     </div>
 </div>
 		<!--<div id="mainPage" style="display:none;">
@@ -566,11 +593,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         </ul>
                 </nav>          
 
-                <div class="icons">
-                        <!-- 🔍 सर्च का बटन यहाँ से हटा दिया गया है -->
-                        <div onclick="myFunction()" id="theme-icon" class="fas fa-moon"></div>
-                        <div class="fas fa-bars" id="menu-btn"></div>
-                </div>
+								<div class="icons">
+									<!-- 👤 STUDENT PROFILE AVATAR TRIGGER -->
+									<div class="custom-profile-trigger" id="customProfileTrigger" onclick="toggleProfilePopupModal()" style="display: none;">
+										<span id="headerAvatarInitial">S</span>
+										<img id="headerAvatarImg" src="" alt="Avatar" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+									</div>
+
+									<!-- 🌙 Theme & Responsive Menu -->
+									<div onclick="myFunction()" id="theme-icon" class="fas fa-moon"></div>
+									<div class="fas fa-bars" id="menu-btn" style="display: none !important;"></div>
+								</div>
                 
                 <!-- 🔍 सर्च का फॉर्म भी यहाँ से पूरी तरह हटा दिया गया है -->
         </header>
@@ -1721,7 +1754,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="credit" id="contact">
                         <!-- 🔑 version 5.0.0 पर क्लिक करते ही एडमिन पैनल खुल जाएगा -->
 						<p onclick="openAdminControlPanel()" style="cursor: pointer; display: inline-block;" title="Click for Admin Control">version 5.0.0 ⚙️</p>
-                        <p>Last update: 01-October-2026</p>
+                        <p>Last update: 11-October-2026</p>
                         BCA Study <span>Zone</span><br>
                         &#169; copyright 2026 ❤️ All Rights Reserved<br>
                         Developed by<a href="https://subhamkumar-ray.github.io/bcastudyzone/" target="_blank">
@@ -1734,6 +1767,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <!-- ---------------- Java Script file --------------------------  -->
         <!-- index.html के सबसे नीचे जहाँ स्क्रिप्ट बंद होती हैं -->
 <script src="JS/script.js?v=3.0"></script>
+<!-- 🌟 NAYA PROFILE SCRIPT -->
+<script src="JS/script1.js?v=1.0"></script>
 <script src="JS/dark.js?v=3.0"></script>
 <script src="JS/Sheet.js?v=3.0"></script>
 </div> <!-- mainPage end -->
@@ -2356,6 +2391,79 @@ function scrollToTopMatrix() {
             <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i> Send Unblock Request on WhatsApp
         </a>
 
+    </div>
+</div>
+
+<!-- ================= 👑 FLOATING PROFILE POPUP MODAL ================= -->
+<div id="profileModalOverlay" onclick="closeProfilePopupModal()"></div>
+
+<div id="profilePopupModal">
+        <div>
+                <div class="modal-avatar-circle" id="modalAvatarBig">S</div>
+                <h4 id="modalStudentName">Subham Kumar Ray</h4>
+                <div class="modal-verified-pill">
+                        <i class="fas fa-check-circle"></i> Verified Student
+                </div>
+        </div>
+
+        <!-- Multi-Color Content Stack -->
+        <div class="modal-info-stack">
+                <div class="modal-item-college">
+                        <i class="fas fa-university"></i>
+                        <span id="modalStudentCollege">Annada College, Hazaribag</span>
+                </div>
+                <div class="modal-item-sem">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span id="modalStudentSem">Semester 6</span>
+                </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="modal-actions-stack">
+                <button type="button" class="modal-btn-edit" onclick="openEditProfileModal()">
+                        <i class="fas fa-user-edit"></i> Edit Profile
+                </button>
+                <button type="button" class="modal-btn-logout" onclick="handleStudentPortalLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+        </div>
+</div>
+
+<!-- ================= 👑 FLOATING PROFILE POPUP MODAL ================= -->
+<div id="profileModalOverlay" onclick="closeProfilePopupModal()"></div>
+
+<div id="profilePopupModal">
+    <div>
+        <div class="modal-avatar-circle" id="modalAvatarContainer">
+            <span id="modalAvatarBig">S</span>
+            <img id="modalAvatarBigImg" src="" alt="Profile Photo" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+        </div>
+        <h4 id="modalStudentName">Student Name</h4>
+        <div class="modal-verified-pill">
+            <i class="fas fa-check-circle"></i> Verified Student
+        </div>
+    </div>
+
+    <!-- Details Box -->
+    <div class="modal-info-stack">
+        <div class="modal-item-college">
+            <i class="fas fa-university"></i>
+            <span id="modalStudentCollege">College Name</span>
+        </div>
+        <div class="modal-item-sem">
+            <i class="fas fa-graduation-cap"></i>
+            <span id="modalStudentSem">Semester</span>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions-stack">
+        <button type="button" class="modal-btn-edit" onclick="openEditProfileModal()">
+            <i class="fas fa-user-edit"></i> Edit Profile (प्रोफ़ाइल बदलें)
+        </button>
+        <button type="button" class="modal-btn-logout" onclick="handleStudentPortalLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout (लॉगआउट)
+        </button>
     </div>
 </div>
 </body>
