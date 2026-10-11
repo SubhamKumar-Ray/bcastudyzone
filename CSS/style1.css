@@ -269,3 +269,46 @@
 .swal2-container {
     z-index: 100000000 !important;
 }
+/* =========================================================================
+   🎯 PERFECT CENTER ALIGNMENT FOR ALL HEADER ICONS (MOBILE & TABLET)
+========================================================================= */
+
+/* Sabhi icons ka container flexbox center */
+.header .icons {
+    display: flex !important;
+    align-items: center !important;         /* Sabko ekdum barabar vertically center rakhega */
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    height: 100% !important;
+    line-height: 1 !important;
+}
+
+/* Avatar, Moon, aur Menu Button teeno ka size aur center alignment ek jaisa */
+.custom-profile-trigger,
+.header .icons #theme-icon,
+.header .icons #menu-btn {
+    display: inline-flex !important;
+    align-items: center !important;         /* Icon ko box ke theek beech me rakhega */
+    justify-content: center !important;      /* Horizontally center */
+    width: 38px !important;                 /* Moon aur Avatar ke barabar width */
+    height: 38px !important;                /* Moon aur Avatar ke barabar height */
+    line-height: normal !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+}
+
+/* Menu Button ka Icon Alignment */
+#menu-btn {
+    font-size: 1.8rem !important;
+    cursor: pointer !important;
+}
+
+/* 💻 Laptop/Desktop Screen par Menu Button Hide */
+@media screen and (min-width: 769px) {
+    #menu-btn,
+    .header .icons #menu-btn {
+        display: none !important;
+    }
+}
