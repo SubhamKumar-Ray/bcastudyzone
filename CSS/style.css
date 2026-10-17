@@ -189,7 +189,7 @@ ul.dropdown li:hover .dropdown1 {
     box-shadow: var(--box-shadow);
 }
 /* ==================== UNIVERSAL SAFE PROFESSIONAL HEADER ==================== */
-.header {
+/*.header {
     position: fixed;
     top: 0;
     left: 0;
@@ -201,10 +201,27 @@ ul.dropdown li:hover .dropdown1 {
     padding: 1.5rem 8%;
     
     /* ⚪ लाइट मोड में डिफ़ॉल्ट सफ़ेद बैकग्राउंड */
-    background: #ffffff !important;
+   /* background: #ffffff !important;
     border-bottom: 1px solid #e2e8f0 !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}*/
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.8rem 2% !important; /* 8% se hata kar 2% kiya taaki poora space mile */
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    box-sizing: border-box !important;
+    transition: all 0.3s ease !important;
 }
 
 /* लोगो कंटेनर स्ट्रक्चर */
