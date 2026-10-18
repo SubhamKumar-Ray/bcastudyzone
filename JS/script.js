@@ -1097,7 +1097,7 @@ const coachingAdsList = [
     },
 
     // 3️⃣ POSTER 1: Official BCA Farewell Celebration
-    {
+   /* {
         id: "bca_farewell_celebration",
         badge: "🎓 BCA FAREWELL • 2023-2026",
         badgeStyle: "badge-gold",
@@ -1118,7 +1118,7 @@ const coachingAdsList = [
                 style: "background: linear-gradient(135deg, #25d366, #128c7e);"
             }
         ]
-    },
+    },*/
 
     // 4️⃣ Coaching Ad (Randhir Sir)
     {
@@ -2473,15 +2473,15 @@ const programmingPdfVault = {
                 path: "Program/c_part1.pdf" // ✅ Ready (Download Link)
             },
             {
-                title: "Part 2: Basic Level to High Level code With Output (Q79 - Q150)",
+                title: "Part 2: Basic Level to High Level code With Output (Q80 - Q125)",
+                path: "Program/c_part2.pdf" // ⏳ Khali path = Automatic Coming Soon
+            },
+            {
+                title: "Part 3: Basic Level to High Level code With Output (Q125 - Q200)",
                 path: "" // ⏳ Khali path = Automatic Coming Soon
             },
             {
-                title: "Part 3: Basic Level to High Level code With Output (Q150 - Q250)",
-                path: "" // ⏳ Khali path = Automatic Coming Soon
-            },
-            {
-                title: "Part 4: Basic Level to High Level code With Output (Q250 - Q350)",
+                title: "Part 4: Basic Level to High Level code With Output (Q200 - Q280)",
                 path: "" // ⏳ Khali path = Automatic Coming Soon
             }
         ],
