@@ -1,2 +1,4 @@
 # bcastudyzone.github.io
-A personal tech portfolio showcasing web development projects, coding tutorials, and creative software solutions by Subham Kumar. Explore projects, learn new skills, and discover innovative ideas in technology.
+# BCA Study Zone
+
+BCA Study Zone is an educational platform designed for BCA students studying at colleges under Vinoba Bhave University (VBU), Hazaribag. The website provides study notes, syllabus, previous year question papers, and other useful academic resources to help students prepare for their exams. Available 24/7, it helps BCA students learn smarter and access study materials anytime, anywhere.
