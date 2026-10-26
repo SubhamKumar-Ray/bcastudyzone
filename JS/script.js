@@ -840,134 +840,7 @@ function initIdentityTrackingVerification() {
         }
     }
 }
-// =========================================================================
-// 🚀 STUDENT VERIFICATION & ENTRY PIPELINE (PHOTO 100% SAVE FIX)
-// =========================================================================
-function submitStudentMetadataPipeline() {
-    const nameInput = document.getElementById("track-student-name");
-    const collegeSelect = document.getElementById("track-student-college");
-    const semSelect = document.getElementById("track-student-sem");
-    const photoInput = document.getElementById("track-student-photo");
-    const verifyBtn = document.getElementById("trackVerifyBtn");
 
-    if (!nameInput || !collegeSelect || !semSelect) return;
-
-    const name = nameInput.value.trim();
-    const college = collegeSelect.value;
-    const semester = semSelect.value;
-    const photoFile = (photoInput && photoInput.files && photoInput.files[0]) ? photoInput.files[0] : null;
-
-    // 🚨 Validation
-    if (!name || !college || !semester) {
-        alert("⚠️ All fields are required!\n\nकृपया पोर्टल एक्सेस करने के लिए सभी जानकारी भरें।");
-        return;
-    }
-    const nameParts = name.split(/\s+/).filter(word => word.length > 0);
-    const alphaOnlyRegex = /^[a-zA-Z\s]+$/;
-    const junkPatternRegex = /(.)\1{2,}/i; 
-
-    if (!alphaOnlyRegex.test(name)) {
-        alert("⚠️ Invalid Name!\n\nनाम में केवल English अक्षरों का उपयोग करें।");
-        return;
-    }
-    if (nameParts.length < 2) {
-        alert("⚠️ Full Name Required!\n\nकृपया अपना पूरा नाम लिखें (First Name और Last Name दोनों)।");
-        return;
-    }
-    if (junkPatternRegex.test(name.replace(/\s/g, ''))) {
-        alert("⚠️ Spam Pattern Detected!\n\nकृपया अपना सही वास्तविक नाम लिखें।");
-        return;
-    }
-
-    if (verifyBtn) {
-        verifyBtn.disabled = true;
-        verifyBtn.innerText = "VERIFYING ACCESS... ⏳";
-    }
-
-    const currentTimestamp = Date.now().toString();
-    const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-    const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
-
-    // Local Storage me basic details pehle save karein
-    localStorage.setItem("student_tracked_name", structuredName);
-    localStorage.setItem("student_tracked_college", college);
-    localStorage.setItem("student_tracked_sem", semester);
-    localStorage.setItem("student_last_visit_timestamp", currentTimestamp);
-    localStorage.setItem("student_last_visit_readable", formattedDate);
-    localStorage.setItem("student_portal_uid", currentTimestamp);
-
-    // 🎯 MAIN DISPATCH FUNCTION (Photo save hone ke baad chalega)
-    function proceedWithDispatch() {
-        const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
-        const chatId = '@bca_dashboard_subham';
-
-        const telegramAlertMessage = 
-            `🎓 *NEW STUDENT ACCESS RECORD* 🎓\n\n` +
-            `👤 *Student Name:* ${structuredName}\n` +
-            `🏫 *College:* ${college}\n` +
-            `📚 *Semester:* ${semester}\n` +
-            `📸 *Photo Status:* ${photoFile ? "Photo Attached Above 📸" : "No Photo Uploaded"}\n` +
-            `🕒 *Joined Time:* ${formattedDate}\n` +
-            `📱 *Device:* ${navigator.platform}`;
-
-        // 1. Telegram Dispatch
-        if (photoFile) {
-            const formData = new FormData();
-            formData.append("chat_id", chatId);
-            formData.append("photo", photoFile);
-            formData.append("caption", telegramAlertMessage);
-            formData.append("parse_mode", "Markdown");
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                method: 'POST',
-                body: formData
-            }).catch(() => console.log("Telegram alert bypassed."));
-        } else {
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
-            }).catch(() => console.log("Telegram alert bypassed."));
-        }
-
-        // 2. Firebase Database Sync (0 KB Photo)
-        const firebaseDatabaseUrl = `https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers/${currentTimestamp}.json`;
-
-        fetch(firebaseDatabaseUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                studentName: structuredName,
-                collegeName: college,
-                currentSemester: semester,
-                entryTime: formattedDate,
-                platform: navigator.platform
-            })
-        })
-        .then(() => completeTrackingSequence())
-        .catch(() => completeTrackingSequence());
-    }
-
-    // 📷 STEP: PEHLE PHOTO PROCESS HOGI, FIR HI DISPATCH HOGA
-    if (photoFile) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // LocalStorage me pakka save karein
-            localStorage.setItem("student_profile_photo_data", e.target.result);
-            
-            // Header icon me turant reflect karein
-            if (typeof updateStudentHeaderProfile === "function") {
-                updateStudentHeaderProfile();
-            }
-            // Ab Telegram aur Firebase ko dispatch karein
-            proceedWithDispatch();
-        };
-        reader.readAsDataURL(photoFile);
-    } else {
-        // Agar photo nahi hai to direct bhej do
-        proceedWithDispatch();
-    }
-}
 
 function completeTrackingSequence() {
     localStorage.setItem("student_verified_profile", "true");
@@ -1921,9 +1794,9 @@ window.initIdentityTrackingVerification = function() {
     }
 };
 
-// -------------------------------------------------------------------------
-// 🎯 5. NEW STUDENT ENTRY SUBMISSION (WITH AUTO-BAN FILTER)
-// -------------------------------------------------------------------------
+// =========================================================================
+// 🚀 MASTER REGISTRATION PIPELINE (PHOTO LESS, CLEAN TELEGRAM ALERT)
+// =========================================================================
 window.submitStudentMetadataPipeline = function() {
     const nameInput = document.getElementById("track-student-name");
     const collegeSelect = document.getElementById("track-student-college");
@@ -1937,15 +1810,19 @@ window.submitStudentMetadataPipeline = function() {
     const semester = semSelect.value;
 
     if (!name || !college || !semester) {
-        alert("⚠️ Please fill all details to proceed!\n\nपोर्टल अनलॉक करने के लिए कृपया नाम, कॉलेज और सेमेस्टर चुनें।");
+        alert("⚠️ All fields are required!\n\nकृपया पोर्टल एक्सेस करने के लिए सभी जानकारी भरें।");
         return;
     }
 
-    // Check Name Validity
-    const nameValidation = validateStudentName(name);
+    // Name Validation
+    const nameValidation = (typeof validateStudentName === "function")
+        ? validateStudentName(name)
+        : { isValid: true, reason: "" };
 
-    // Check Active Semester Status
-    const isSemActive = activeSemestersMap[semester] !== false;
+    // Semester Active Check
+    const isSemActive = (typeof activeSemestersMap !== "undefined" && activeSemestersMap[semester] !== undefined)
+        ? activeSemestersMap[semester] !== false
+        : true;
 
     let initialStatus = "active";
     let autoBanReason = "";
@@ -1960,7 +1837,7 @@ window.submitStudentMetadataPipeline = function() {
 
     if (verifyBtn) {
         verifyBtn.disabled = true;
-        verifyBtn.innerText = "VERIFYING ACCESS...";
+        verifyBtn.innerText = "VERIFYING ACCESS... ⏳";
     }
 
     const currentTs = Date.now();
@@ -1968,6 +1845,7 @@ window.submitStudentMetadataPipeline = function() {
     const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
     const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
 
+    // Local Storage Save
     localStorage.setItem("student_tracked_name", structuredName);
     localStorage.setItem("student_tracked_college", college);
     localStorage.setItem("student_tracked_sem", semester);
@@ -1975,25 +1853,28 @@ window.submitStudentMetadataPipeline = function() {
     localStorage.setItem("student_verified_profile", "true");
     localStorage.setItem("student_last_visit_timestamp", currentTs.toString());
     localStorage.setItem("student_last_visit_readable", formattedDate);
+    localStorage.setItem("portal_already_entered", "true");
 
-    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
-    const chatId = '@bca_dashboard_subham'; 
-    
-    const telegramAlertMessage = `🎓 *NEW PORTAL ACCESS ENTRY* 🎓\n\n` +
-                                 `👤 *Student Name:* ${structuredName}\n` +
-                                 `🏫 *College:* ${college}\n` +
-                                 `📚 *Semester:* ${semester}\n` +
-                                 `📊 *Initial Status:* ${initialStatus === "active" ? "🟢 ACTIVE" : "🚫 AUTO-BANNED"}\n` +
-                                 `📌 *Log Reason:* ${autoBanReason || "Passed Verification"}\n` +
-                                 `🕒 *Active Time:* ${formattedDate}\n` +
-                                 `📱 *Device Sync:* ${navigator.platform}`;
+    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
+    const chatId = '@bca_dashboard_subham';
+
+    // 🎯 CLEAN FRESH TELEGRAM MESSAGE (No old comparison)
+    const telegramAlertMessage = 
+        `🎓 *NEW STUDENT REGISTERED* 🎓\n\n` +
+        `👤 *Name:* ${structuredName}\n` +
+        `🏫 *College:* ${college}\n` +
+        `📚 *Semester:* ${semester}\n` +
+        `📊 *Status:* ${initialStatus === "active" ? "🟢 ACTIVE" : "🚫 AUTO-BANNED"}\n` +
+        `🕒 *Time:* ${formattedDate}\n` +
+        `📱 *Device:* ${navigator.platform}`;
 
     fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
-    }).catch(err => console.log("Telegram alert bypassed."));
+    }).catch(() => {});
 
+    // Firebase Database Sync
     fetch(`${FIREBASE_USERS_NODE_URL}/${currentTimestampStr}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -2001,9 +1882,6 @@ window.submitStudentMetadataPipeline = function() {
             studentName: structuredName,
             collegeName: college,
             currentSemester: semester,
-            originalName: structuredName,
-            originalCollege: college,
-            originalSem: semester,
             entryTime: formattedDate,
             timestamp: currentTs,
             status: initialStatus,
@@ -2015,9 +1893,15 @@ window.submitStudentMetadataPipeline = function() {
     .catch(() => completeStudentEntrySequence(initialStatus));
 };
 
+// ✅ Naya Code:
 function completeStudentEntrySequence(status) {
     const popup = document.getElementById("studentTrackingPopup");
     if (popup) popup.style.display = "none";
+
+    // 🟢 Header aur popup profile icon ko naye student ke data se sync karein
+    if (typeof updateStudentHeaderProfile === "function") {
+        updateStudentHeaderProfile();
+    }
 
     if (status === "banned") {
         window.verifyStudentAccessStatus();
