@@ -6,13 +6,12 @@ const TELEGRAM_BOT_TOKEN = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
 const TELEGRAM_CHAT_ID = '@bca_dashboard_subham';
 const FIREBASE_ACTIVE_USERS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers";
 
-// 1. Header & Modal UI Renderer (Displays Photo or Letter)
+// 1. Header & Modal UI Renderer (Displays First Letter)
 function updateStudentHeaderProfile() {
     const isVerified = localStorage.getItem("student_verified_profile") === "true";
-    const name = localStorage.getItem("student_tracked_name") || "Student Name";
+    const name = localStorage.getItem("student_tracked_name") || "Student";
     const college = localStorage.getItem("student_tracked_college") || "Annada College, Hazaribag";
-    const sem = localStorage.getItem("student_tracked_sem") || "Semester 6";
-    const photoBase64 = localStorage.getItem("student_profile_photo_data");
+    const sem = localStorage.getItem("student_tracked_sem") || "Semester 1";
 
     const triggerBtn = document.getElementById("customProfileTrigger");
     if (!triggerBtn) return;
@@ -21,25 +20,12 @@ function updateStudentHeaderProfile() {
         triggerBtn.style.display = "inline-flex";
 
         const headerInit = document.getElementById("headerAvatarInitial");
-        const headerImg = document.getElementById("headerAvatarImg");
         const modalInit = document.getElementById("modalAvatarBig");
-        const modalImg = document.getElementById("modalAvatarBigImg");
 
-        // Photo Check
-        if (photoBase64 && photoBase64.startsWith("data:image")) {
-            if (headerImg) { headerImg.src = photoBase64; headerImg.style.display = "block"; }
-            if (headerInit) headerInit.style.display = "none";
-
-            if (modalImg) { modalImg.src = photoBase64; modalImg.style.display = "block"; }
-            if (modalInit) modalInit.style.display = "none";
-        } else {
-            const firstLetter = name.trim().charAt(0).toUpperCase() || "S";
-            if (headerInit) { headerInit.innerText = firstLetter; headerInit.style.display = "block"; }
-            if (headerImg) headerImg.style.display = "none";
-
-            if (modalInit) { modalInit.innerText = firstLetter; modalInit.style.display = "block"; }
-            if (modalImg) modalImg.style.display = "none";
-        }
+        // First Letter Extraction
+        const firstLetter = name.trim().charAt(0).toUpperCase() || "S";
+        if (headerInit) headerInit.innerText = firstLetter;
+        if (modalInit) modalInit.innerText = firstLetter;
 
         const modalName = document.getElementById("modalStudentName");
         const modalCollege = document.getElementById("modalStudentCollege");
@@ -74,7 +60,7 @@ function closeProfilePopupModal() {
     if (overlay) overlay.style.display = "none";
 }
 
-// 3. EDIT PROFILE (With Photo, Old vs New Comparison)
+// 3. EDIT PROFILE (Only Text Data - No Photo & No Old Record Comparison)
 function openEditProfileModal() {
     closeProfilePopupModal();
 
@@ -118,11 +104,6 @@ function openEditProfileModal() {
                         <option value="Semester 6">Semester 6</option>
                     </select>
                 </div>
-
-                <div>
-                    <label style="color:#00f7ff; font-size:1.1rem; font-weight:600; display:block; margin-bottom:4px;">📷 Change Photo (फोटो बदलें):</label>
-                    <input type="file" id="edit-swal-photo" accept="image/*" style="width:100%; padding:8px; border:1.5px dashed #00f7ff; border-radius:8px; background:#0f172a; color:#cbd5e1; font-size:1.1rem; box-sizing:border-box;">
-                </div>
             </div>
         `,
         didOpen: () => {
@@ -140,7 +121,6 @@ function openEditProfileModal() {
             const newName = document.getElementById("edit-swal-name").value.trim();
             const newCollege = document.getElementById("edit-swal-college").value;
             const newSem = document.getElementById("edit-swal-sem").value;
-            const photoInput = document.getElementById("edit-swal-photo");
 
             if (!newName || !newCollege || !newSem) {
                 Swal.showValidationMessage("Please fill all required details! (सभी जानकारी भरें)");
@@ -148,9 +128,7 @@ function openEditProfileModal() {
             }
 
             const formattedName = newName.replace(/\b\w/g, c => c.toUpperCase());
-            const file = (photoInput && photoInput.files && photoInput.files[0]) ? photoInput.files[0] : null;
-
-            return { name: formattedName, college: newCollege, sem: newSem, file: file };
+            return { name: formattedName, college: newCollege, sem: newSem };
         }
     }).then((result) => {
         if (result.isConfirmed) {
@@ -162,7 +140,7 @@ function openEditProfileModal() {
             localStorage.setItem("student_tracked_college", data.college);
             localStorage.setItem("student_tracked_sem", data.sem);
 
-            // 2. Firebase Update (ONLY TEXT DATA - NO PHOTO!)
+            // 2. Firebase Update
             if (studentUID) {
                 fetch(`${FIREBASE_ACTIVE_USERS_URL}/${studentUID}.json`, {
                     method: 'PATCH',
@@ -171,61 +149,31 @@ function openEditProfileModal() {
                         studentName: data.name,
                         collegeName: data.college,
                         currentSemester: data.sem,
-                        isProfileUpdated: true,
                         lastUpdatedTime: updateTime
                     })
                 }).catch(() => {});
             }
 
-            // 3. Telegram Comparison Alert
+            // 3. Telegram Clean Notification (No Old vs New comparison)
             const telegramCaption = 
-                `🔄 *STUDENT PROFILE UPDATED* 🔄\n\n` +
-                `🆔 *Student ID:* \`${studentUID || "N/A"}\`\n\n` +
-                `❌ *OLD RECORD (पुराना डेटा):*\n` +
-                `• Name: ${oldName}\n` +
-                `• College: ${oldCollege}\n` +
-                `• Semester: ${oldSem}\n\n` +
-                `✨ *NEW RECORD (नया डेटा):*\n` +
-                `• Name: ${data.name}\n` +
-                `• College: ${data.college}\n` +
-                `• Semester: ${data.sem}\n` +
-                `• Photo: ${data.file ? "New Photo Attached 📸" : "Unchanged"}\n\n` +
+                `✏️ *STUDENT PROFILE UPDATED* ✏️\n\n` +
+                `👤 *Name:* ${data.name}\n` +
+                `🏫 *College:* ${data.college}\n` +
+                `📚 *Semester:* ${data.sem}\n` +
                 `🕒 *Time:* ${updateTime}\n` +
                 `📱 *Device:* ${navigator.platform}`;
 
-            if (data.file) {
-                // Device Local Storage
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    localStorage.setItem("student_profile_photo_data", e.target.result);
-                    updateStudentHeaderProfile();
-                };
-                reader.readAsDataURL(data.file);
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: telegramCaption,
+                    parse_mode: 'Markdown'
+                })
+            }).catch(() => {});
 
-                // Telegram Photo
-                const formData = new FormData();
-                formData.append("chat_id", TELEGRAM_CHAT_ID);
-                formData.append("photo", data.file);
-                formData.append("caption", telegramCaption);
-                formData.append("parse_mode", "Markdown");
-
-                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                }).catch(() => {});
-            } else {
-                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: telegramCaption,
-                        parse_mode: 'Markdown'
-                    })
-                }).catch(() => {});
-
-                updateStudentHeaderProfile();
-            }
+            updateStudentHeaderProfile();
 
             Swal.fire({
                 icon: 'success',
@@ -269,42 +217,57 @@ function handleStudentPortalLogout() {
     });
 }
 
-// 5. RE-LOGIN MODAL (100% Clickable & Global Scope)
+// 5. RE-LOGIN MODAL: NAME + COLLEGE INPUT (100% Sahi Direct Matching)
 window.openStudentReLoginModal = function() {
-    // Agar tracking popup khula hai to pehle use thoda piche bhejo
-    const trackingPopup = document.getElementById("studentTrackingPopup");
-
     Swal.fire({
-        title: '<span style="color:#00f7ff; font-size:1.6rem; font-weight:800;">🔑 Direct Student Login</span>',
+        title: '<span style="color:#00f7ff; font-size:1.6rem; font-weight:800;">🔑 Direct Student Sign In</span>',
         html: `
-            <p style="color:#cbd5e1; font-size:1.15rem; margin-bottom:12px;">
-                Enter your registered Full Name / अपना रजिस्टर्ड नाम लिखें:
+            <p style="color:#cbd5e1; font-size:1.15rem; margin-bottom:12px; text-align: left;">
+                अपना रजिस्टर्ड Name और College चुनें:
             </p>
-            <input type="text" id="relogin-student-name" placeholder="e.g. Subham Kumar Ray" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#fff; font-size:1.25rem; box-sizing:border-box;">
+            <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                <div>
+                    <label style="color:#94a3b8; font-size:1.05rem; display:block; margin-bottom:4px;">Full Name:</label>
+                    <input type="text" id="relogin-student-name" placeholder="e.g. Subham Kumar Ray" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#fff; font-size:1.2rem; box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="color:#94a3b8; font-size:1.05rem; display:block; margin-bottom:4px;">Registered College:</label>
+                    <select id="relogin-student-college" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#fff; font-size:1.2rem; box-sizing:border-box;">
+                        <option value="" disabled selected>Select Your College</option>
+                        <option value="Annada College, Hazaribag">Annada College, Hazaribag</option>
+                        <option value="St. Columba's College, Hazaribag">St. Columba's College, Hazaribag</option>
+                        <option value="Chatra College, Chatra">Chatra College, Chatra</option>
+                        <option value="Ramgarh College, Ramgarh">Ramgarh College, Ramgarh</option>
+                        <option value="J.J College, Jhumritelaiya, Koderma">J.J College, Jhumritelaiya, Koderma</option>
+                        <option value="K.B. Women's College, Hazaribag">K.B. Women's College, Hazaribag</option>
+                        <option value="Markham College of Commerce, Hazaribag">Markham College of Commerce, Hazaribag</option>
+                        <option value="VBU University Department, Hazaribag">VBU University Department</option>
+                        <option value="Other College">Other College (अन्य कॉलेज)</option>
+                    </select>
+                </div>
+            </div>
         `,
         showCancelButton: true,
-        confirmButtonText: 'Search & Login 🚀',
+        confirmButtonText: 'Verify & Sign In 🚀',
         cancelButtonText: 'Cancel',
         confirmButtonColor: '#009dff',
         cancelButtonColor: '#475569',
         background: '#0b1329',
         color: '#ffffff',
-        backdrop: true,
-        target: document.body, /* Direct body par render hoga, kisi popup ke piche nahi dabega */
-        customClass: {
-            container: 'swal-top-layer-fix'
-        },
+        target: document.body,
         preConfirm: () => {
             const nameInput = document.getElementById("relogin-student-name").value.trim().toLowerCase();
-            if (!nameInput) {
-                Swal.showValidationMessage("Please enter your registered name! (नाम लिखना ज़रूरी है)");
+            const collegeInput = document.getElementById("relogin-student-college").value;
+
+            if (!nameInput || !collegeInput) {
+                Swal.showValidationMessage("Name aur College dono bharna zaroori hai!");
                 return false;
             }
-            return nameInput;
+            return { name: nameInput, college: collegeInput };
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            const queryName = result.value;
+            const query = result.value;
 
             Swal.fire({
                 title: 'Checking Portal Database... 🔍',
@@ -324,15 +287,29 @@ window.openStudentReLoginModal = function() {
 
                     if (allData) {
                         for (let key in allData) {
-                            if (allData[key].studentName && allData[key].studentName.toLowerCase() === queryName) {
+                            const rec = allData[key];
+                            if (
+                                rec.studentName && 
+                                rec.studentName.trim().toLowerCase() === query.name &&
+                                rec.collegeName === query.college
+                            ) {
                                 matchedKey = key;
-                                matchedRecord = allData[key];
+                                matchedRecord = rec;
                                 break;
                             }
                         }
                     }
 
                     if (matchedRecord) {
+                        // Check if banned
+                        if (matchedRecord.status === "banned") {
+                            localStorage.setItem("student_portal_uid", matchedKey);
+                            if (typeof window.verifyStudentAccessStatus === "function") {
+                                window.verifyStudentAccessStatus();
+                            }
+                            return;
+                        }
+
                         localStorage.setItem("student_verified_profile", "true");
                         localStorage.setItem("portal_already_entered", "true");
                         localStorage.setItem("student_portal_uid", matchedKey);
@@ -346,7 +323,7 @@ window.openStudentReLoginModal = function() {
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 chat_id: TELEGRAM_CHAT_ID,
-                                text: `🔑 *STUDENT RE-LOGIN SUCCESSFUL*\n\n👤 *Name:* ${matchedRecord.studentName}\n🏫 *College:* ${matchedRecord.collegeName}\n📚 *Semester:* ${matchedRecord.currentSemester}\n🕒 *Time:* ${time}`,
+                                text: `🔑 *STUDENT SIGN-IN SUCCESSFUL*\n\n👤 *Name:* ${matchedRecord.studentName}\n🏫 *College:* ${matchedRecord.collegeName}\n📚 *Semester:* ${matchedRecord.currentSemester}\n🕒 *Time:* ${time}`,
                                 parse_mode: 'Markdown'
                             })
                         }).catch(() => {});
@@ -367,7 +344,7 @@ window.openStudentReLoginModal = function() {
                         Swal.fire({
                             icon: 'error',
                             title: 'Record Not Found! ❌',
-                            text: 'इस नाम से कोई स्टूडेंट नहीं मिला। कृपया पहली बार वाला रजिस्ट्रेशन फॉर्म भरें।',
+                            text: 'इस Name और College से कोई छात्र नहीं मिला। कृपया पहली बार वाला रजिस्ट्रेशन फॉर्म भरें।',
                             confirmButtonColor: '#ef4444',
                             background: '#0b1329',
                             color: '#ffffff',
