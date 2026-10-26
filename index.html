@@ -244,14 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <span style="color: #64748b; font-size: 1.05rem;">सटीक जानकारी भरकर पोर्टल एक्सेस प्राप्त करें।</span>
         </p>
 
-        <!-- 📷 1. PHOTO UPLOAD (NAME KE THEEK UPAR) -->
-        <div style="position: relative; margin-bottom: 14px; text-align: left; background: rgba(16, 185, 129, 0.06); border: 1.5px dashed rgba(52, 211, 153, 0.5); border-radius: 8px; padding: 10px 14px;">
-            <label style="color: #34d399; font-size: 1.15rem; font-weight: 700; display: block; margin-bottom: 5px;">
-                📷 Upload Profile Photo:
-            </label>
-            <input type="file" id="track-student-photo" accept="image/*" style="width: 100%; padding: 6px 8px; border-radius: 6px; background: #090e1a; color: #cbd5e1; font-size: 1.1rem; box-sizing: border-box; border: 1px solid #1e293b; cursor: pointer;">
-        </div>
-
         <!-- 2. Full Name Input (Cyan Accent) -->
         <div style="position: relative; margin-bottom: 12px; display: flex; align-items: center;">
             <i class="fas fa-user" style="position: absolute; left: 16px; color: #00f7ff; font-size: 1.35rem;"></i>
@@ -594,10 +586,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </nav>          
 
 								<div class="icons">
-									<!-- 👤 STUDENT PROFILE AVATAR TRIGGER -->
+									<!-- ✅ NAYA CLEAN HEADER TRIGGER (Sirf First Letter dikhega) -->
 									<div class="custom-profile-trigger" id="customProfileTrigger" onclick="toggleProfilePopupModal()" style="display: none;">
 										<span id="headerAvatarInitial">S</span>
-										<img id="headerAvatarImg" src="" alt="Avatar" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
 									</div>
 
 									<!-- 🌙 Theme & Responsive Menu -->
@@ -2398,45 +2389,9 @@ function scrollToTopMatrix() {
 <div id="profileModalOverlay" onclick="closeProfilePopupModal()"></div>
 
 <div id="profilePopupModal">
-        <div>
-                <div class="modal-avatar-circle" id="modalAvatarBig">S</div>
-                <h4 id="modalStudentName">Subham Kumar Ray</h4>
-                <div class="modal-verified-pill">
-                        <i class="fas fa-check-circle"></i> Verified Student
-                </div>
-        </div>
-
-        <!-- Multi-Color Content Stack -->
-        <div class="modal-info-stack">
-                <div class="modal-item-college">
-                        <i class="fas fa-university"></i>
-                        <span id="modalStudentCollege">Annada College, Hazaribag</span>
-                </div>
-                <div class="modal-item-sem">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span id="modalStudentSem">Semester 6</span>
-                </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="modal-actions-stack">
-                <button type="button" class="modal-btn-edit" onclick="openEditProfileModal()">
-                        <i class="fas fa-user-edit"></i> Edit Profile
-                </button>
-                <button type="button" class="modal-btn-logout" onclick="handleStudentPortalLogout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-        </div>
-</div>
-
-<!-- ================= 👑 FLOATING PROFILE POPUP MODAL ================= -->
-<div id="profileModalOverlay" onclick="closeProfilePopupModal()"></div>
-
-<div id="profilePopupModal">
     <div>
         <div class="modal-avatar-circle" id="modalAvatarContainer">
             <span id="modalAvatarBig">S</span>
-            <img id="modalAvatarBigImg" src="" alt="Profile Photo" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
         </div>
         <h4 id="modalStudentName">Student Name</h4>
         <div class="modal-verified-pill">
