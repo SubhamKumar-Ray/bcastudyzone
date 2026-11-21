@@ -3098,3 +3098,171 @@ function submitDirectProgramRequest(college, sem) {
         });
     }
 }
+
+// =========================================================================
+// 🔍 PORTAL ID (BCA-XXXX-XXX) & SESSION LOOKUP IN ADMIN STUDENT DIRECTORY
+// =========================================================================
+(function enableSessionIdAdminLookup() {
+    const origLoadLiveStudents = window.loadLiveStudentsList;
+    if (typeof origLoadLiveStudents === "function") {
+        window.loadLiveStudentsList = function() {
+            const container = document.getElementById("adminStudentCardsContainer");
+            const countSpan = document.getElementById("totalStudentsCount");
+            const searchInput = document.getElementById("adminStudentSearch");
+            if (searchInput) {
+                searchInput.placeholder = "🔍 Search Name or ID (e.g. BCA-2629-001)...";
+            }
+            if (!container) return;
+
+            container.innerHTML = `<p style="color: #00f7ff; font-size: 1.3rem;">⏳ Fetching live student records...</p>`;
+
+            fetch(`${FIREBASE_USERS_NODE_URL}.json`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || Object.keys(data).length === 0) {
+                        container.innerHTML = `<p style="color: #94a3b8; font-size: 1.3rem;">No registered students found in database.</p>`;
+                        if (countSpan) countSpan.innerText = "0";
+                        return;
+                    }
+
+                    const sortedKeys = Object.keys(data).sort();
+                    globalStudentsCache = [];
+
+                    sortedKeys.forEach((uid, index) => {
+                        const record = data[uid];
+                        if (record && typeof record === "object") {
+                            const sess = record.sessionYear || "";
+                            const code = (typeof getSessionShortCode === "function") ? getSessionShortCode(sess) : "2629";
+                            const computedId = record.portalStudentId || `BCA-${code}-${String(index + 1).padStart(3, "0")}`;
+
+                            globalStudentsCache.push({
+                                uid: uid,
+                                portalStudentId: computedId,
+                                sessionYear: sess || "N/A",
+                                mobileNumber: record.mobileNumber || "N/A",
+                                photoData: record.photoData || "",
+                                queuePos: index + 1,
+                                studentName: record.studentName || record.NAME || "Registered Student",
+                                collegeName: record.collegeName || record.COLLEGE || "N/A",
+                                currentSemester: record.currentSemester || record.SEMESTER || "N/A",
+                                originalName: record.originalName || record.studentName || "N/A",
+                                originalCollege: record.originalCollege || record.collegeName || "N/A",
+                                originalSem: record.originalSem || record.currentSemester || "N/A",
+                                isProfileUpdated: record.isProfileUpdated || false,
+                                entryTime: record.entryTime || "N/A",
+                                status: record.status || "active",
+                                banReason: record.banReason || ""
+                            });
+                        }
+                    });
+
+                    if (countSpan) countSpan.innerText = globalStudentsCache.length.toString();
+                    renderSessionStudentCards(globalStudentsCache);
+                })
+                .catch(() => {
+                    container.innerHTML = `<p style="color: #ff3838; font-size: 1.3rem;">❌ Failed to load directory. Check connection.</p>`;
+                });
+        };
+    }
+
+    function renderSessionStudentCards(studentsList) {
+        const container = document.getElementById("adminStudentCardsContainer");
+        if (!container) return;
+
+        if (!studentsList || studentsList.length === 0) {
+            container.innerHTML = `<p style="color: #94a3b8; font-size: 1.3rem;">No matching student found for this ID/Name.</p>`;
+            return;
+        }
+
+        let html = "";
+        studentsList.slice().reverse().forEach(student => {
+            const isBanned = student.status === "banned";
+            const cardBg = isBanned ? "rgba(255, 56, 56, 0.15)" : "#1e293b";
+            const borderCol = isBanned ? "#ff3838" : "#334155";
+            const statusBadge = isBanned
+                ? `<span style="background: #ff3838; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; font-weight: bold;">BANNED 🚫</span>`
+                : `<span style="background: #00c853; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; font-weight: bold;">ACTIVE 🟢</span>`;
+
+            const avatarThumb = student.photoData
+                ? `<img src="${student.photoData}" alt="Photo" style="width:46px; height:46px; border-radius:50%; object-fit:cover; border:2px solid #00f7ff;">`
+                : `<div style="width:46px; height:46px; border-radius:50%; background:#0f172a; color:#00f7ff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.5rem; border:1px solid #00f7ff;">${(student.studentName || "S").charAt(0).toUpperCase()}</div>`;
+
+            const banBtn = isBanned
+                ? `<button onclick="toggleUserBanStatus('${student.uid}', 'active')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #00c853; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🟢 UNBLOCK</button>`
+                : `<button onclick="toggleUserBanStatus('${student.uid}', 'banned')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #ff3838; color: #fff; border: none; border-radius: 8px; cursor: pointer;">🚫 BAN</button>`;
+
+            const deleteBtn = `<button onclick="deleteUserPermanently('${student.uid}', '${student.studentName}')" style="padding: 8px 12px; font-size: 1.15rem; font-weight: bold; background: #dc2626; color: #fff; border: none; border-radius: 8px; cursor: pointer; margin-left: 6px;">🗑️ DELETE</button>`;
+
+            html += `
+                <div class="student-matrix-card" style="background: ${cardBg}; border: 1px solid ${borderCol}; padding: 14px; border-radius: 12px; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <div style="display:flex; align-items:flex-start; gap:12px; flex: 1; min-width: 220px;">
+                        ${avatarThumb}
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                                <span style="background:#0f172a; color:#00f7ff; border:1px solid #00f7ff; padding:2px 8px; border-radius:6px; font-size:1.15rem; font-weight:800;">${student.portalStudentId}</span>
+                                <h4 style="color: #fff; font-size: 1.45rem; margin: 0; font-weight: 700;">${student.studentName}</h4>
+                                ${statusBadge}
+                            </div>
+                            <p style="color: #ffd700; font-size: 1.18rem; margin: 0 0 3px 0;">🏫 ${student.collegeName} • 📚 ${student.currentSemester} • 📅 Session: ${student.sessionYear}</p>
+                            <p style="color: #cbd5e1; font-size: 1.12rem; margin: 0 0 3px 0;">📱 Mobile: ${student.mobileNumber !== "N/A" ? "+91 " + student.mobileNumber : "N/A"}</p>
+                            <p style="color: #94a3b8; font-size: 1.02rem; margin: 0;">🕒 Joined: ${student.entryTime} | UID: ${student.uid}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px; flex-wrap: nowrap;">
+                        ${banBtn}
+                        ${deleteBtn}
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    window.filterStudentUserMatrix = function() {
+        const searchVal = document.getElementById("adminStudentSearch");
+        const collegeVal = document.getElementById("adminCollegeFilter");
+        const semVal = document.getElementById("adminSemFilter");
+
+        const query = searchVal ? searchVal.value.toLowerCase().trim() : "";
+        const selectedCollege = collegeVal ? collegeVal.value : "";
+        const selectedSem = semVal ? semVal.value : "";
+
+        const filteredList = globalStudentsCache.filter(student => {
+            const matchesText =
+                (student.studentName || "").toLowerCase().includes(query) ||
+                (student.portalStudentId || "").toLowerCase().includes(query) ||
+                (student.uid || "").toLowerCase().includes(query) ||
+                (student.mobileNumber || "").toLowerCase().includes(query);
+
+            const matchesCollege = selectedCollege === "" || (student.collegeName || "") === selectedCollege;
+            const matchesSem = selectedSem === "" || (student.currentSemester || "") === selectedSem;
+
+            return matchesText && matchesCollege && matchesSem;
+        });
+
+        const countSpan = document.getElementById("totalStudentsCount");
+        if (countSpan) countSpan.innerText = filteredList.length.toString();
+        renderSessionStudentCards(filteredList);
+    };
+})();
+
+// =========================================================================
+// 🛡️ ENSURE ADMIN CARD SHOWS SESSION YEAR EVEN IF LOCAL/DB SYNC IS FAST
+// =========================================================================
+(function syncAdminSessionDisplay() {
+    const origRender = window.filterStudentUserMatrix;
+    if (typeof origRender === "function" && Array.isArray(window.globalStudentsCache)) {
+        const myUid = localStorage.getItem("student_portal_uid");
+        const mySess = localStorage.getItem("student_tracked_session");
+        const myId = localStorage.getItem("student_portal_student_id");
+        if (myUid && mySess) {
+            window.globalStudentsCache.forEach(item => {
+                if (item.uid === myUid) {
+                    item.sessionYear = mySess;
+                    if (myId) item.portalStudentId = myId;
+                }
+            });
+        }
+    }
+})();
