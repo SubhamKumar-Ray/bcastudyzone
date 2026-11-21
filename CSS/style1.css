@@ -312,3 +312,1788 @@
         display: none !important;
     }
 }
+
+
+/* =========================================================================
+   🏛️ NEW 4-TIER INSTITUTIONAL HEADER & 4-COLUMN FOOTER (RESPONSIVE)
+========================================================================= */
+
+.inst-container {
+    width: 100%;
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.inst-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* 1. TOP RED UTILITY BAR */
+.inst-topbar {
+    background: #b91c1c;
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding: 6px 0;
+}
+
+.inst-topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.inst-quick-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.inst-quick-links a {
+    color: #ffffff;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.inst-quick-links a:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.inst-quick-links span {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.inst-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.inst-social-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inst-social-mini a {
+    color: #ffffff;
+    font-size: 1.35rem;
+    transition: transform 0.2s;
+}
+
+.inst-social-mini a:hover {
+    transform: scale(1.15);
+    color: #fde047;
+}
+
+.inst-user-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inst-theme-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.inst-theme-btn:hover {
+    background: #ffffff;
+    color: #b91c1c;
+}
+
+/* 2. BRAND & INFO BAR */
+.inst-brandbar {
+    background: #ffffff;
+    padding: 14px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.dark-mode .inst-brandbar {
+    background: #111827;
+    border-bottom-color: #1f2937;
+}
+
+.inst-brandbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.inst-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+.inst-logo-img {
+    height: 68px;
+    width: auto;
+    object-fit: contain;
+}
+
+.inst-logo-text h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    letter-spacing: 0.4px;
+}
+
+.inst-logo-text .brand-blue {
+    color: #1e3a8a;
+}
+
+.dark-mode .inst-logo-text .brand-blue {
+    color: #60a5fa;
+}
+
+.inst-logo-text .brand-red {
+    color: #dc2626;
+}
+
+.inst-tagline {
+    font-size: 1.25rem;
+    color: #b91c1c;
+    font-weight: 600;
+    margin: 3px 0 2px 0;
+}
+
+.dark-mode .inst-tagline {
+    color: #fbbf24;
+}
+
+.inst-author {
+    font-size: 1.15rem;
+    color: #475569;
+    font-weight: 500;
+    display: block;
+}
+
+.dark-mode .inst-author {
+    color: #9ca3af;
+}
+
+.inst-info-widgets {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.inst-widget {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inst-widget-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #1e3a8a;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-mode .inst-widget-icon {
+    background: #1e293b;
+    color: #38bdf8;
+}
+
+.inst-widget-text strong {
+    display: block;
+    font-size: 1.35rem;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.dark-mode .inst-widget-text strong {
+    color: #f8fafc;
+}
+
+.inst-widget-text span {
+    font-size: 1.2rem;
+    color: #64748b;
+}
+
+.dark-mode .inst-widget-text span {
+    color: #94a3b8;
+}
+
+/* 3. DEEP NAVY NAVIGATION BAR */
+.inst-navbar {
+    background: #1e2a78;
+    position: relative;
+}
+
+.inst-mobile-toggle {
+    display: none;
+    background: transparent;
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding: 12px 0;
+    cursor: pointer;
+    align-items: center;
+    gap: 8px;
+}
+
+.inst-nav-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.inst-nav-list > li {
+    position: relative;
+    padding: 0;
+    display: block;
+}
+
+.inst-nav-list > li > a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 13px 16px;
+    color: #ffffff !important;
+    font-size: 1.45rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.inst-nav-list > li > a:hover {
+    background: #b91c1c;
+}
+
+.inst-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 210px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    border-top: 3px solid #b91c1c;
+    border-radius: 0 0 8px 8px;
+    z-index: 1050;
+    padding: 6px 0;
+}
+
+.dark-mode .inst-dropdown {
+    background: #1e293b;
+}
+
+.inst-has-drop:hover .inst-dropdown {
+    display: block;
+}
+
+.inst-dropdown li {
+    display: block;
+    padding: 0;
+}
+
+.inst-dropdown li a {
+    display: block;
+    padding: 10px 16px;
+    color: #1e293b !important;
+    font-size: 1.35rem;
+    font-weight: 500;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.dark-mode .inst-dropdown li a {
+    color: #e2e8f0 !important;
+    border-bottom-color: #334155;
+}
+
+.inst-dropdown li a:hover {
+    background: #eff6ff;
+    color: #b91c1c !important;
+    padding-left: 20px;
+}
+
+.dark-mode .inst-dropdown li a:hover {
+    background: #334155;
+    color: #38bdf8 !important;
+}
+
+/* 4. LIVE SCROLLING TICKER BAR */
+.inst-ticker-bar {
+    background: #991b1b;
+    color: #ffffff;
+    padding: 6px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+}
+
+.inst-ticker-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inst-ticker-label {
+    background: #fbbf24;
+    color: #111827;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.inst-ticker-track {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.inst-ticker-move {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #fef08a;
+    animation: instMarquee 26s linear infinite;
+}
+
+.inst-ticker-track:hover .inst-ticker-move {
+    animation-play-state: paused;
+}
+
+@keyframes instMarquee {
+    0% { transform: translateX(40%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Notice section top spacing fix for sticky header */
+.notice-section {
+    margin-top: 25px !important;
+}
+
+/* =========================================================================
+   🏛️ 4-COLUMN INSTITUTIONAL FOOTER STYLES
+========================================================================= */
+.inst-footer {
+    background: #23252a;
+    color: #e2e8f0;
+    padding-top: 50px;
+    margin-top: 40px;
+    border-top: 4px solid #b91c1c;
+}
+
+.inst-footer-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr 1.1fr;
+    gap: 32px;
+    padding-bottom: 40px;
+}
+
+.inst-footer-logo-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.inst-footer-logo-card img {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+}
+
+.inst-footer-logo-card h3 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin: 0;
+}
+
+.inst-footer-logo-card p {
+    font-size: 1.1rem;
+    color: #b91c1c;
+    font-weight: 600;
+    margin: 2px 0 0 0;
+}
+
+.inst-footer-addr {
+    font-size: 1.35rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+}
+
+.inst-footer-contact-list {
+    list-style: none;
+    padding: 0;
+}
+
+.inst-footer-contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.35rem;
+    margin-bottom: 10px;
+    padding: 0;
+    color: #f8fafc;
+}
+
+.inst-footer-contact-list li i {
+    color: #ef4444;
+    font-size: 1.5rem;
+}
+
+.inst-footer-contact-list a {
+    color: #f8fafc;
+}
+
+.inst-footer-contact-list a:hover {
+    color: #38bdf8;
+    text-decoration: underline;
+}
+
+.inst-footer-heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ef4444;
+    margin-bottom: 18px;
+}
+
+.inst-footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.inst-footer-links li {
+    display: block;
+    padding: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.inst-footer-links li a {
+    display: block;
+    padding: 9px 0;
+    font-size: 1.35rem;
+    color: #f1f5f9;
+    transition: all 0.2s;
+}
+
+.inst-footer-links li a:hover {
+    color: #38bdf8;
+    padding-left: 6px;
+}
+
+.inst-map-box {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: #1e293b;
+}
+
+.inst-map-box iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.inst-map-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ffffff;
+    color: #1d4ed8 !important;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+}
+
+.inst-footer-bottom {
+    background: #18191d;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 0;
+    font-size: 1.3rem;
+    color: #94a3b8;
+}
+
+.inst-footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.inst-footer-bottom a {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.inst-version-tag {
+    cursor: pointer;
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.inst-version-tag:hover {
+    color: #fbbf24;
+}
+
+/* =========================================================================
+   📱 TABLET & MOBILE RESPONSIVENESS (991px & 768px)
+========================================================================= */
+@media (max-width: 1024px) {
+    .inst-nav-list > li > a {
+        padding: 12px 10px;
+        font-size: 1.3rem;
+    }
+    .inst-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .inst-quick-links {
+        display: none; /* Mobile par topbar clean rakhne ke liye */
+    }
+    .inst-topbar-inner {
+        justify-content: space-between;
+    }
+    .inst-brandbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .inst-logo-img {
+        height: 52px;
+    }
+    .inst-logo-text h1 {
+        font-size: 2.1rem;
+    }
+    .inst-info-widgets {
+        width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 8px;
+        border-top: 1px dashed #cbd5e1;
+    }
+    .inst-widget-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 1.5rem;
+    }
+    .inst-widget-text strong {
+        font-size: 1.15rem;
+    }
+    .inst-widget-text span {
+        font-size: 1.05rem;
+    }
+    .inst-mobile-toggle {
+        display: flex;
+    }
+    .inst-nav-list {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        background: #17205e;
+        padding-bottom: 10px;
+    }
+    .inst-nav-list.inst-nav-open {
+        display: flex;
+    }
+    .inst-nav-list > li > a {
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .inst-has-drop:hover .inst-dropdown {
+        display: none;
+    }
+    .inst-has-drop.inst-drop-open .inst-dropdown {
+        display: block;
+        position: static;
+        box-shadow: none;
+        border-radius: 0;
+        background: #0f1747;
+    }
+    .inst-dropdown li a {
+        color: #e2e8f0 !important;
+        padding-left: 28px;
+        border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+    .inst-footer-grid {
+        grid-template-columns: 1fr;
+    }
+    .inst-footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* =========================================================================
+   ✨ PRO POLISH: RIGHT-SIDE MENU BUTTON & CLEAN TOPBAR ALIGNMENT
+========================================================================= */
+
+/* 1. Latest Update wali chalti hui line ko Pure White aur Bold rakhne ke liye */
+.inst-ticker-move,
+.inst-ticker-move span {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px;
+}
+
+/* 2. Mobile Topbar (Red Strip) ko Left-Right Professional Set karne ke liye */
+@media (max-width: 768px) {
+    .inst-topbar {
+        padding: 7px 0 !important;
+    }
+
+    .inst-topbar-inner {
+        display: flex !important;
+        width: 100% !important;
+        padding: 0 14px !important;
+    }
+
+    .inst-topbar-right {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    /* Social Icons Left side me clean pill container me */
+    .inst-social-mini {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .inst-social-mini a {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.14) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.35rem !important;
+        color: #ffffff !important;
+    }
+
+    /* Profile 'S' aur Moon Icon Right side me ekdum barabar size me */
+    .inst-user-controls {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-left: auto !important;
+    }
+
+    .inst-user-controls .custom-profile-trigger {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        font-size: 1.45rem !important;
+        border: 2px solid #ffffff !important;
+    }
+
+    .inst-user-controls #headerAvatarInitial {
+        color: #ffffff !important; /* Red 'S' ki jagah crisp white 'S' */
+    }
+
+    .inst-theme-btn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        font-size: 1.45rem !important;
+        background: rgba(255, 255, 255, 0.16) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+    }
+
+    /* 3. Navy Bar me MENU Button ko Right Side me Professional Look dene ke liye */
+    .inst-navbar-inner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important; /* Right side alignment */
+        padding: 6px 14px !important;
+    }
+
+    .inst-mobile-toggle {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        margin-left: auto !important;
+        padding: 7px 15px !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 6px !important;
+        color: #ffffff !important;
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.6px !important;
+    }
+
+    .inst-mobile-toggle span,
+    .inst-mobile-toggle i {
+        color: #ffffff !important; /* Red text hata kar clean white kiya */
+    }
+
+    .inst-mobile-toggle:active {
+        background: #b91c1c !important;
+    }
+
+    .inst-nav-list {
+        width: 100% !important;
+        margin-top: 6px !important;
+    }
+}
+
+/* =========================================================================
+   ✨ DISTINCT EDITORIAL BOX DESIGN FOR "ABOUT BCA" & "ABOUT US" INFO SECTIONS
+   (Team Member Slider & Feedback Form remain untouched)
+========================================================================= */
+
+.about {
+    padding: 4.5rem 6% !important;
+}
+
+/* 1. ABOUT BCA BOX — Left Navy Accent + Soft Tinted Academic Card */
+.bca_info {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    max-width: 1180px !important;
+    margin: 0 auto 32px auto !important;
+    padding: 34px 36px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5fb 100%) !important;
+    border: 1px solid #cbd5e1 !important;
+    border-left: 7px solid #1e2a78 !important;
+    border-top: 1px solid #cbd5e1 !important;
+    border-radius: 4px 22px 22px 4px !important;
+    box-shadow: 0 12px 30px rgba(30, 42, 120, 0.08) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.bca_info:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 18px 38px rgba(30, 42, 120, 0.13) !important;
+}
+
+/* 2. ABOUT US (PLATFORM MISSION) BOX — Right Crimson Accent + Reverse Asymmetric Frame */
+.about_info {
+    position: relative !important;
+    display: flex !important;
+    flex-flow: row-reverse !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 32px !important;
+    max-width: 1180px !important;
+    margin: 0 auto 20px auto !important;
+    padding: 34px 36px !important;
+    background: linear-gradient(135deg, #fffafa 0%, #ffffff 100%) !important;
+    border: 1px solid #e2d8d8 !important;
+    border-right: 7px solid #b91c1c !important;
+    border-top: 1px solid #e2d8d8 !important;
+    border-radius: 22px 4px 4px 22px !important;
+    box-shadow: 0 12px 30px rgba(185, 28, 28, 0.07) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.about_info:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 18px 38px rgba(185, 28, 28, 0.12) !important;
+}
+
+/* Image Frame Inside About BCA & About Us */
+.bca_info .image,
+.about_info .image {
+    flex: 0 0 280px !important;
+    background: #ffffff !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    border: 1px dashed #cbd5e1 !important;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
+    text-align: center !important;
+    margin: 0 !important;
+}
+
+.bca_info img,
+.about_info img {
+    width: 100% !important;
+    max-width: 230px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* Text Styling Inside Both Boxes */
+.bca_info .info,
+.about_info .info {
+    flex: 1 !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+}
+
+.bca_info .info hr {
+    width: 60px !important;
+    height: 4px !important;
+    background: #b91c1c !important;
+    border-radius: 4px !important;
+    margin-bottom: 12px !important;
+}
+
+.bca_info h2,
+.about_info h2 {
+    font-size: 3.1rem !important;
+    font-weight: 800 !important;
+    color: #1e2a78 !important;
+    margin-bottom: 12px !important;
+    letter-spacing: 0.3px !important;
+}
+
+.bca_info h2 span,
+.about_info h2 span {
+    color: #b91c1c !important;
+}
+
+.bca_info p,
+.about_info p {
+    font-size: 1.55rem !important;
+    line-height: 1.8 !important;
+    color: #334155 !important;
+    font-weight: 400 !important;
+}
+
+/* Dark Mode Support for Both Special Boxes */
+.dark-mode .bca_info {
+    background: linear-gradient(135deg, #181e2c 0%, #1e2638 100%) !important;
+    border-color: #2e384d !important;
+    border-left: 7px solid #60a5fa !important;
+}
+
+.dark-mode .about_info {
+    background: linear-gradient(135deg, #241b22 0%, #1c202b 100%) !important;
+    border-color: #3a2d36 !important;
+    border-right: 7px solid #ef4444 !important;
+}
+
+.dark-mode .bca_info .image,
+.dark-mode .about_info .image {
+    background: #121620 !important;
+    border-color: #334155 !important;
+}
+
+.dark-mode .bca_info h2,
+.dark-mode .about_info h2 {
+    color: #f8fafc !important;
+}
+
+.dark-mode .bca_info p,
+.dark-mode .about_info p {
+    color: #cbd5e1 !important;
+}
+
+/* Mobile & Tablet Responsive Stack */
+@media (max-width: 850px) {
+    .bca_info,
+    .about_info {
+        flex-direction: column !important;
+        padding: 24px 20px !important;
+        border-radius: 14px !important;
+        text-align: center !important;
+    }
+
+    .bca_info .image,
+    .about_info .image {
+        flex: none !important;
+        width: 100% !important;
+        max-width: 240px !important;
+        margin: 0 auto !important;
+    }
+
+    .bca_info .info hr {
+        margin: 0 auto 12px auto !important;
+    }
+
+    .bca_info h2,
+    .about_info h2 {
+        font-size: 2.5rem !important;
+    }
+
+    .bca_info p,
+    .about_info p {
+        font-size: 1.4rem !important;
+    }
+}
+/* =========================================================================
+   🎨 INTERACTIVE STUDY ZONE DASHBOARD — 3 DISTINCT CARD COLOR THEMES
+   (Card 1: Emerald Green | Card 2: Crimson Red | Card 3: Royal Blue)
+========================================================================= */
+
+/* 1️⃣ FIRST BOX: SYLLABUS CARD (EMERALD GREEN THEME) */
+.dashboard-display-grid .sem-display-card:nth-child(3n + 1) {
+    background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%) !important;
+    border: 1px solid #bbf7d0 !important;
+    border-top: 5px solid #059669 !important;
+    box-shadow: 0 10px 25px rgba(5, 150, 105, 0.08) !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 1):hover {
+    border-color: #34d399 !important;
+    box-shadow: 0 16px 32px rgba(5, 150, 105, 0.16) !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 1) .icon-box {
+    background: #dcfce7 !important;
+    border: 1px solid #86efac !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 1) .card-green {
+    color: #059669 !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 1) .btn-green {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+}
+
+/* 2️⃣ SECOND BOX: PYQ HUB CARD (CRIMSON RED THEME) */
+.dashboard-display-grid .sem-display-card:nth-child(3n + 2) {
+    background: linear-gradient(180deg, #ffffff 0%, #fef2f2 100%) !important;
+    border: 1px solid #fecaca !important;
+    border-top: 5px solid #dc2626 !important;
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.08) !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 2):hover {
+    border-color: #f87171 !important;
+    box-shadow: 0 16px 32px rgba(220, 38, 38, 0.16) !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 2) .icon-box {
+    background: #fee2e2 !important;
+    border: 1px solid #fca5a5 !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 2) .card-red {
+    color: #dc2626 !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 2) .btn-red {
+    background: linear-gradient(135deg, #b91c1c, #dc2626) !important;
+}
+
+/* 3️⃣ THIRD BOX: STUDY NOTES CARD (ROYAL BLUE THEME) */
+.dashboard-display-grid .sem-display-card:nth-child(3n + 3) {
+    background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%) !important;
+    border: 1px solid #bfdbfe !important;
+    border-top: 5px solid #1d4ed8 !important;
+    box-shadow: 0 10px 25px rgba(29, 78, 216, 0.08) !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 3):hover {
+    border-color: #60a5fa !important;
+    box-shadow: 0 16px 32px rgba(29, 78, 216, 0.16) !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 3) .icon-box {
+    background: #dbeafe !important;
+    border: 1px solid #93c5fd !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 3) .card-blue {
+    color: #1d4ed8 !important;
+}
+
+.dashboard-display-grid .sem-display-card:nth-child(3n + 3) .btn-blue {
+    background: linear-gradient(135deg, #1e2a78, #2563eb) !important;
+}
+
+/* 🌑 DARK MODE SUPPORT FOR ALL 3 DISTINCT CARDS */
+.dark-mode .dashboard-display-grid .sem-display-card:nth-child(3n + 1) {
+    background: linear-gradient(180deg, #1c202b 0%, #132520 100%) !important;
+    border-color: #065f46 !important;
+    border-top-color: #10b981 !important;
+}
+
+.dark-mode .dashboard-display-grid .sem-display-card:nth-child(3n + 2) {
+    background: linear-gradient(180deg, #1c202b 0%, #29181c 100%) !important;
+    border-color: #7f1d1d !important;
+    border-top-color: #ef4444 !important;
+}
+
+.dark-mode .dashboard-display-grid .sem-display-card:nth-child(3n + 3) {
+    background: linear-gradient(180deg, #1c202b 0%, #162038 100%) !important;
+    border-color: #1e3a8a !important;
+    border-top-color: #3b82f6 !important;
+}
+
+/* =========================================================================
+   🪪 OFFICIAL DIGITAL STUDENT ID CARD STYLESHEET (100% RESPONSIVE)
+========================================================================= */
+
+.modal-btn-idcard {
+    width: 100% !important;
+    padding: 11px 0 !important;
+    border-radius: 10px !important;
+    font-size: 1.3rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #ffffff !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.modal-btn-idcard:hover {
+    transform: translateY(-2px) !important;
+}
+
+.idcard-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 7, 18, 0.88);
+    backdrop-filter: blur(8px);
+    z-index: 10000000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.idcard-modal-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    background: #0f172a;
+    border: 1.5px solid #334155;
+    border-radius: 20px;
+    padding: 24px 20px 20px 20px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    box-sizing: border-box;
+}
+
+.idcard-close-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #dc2626;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* SMART CARD DESIGN */
+.bsz-smart-idcard {
+    width: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #1e2a78;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    color: #0f172a;
+    font-family: 'Poppins', sans-serif;
+}
+
+.idcard-top-band {
+    background: linear-gradient(90deg, #1e2a78 0%, #1e3a8a 100%);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid #b91c1c;
+}
+
+.idcard-brand-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.idcard-brand-left img {
+    height: 42px;
+    width: auto;
+    background: #ffffff;
+    padding: 3px;
+    border-radius: 8px;
+}
+
+.idcard-brand-left h3 {
+    color: #ffffff !important;
+    font-size: 1.65rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.idcard-brand-left span {
+    color: #cbd5e1 !important;
+    font-size: 1.05rem;
+    display: block;
+}
+
+.idcard-verified-tag {
+    background: #10b981;
+    color: #ffffff !important;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #ffffff;
+}
+
+.idcard-body-grid {
+    display: grid;
+    grid-template-columns: 95px 1fr 96px;
+    gap: 14px;
+    padding: 18px 16px;
+    align-items: center;
+    background: #ffffff;
+}
+
+.idcard-avatar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.idcard-avatar-ring {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e2a78, #2563eb);
+    border: 3px solid #b91c1c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(30, 42, 120, 0.25);
+}
+
+.idcard-avatar-ring span {
+    color: #ffffff !important;
+    font-size: 3.2rem;
+    font-weight: 900;
+}
+
+.idcard-role-pill {
+    background: #eff6ff;
+    color: #1e2a78 !important;
+    border: 1px solid #bfdbfe;
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.idcard-details-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+}
+
+.idcard-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 1.18rem;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 3px;
+}
+
+.idcard-lbl {
+    color: #64748b !important;
+    font-weight: 600;
+    min-width: 86px;
+    font-size: 1.05rem;
+}
+
+.idcard-val {
+    color: #0f172a !important;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.idcard-name-highlight {
+    color: #1e2a78 !important;
+    font-size: 1.35rem;
+    text-transform: uppercase;
+}
+
+.idcard-uid-text {
+    color: #b91c1c !important;
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+
+.idcard-qr-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.idcard-qr-frame {
+    width: 86px;
+    height: 86px;
+    padding: 4px;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.idcard-qr-frame img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.idcard-qr-caption {
+    font-size: 0.9rem;
+    color: #64748b !important;
+    font-weight: 700;
+}
+
+.idcard-bottom-band {
+    background: #f1f5f9;
+    border-top: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: #475569 !important;
+}
+
+.idcard-bottom-band strong {
+    color: #1e2a78 !important;
+}
+
+/* ACTION BUTTONS */
+.idcard-actions-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.idcard-btn-download,
+.idcard-btn-whatsapp {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.idcard-btn-download {
+    background: linear-gradient(135deg, #1e2a78, #2563eb);
+}
+
+.idcard-btn-whatsapp {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.idcard-btn-download:hover,
+.idcard-btn-whatsapp:hover {
+    transform: translateY(-2px);
+}
+
+/* MOBILE RESPONSIVE ID CARD */
+@media (max-width: 540px) {
+    .idcard-body-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 12px;
+    }
+    .idcard-row {
+        justify-content: flex-start;
+        font-size: 1.1rem;
+    }
+    .idcard-bottom-band {
+        flex-direction: column;
+        gap: 3px;
+        text-align: center;
+    }
+    .idcard-actions-bar {
+        flex-direction: column;
+    }
+}
+
+/* =========================================================================
+   ✂️ CIRCULAR CROPPER GUIDE & HEADER AVATAR PHOTO FIT
+========================================================================= */
+#bszPhotoCropperOverlay .cropper-view-box,
+#bszPhotoCropperOverlay .cropper-face {
+    border-radius: 50% !important;
+}
+
+#bszPhotoCropperOverlay .cropper-view-box {
+    outline: 2px solid #00f7ff !important;
+    outline-color: rgba(0, 247, 255, 0.85) !important;
+}
+
+.custom-profile-trigger img,
+.modal-avatar-circle img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    display: block !important;
+}
+
+/* =========================================================================
+   📱 MOBILE COMPACT ID CARD & SAFE CLOSE BUTTON FIX
+========================================================================= */
+.idcard-modal-overlay {
+    padding: 12px !important;
+    overflow-y: auto !important;
+}
+
+.idcard-modal-wrapper {
+    max-width: 520px !important;
+    padding: 18px 14px 16px 14px !important;
+    margin: auto !important;
+}
+
+.idcard-close-btn {
+    top: 8px !important;
+    right: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 18px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+@media (max-width: 540px) {
+    .idcard-top-band {
+        padding: 12px 42px 12px 12px !important; /* Right me close button ke liye safe space */
+    }
+    .idcard-brand-left img {
+        height: 36px !important;
+    }
+    .idcard-brand-left h3 {
+        font-size: 1.4rem !important;
+    }
+    .idcard-brand-left span {
+        font-size: 0.95rem !important;
+    }
+    .idcard-verified-tag {
+        padding: 3px 8px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Compact Mobile Grid: Upar Avatar + QR saath me, niche saari details */
+    .idcard-body-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        padding: 12px !important;
+    }
+    .idcard-avatar-col {
+        grid-column: 1 / 2 !important;
+        justify-content: center !important;
+    }
+    .idcard-avatar-ring {
+        width: 68px !important;
+        height: 68px !important;
+    }
+    .idcard-qr-col {
+        grid-column: 2 / 3 !important;
+        justify-content: center !important;
+    }
+    .idcard-qr-frame {
+        width: 68px !important;
+        height: 68px !important;
+    }
+    .idcard-details-col {
+        grid-column: 1 / 3 !important;
+        border-top: 1px dashed #cbd5e1 !important;
+        padding-top: 8px !important;
+        gap: 4px !important;
+    }
+    .idcard-row {
+        font-size: 1.12rem !important;
+    }
+    .idcard-lbl {
+        min-width: 82px !important;
+        font-size: 1rem !important;
+    }
+    .idcard-actions-bar {
+        flex-direction: row !important;
+        gap: 8px !important;
+        margin-top: 12px !important;
+    }
+    .idcard-btn-download,
+    .idcard-btn-whatsapp {
+        padding: 10px 8px !important;
+        font-size: 1.1rem !important;
+    }
+}
+/* =========================================================================
+   🎯 ONE-SCREEN FIT DIGITAL ID CARD (NO SCROLL + MIDDLE PHOTO & QR + BIG FONTS)
+========================================================================= */
+.idcard-modal-overlay {
+    padding: 8px 12px !important;
+    overflow: hidden !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.idcard-modal-wrapper {
+    max-width: 450px !important;
+    width: 100% !important;
+    max-height: 97dvh !important;
+    padding: 10px 12px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    border-radius: 16px !important;
+}
+
+.idcard-close-btn {
+    top: 6px !important;
+    right: 6px !important;
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 17px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.bsz-smart-idcard {
+    border-radius: 13px !important;
+    border: 2px solid #1e2a78 !important;
+    overflow: hidden !important;
+}
+
+.idcard-top-band {
+    padding: 9px 38px 9px 12px !important;
+    border-bottom: 3px solid #b91c1c !important;
+}
+
+.idcard-brand-left img {
+    height: 34px !important;
+}
+
+.idcard-brand-left h3 {
+    font-size: 1.5rem !important;
+    letter-spacing: 0.4px !important;
+}
+
+.idcard-brand-left span {
+    font-size: 0.98rem !important;
+}
+
+.idcard-verified-tag {
+    padding: 3px 9px !important;
+    font-size: 0.95rem !important;
+}
+
+/* 🎯 CENTERED BODY WITH ZERO EXTRA VERTICAL HEIGHT */
+.idcard-body-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 14px 8px 14px !important;
+    gap: 8px !important;
+    background: #ffffff !important;
+}
+
+/* 1. PHOTO CENTERED IN MIDDLE */
+.idcard-avatar-col {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+}
+
+.idcard-avatar-ring {
+    width: 74px !important;
+    height: 74px !important;
+    border: 3px solid #b91c1c !important;
+    box-shadow: 0 5px 14px rgba(30, 42, 120, 0.22) !important;
+}
+
+.idcard-avatar-ring span {
+    font-size: 2.9rem !important;
+}
+
+.idcard-role-pill {
+    font-size: 0.98rem !important;
+    padding: 2px 11px !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* 2. BIG & CRISP DETAILS ROWS (TIGHT VERTICAL RHYTHM) */
+.idcard-details-col {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    border-top: 1px dashed #cbd5e1 !important;
+    border-bottom: 1px dashed #cbd5e1 !important;
+    padding: 6px 2px !important;
+}
+
+.idcard-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    padding-bottom: 2px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.idcard-row:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+.idcard-lbl {
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+    min-width: 96px !important;
+    text-align: left !important;
+}
+
+.idcard-val {
+    font-size: 1.24rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    text-align: right !important;
+    flex: 1 !important;
+    line-height: 1.25 !important;
+}
+
+.idcard-name-highlight {
+    font-size: 1.42rem !important;
+    font-weight: 800 !important;
+    color: #1e2a78 !important;
+}
+
+.idcard-uid-text {
+    font-size: 1.28rem !important;
+    font-weight: 800 !important;
+    color: #b91c1c !important;
+}
+
+/* 3. QR SCANNER CENTERED IN MIDDLE */
+.idcard-qr-col {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+}
+
+.idcard-qr-frame {
+    width: 76px !important;
+    height: 76px !important;
+    padding: 3px !important;
+    border: 1.5px solid #1e2a78 !important;
+    border-radius: 8px !important;
+}
+
+.idcard-qr-caption {
+    font-size: 0.98rem !important;
+    font-weight: 700 !important;
+    color: #1e2a78 !important;
+}
+
+.idcard-bottom-band {
+    padding: 6px 10px !important;
+    font-size: 1rem !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+    text-align: center !important;
+}
+
+/* COMPACT ACTION BUTTONS SIDE BY SIDE */
+.idcard-actions-bar {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    margin-top: 9px !important;
+}
+
+.idcard-btn-download,
+.idcard-btn-whatsapp {
+    padding: 9px 8px !important;
+    font-size: 1.15rem !important;
+    border-radius: 8px !important;
+}
+
+/* =========================================================================
+   🎯 FINAL COMPACT RIGHT-FLOATING MOBILE MENU (OVERRIDE FULL-WIDTH BOX)
+========================================================================= */
+@media (max-width: 768px) {
+    .inst-navbar {
+        position: relative !important;
+        overflow: visible !important;
+        z-index: 9999 !important;
+    }
+
+    .inst-navbar-inner {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        padding: 5px 14px !important;
+    }
+
+    .inst-mobile-toggle {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 5px 11px !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        background: rgba(255, 255, 255, 0.14) !important;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
+        border-radius: 6px !important;
+        color: #ffffff !important;
+    }
+
+    /* Small Right-Aligned Floating Menu Box */
+    .inst-navbar .inst-nav-list {
+        display: none !important;
+        position: absolute !important;
+        top: calc(100% + 4px) !important;
+        right: 14px !important;
+        left: auto !important;
+        width: 225px !important;
+        max-width: calc(100vw - 28px) !important;
+        max-height: 70vh !important;
+        overflow-y: auto !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        background: #131b4e !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-top: 3px solid #b91c1c !important;
+        border-radius: 10px !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45) !important;
+        padding: 5px 0 !important;
+        margin: 0 !important;
+        z-index: 10050 !important;
+    }
+
+    .inst-navbar .inst-nav-list.inst-nav-open {
+        display: flex !important;
+    }
+
+    .inst-navbar .inst-nav-list > li {
+        display: block !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .inst-navbar .inst-nav-list > li > a {
+        padding: 8px 13px !important;
+        font-size: 1.25rem !important;
+        font-weight: 500 !important;
+        line-height: 1.3 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    }
+
+    .inst-navbar .inst-nav-list > li:last-child > a {
+        border-bottom: none !important;
+    }
+
+    .inst-navbar .inst-has-drop .inst-dropdown {
+        display: none !important;
+        position: static !important;
+        width: 100% !important;
+        background: #0c1238 !important;
+        box-shadow: none !important;
+        border-top: none !important;
+        border-radius: 0 !important;
+        padding: 2px 0 !important;
+    }
+
+    .inst-navbar .inst-has-drop.inst-drop-open .inst-dropdown {
+        display: block !important;
+    }
+
+    .inst-navbar .inst-dropdown li a {
+        padding: 6px 12px 6px 22px !important;
+        font-size: 1.18rem !important;
+        color: #cbd5e1 !important;
+    }
+}
+
