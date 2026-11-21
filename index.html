@@ -243,7 +243,20 @@ document.addEventListener("DOMContentLoaded", () => {
             Enter accurate details to unlock academic dashboard.<br>
             <span style="color: #64748b; font-size: 1.05rem;">सटीक जानकारी भरकर पोर्टल एक्सेस प्राप्त करें।</span>
         </p>
-
+		
+		<!-- 1. Student Photo Upload (For ID Card & Telegram) -->
+        <div style="margin-bottom: 14px; text-align: center;">
+            <div onclick="document.getElementById('track-student-photo').click()" style="width: 82px; height: 82px; margin: 0 auto 6px auto; border-radius: 50%; border: 2px dashed #00f7ff; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; position: relative;">
+                <img id="track-photo-preview" src="" alt="Preview" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                <div id="track-photo-placeholder" style="color: #00f7ff; font-size: 1.05rem; font-weight: 700; line-height: 1.2;">
+                    <i class="fas fa-camera" style="font-size: 1.8rem; display: block; margin-bottom: 3px;"></i>
+                    Add Photo
+                </div>
+            </div>
+            <span id="track-photo-label" style="font-size: 1.05rem; color: #94a3b8; display: block;">Upload Photo for ID Card (Required)</span>
+            <input type="file" id="track-student-photo" accept="image/*" style="display: none;" onchange="previewRegistrationPhoto(this)">
+        </div>
+		
         <!-- 2. Full Name Input (Cyan Accent) -->
         <div style="position: relative; margin-bottom: 12px; display: flex; align-items: center;">
             <i class="fas fa-user" style="position: absolute; left: 16px; color: #00f7ff; font-size: 1.35rem;"></i>
@@ -280,7 +293,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 <option value="Semester 6">Semester 6</option>
             </select>
         </div>
-
+		
+		<!-- 4B. Session Dropdown (Amber Gold Accent) -->
+        <div style="position: relative; margin-bottom: 12px; display: flex; align-items: center;">
+            <i class="fas fa-calendar-alt" style="position: absolute; left: 16px; color: #f59e0b; font-size: 1.35rem;"></i>
+            <select id="track-student-session" style="width: 100%; padding: 12px 14px 12px 46px; border: 1.5px solid #1e293b; border-radius: 8px; font-size: 1.3rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; appearance: none; -webkit-appearance: none; box-sizing: border-box; outline: none; cursor: pointer;">
+                <option value="" disabled selected>Select Session</option>
+                <option value="2023-2026">Session 2023-2026</option>
+				<option value="2024-2027">Session 2024-2027</option>
+                <option value="2025-2028">Session 2025-2028</option>
+                <option value="2026-2029">Session 2026-2029</option>
+            </select>
+        </div>
+		
+		<!-- 5. Mobile Number Input (Emerald Accent) -->
+        <div style="position: relative; margin-bottom: 16px; display: flex; align-items: center;">
+            <i class="fas fa-phone-alt" style="position: absolute; left: 16px; color: #00ff88; font-size: 1.35rem;"></i>
+            <input type="tel" id="track-student-mobile" maxlength="10" placeholder="Mobile / WhatsApp Number (10-digit)" style="width: 100%; padding: 12px 14px 12px 46px; border: 1.5px solid #1e293b; border-radius: 8px; font-size: 1.3rem; background: #0f172a; color: #fff; text-align: left; font-weight: 500; box-sizing: border-box; outline: none;">
+        </div>
         <!-- Verify Button (Bada Rectangle + Gradient) -->
         <button id="trackVerifyBtn" onclick="submitStudentMetadataPipeline()" style="width: 100%; padding: 13px 0; font-size: 1.45rem; font-weight: 800; color: #000; background: linear-gradient(135deg, #00f7ff, #00ffa2); border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.6px; box-shadow: 0 4px 20px rgba(0, 247, 255, 0.4); transition: transform 0.2s ease;">
             Verify & Enter Portal 🚀
@@ -525,79 +555,147 @@ document.addEventListener("DOMContentLoaded", () => {
 -->
         <!-- ------------ end header section ------------------- -->
 		<div id="mainPage" style="display:none;">
-        <header class="header">
-                <!-- 🎯 LEFT SIDE NEW LOGO WITH TEXT -->
-                <!-- 🎯 LEFT SIDE TRANSPARENT LOGO WITH SUBHAM'S BRANDING -->
-				<a href="#home" class="logo-container">
-						<img src="Gallary/logo4.png" alt="BCA Study Zone Logo" class="header-logo">
-						<div class="logo-text-wrapper">
-								<!-- BCA Study (Black) और Zone (Red) -->
-								<span class="logo-text"><span class="txt-black">BCA Study</span> - <span class="txt-red">Zone</span></span>
-								<!-- नीचे छोटा ऑथर नाम -->
-								<span class="author-name">By: - Subham Kumar Ray</span>
-						</div>
-				</a>
-                
-                <nav class="navbar">
-                        <ul>
-                                <li><a href="#home">Home</a></li>									
-                                
-                                <!-- 1. SYLLABUS DROPDOWN -->
-                                <li><a>Syllabus <i class="fas fa-caret-down"></i></a>
-                                        <ul class="dropdown">
-                                                <li><a href="Syllabus/full.html" target="_blank">Full Syllabus</a></li>
-                                                <li><a href="Syllabus/sem1.html" target="_blank">SEMESTER - 1</a></li>
-                                                <li><a href="Syllabus/sem2.html" target="_blank">SEMESTER - 2</a></li>
-                                                <li><a href="Syllabus/sem3.html" target="_blank">SEMESTER - 3</a></li>
-                                                <li><a href="Syllabus/sem4.html" target="_blank">SEMESTER - 4</a></li>
-                                                <li><a href="Syllabus/sem5.html" target="_blank">SEMESTER - 5</a></li>
-                                                <li><a href="Syllabus/sem6.html" target="_blank">SEMESTER - 6</a></li>
-                                        </ul>
-                                </li>
-                                
-                                <!-- 2. PYQ DROPDOWN -->
-                                <li><a>PYQ <i class="fas fa-caret-down"></i></a>
-                                        <ul class="dropdown">											
-                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(1)">SEMESTER - 1</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(2)">SEMESTER - 2</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(3)">SEMESTER - 3</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(4)">SEMESTER - 4</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(5)">SEMESTER - 5</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openPyqPopup(6)">SEMESTER - 6</a></li>
-                                        </ul>	
-                                </li>
-                                            
-                                <!-- 3. NOTES DROPDOWN -->
-                                <li><a>Notes <i class="fas fa-caret-down"></i></a>
-                                        <ul class="dropdown">
-                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(1)">SEMESTER - 1</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(2)">SEMESTER - 2</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(3)">SEMESTER - 3</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(4)">SEMESTER - 4</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(5)">SEMESTER - 5</a></li>
-                                                <li><a href="javascript:void(0)" onclick="openNotesPopup(6)">SEMESTER - 6</a></li>
-                                        </ul>
-                                </li>
-                                
-                                <li><a href="#about">About</a></li>
-                                <li><a href="#footer">Quick Link</a></li>
-                                <li><a href="#about-contact">Contact</a></li>
-                        </ul>
-                </nav>          
+        <!-- ================= 🏛️ NEW 4-TIER INSTITUTIONAL HEADER START ================= -->
+        <header class="inst-header">
+            <!-- TIER 1: TOP UTILITY & SOCIAL BAR -->
+            <div class="inst-topbar">
+                <div class="inst-container inst-topbar-inner">
+                    <div class="inst-quick-links">
+                        <a href="https://www.vbu.ac.in/" target="_blank">VBU Official</a>
+                        <span>|</span>
+                        <a href="https://www.vbuuniv.in/login" target="_blank">VBU Exam Portal</a>
+                        <span>|</span>
+                        <a href="https://ekalyan.cgg.gov.in/" target="_blank">eKalyan</a>
+                        <span>|</span>
+                        <a href="https://universities.jharkhand.gov.in/home" target="_blank">Chancellor Portal</a>
+                        <span>|</span>
+                        <a href="https://jac.jharkhand.gov.in/" target="_blank">JAC</a>
+                    </div>
+                    <div class="inst-topbar-right">
+                        <div class="inst-social-mini">
+                            <a href="https://www.facebook.com/subhamray6207" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/subham_kumar_ray_6207" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="http://www.linkedin.com/in/subham-kumar-ray-706163s7118" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://wa.me/917061637118" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                        <div class="inst-user-controls">
+                            <!-- Student Profile Avatar Trigger -->
+                            <div class="custom-profile-trigger" id="customProfileTrigger" onclick="toggleProfilePopupModal()" style="display: none;">
+                                <span id="headerAvatarInitial">S</span>
+                            </div>
+                            <!-- Dark / Light Mode Toggle -->
+                            <button type="button" class="inst-theme-btn" onclick="myFunction()" title="Switch Theme">
+                                <i id="theme-icon" class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-								<div class="icons">
-									<!-- ✅ NAYA CLEAN HEADER TRIGGER (Sirf First Letter dikhega) -->
-									<div class="custom-profile-trigger" id="customProfileTrigger" onclick="toggleProfilePopupModal()" style="display: none;">
-										<span id="headerAvatarInitial">S</span>
-									</div>
+            <!-- TIER 2: MAIN BRANDING, LOCATION & CONTACT BAR -->
+            <div class="inst-brandbar">
+                <div class="inst-container inst-brandbar-inner">
+                    <a href="#home" class="inst-logo-box">
+                        <img src="Gallary/logo4.png" alt="BCA Study Zone Logo" class="inst-logo-img">
+                        <div class="inst-logo-text">
+                            <h1><span class="brand-blue">BCA STUDY</span> <span class="brand-red">ZONE</span></h1>
+                            <p class="inst-tagline">VBU Academic Hub • Complete Notes, PYQ &amp; Lab Solutions</p>
+                            <span class="inst-author">Designed &amp; Developed by Subham Kumar Ray</span>
+                        </div>
+                    </a>
 
-									<!-- 🌙 Theme & Responsive Menu -->
-									<div onclick="myFunction()" id="theme-icon" class="fas fa-moon"></div>
-									<div class="fas fa-bars" id="menu-btn" style="display: none !important;"></div>
-								</div>
-                
-                <!-- 🔍 सर्च का फॉर्म भी यहाँ से पूरी तरह हटा दिया गया है -->
+                    <div class="inst-info-widgets">
+                        <div class="inst-widget">
+                            <div class="inst-widget-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="inst-widget-text">
+                                <strong>OUR LOCATION</strong>
+                                <span>Hazaribagh, Jharkhand - 825301</span>
+                            </div>
+                        </div>
+                        <div class="inst-widget">
+                            <div class="inst-widget-icon"><i class="fas fa-envelope-open-text"></i></div>
+                            <div class="inst-widget-text">
+                                <strong>SUPPORT &amp; HELPLINE</strong>
+                                <span>+91 7061637118 / WhatsApp</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIER 3: DEEP NAVY NAVIGATION BAR -->
+            <nav class="inst-navbar">
+                <div class="inst-container inst-navbar-inner">
+                    <button type="button" class="inst-mobile-toggle" id="instMobileMenuBtn" onclick="toggleInstMobileMenu()">
+                        <i class="fas fa-bars"></i> <span>MENU</span>
+                    </button>
+
+                    <ul class="inst-nav-list" id="instNavList">
+                        <li><a href="#home" onclick="closeInstMobileMenu()">Home</a></li>
+                        
+                        <li class="inst-has-drop">
+                            <a href="javascript:void(0)" onclick="toggleInstDropdown(this)">Syllabus <i class="fas fa-chevron-down"></i></a>
+                            <ul class="inst-dropdown">
+                                <li><a href="Syllabus/full.html" target="_blank">Full Syllabus</a></li>
+                                <li><a href="Syllabus/sem1.html" target="_blank">Semester - 1</a></li>
+                                <li><a href="Syllabus/sem2.html" target="_blank">Semester - 2</a></li>
+                                <li><a href="Syllabus/sem3.html" target="_blank">Semester - 3</a></li>
+                                <li><a href="Syllabus/sem4.html" target="_blank">Semester - 4</a></li>
+                                <li><a href="Syllabus/sem5.html" target="_blank">Semester - 5</a></li>
+                                <li><a href="Syllabus/sem6.html" target="_blank">Semester - 6</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="inst-has-drop">
+                            <a href="javascript:void(0)" onclick="toggleInstDropdown(this)">PYQ <i class="fas fa-chevron-down"></i></a>
+                            <ul class="inst-dropdown">
+                                <li><a href="javascript:void(0)" onclick="openPyqPopup(1); closeInstMobileMenu();">Semester - 1 PYQ</a></li>
+                                <li><a href="javascript:void(0)" onclick="openPyqPopup(2); closeInstMobileMenu();">Semester - 2 PYQ</a></li>
+                                <li><a href="javascript:void(0)" onclick="openPyqPopup(3); closeInstMobileMenu();">Semester - 3 PYQ</a></li>
+                                <li><a href="javascript:void(0)" onclick="openPyqPopup(4); closeInstMobileMenu();">Semester - 4 PYQ</a></li>
+                                <li><a href="javascript:void(0)" onclick="openPyqPopup(5); closeInstMobileMenu();">Semester - 5 PYQ</a></li>
+                                <li><a href="javascript:void(0)" onclick="openPyqPopup(6); closeInstMobileMenu();">Semester - 6 PYQ</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="inst-has-drop">
+                            <a href="javascript:void(0)" onclick="toggleInstDropdown(this)">Notes <i class="fas fa-chevron-down"></i></a>
+                            <ul class="inst-dropdown">
+                                <li><a href="javascript:void(0)" onclick="openNotesPopup(1); closeInstMobileMenu();">Semester - 1 Notes</a></li>
+                                <li><a href="javascript:void(0)" onclick="openNotesPopup(2); closeInstMobileMenu();">Semester - 2 Notes</a></li>
+                                <li><a href="javascript:void(0)" onclick="openNotesPopup(3); closeInstMobileMenu();">Semester - 3 Notes</a></li>
+                                <li><a href="javascript:void(0)" onclick="openNotesPopup(4); closeInstMobileMenu();">Semester - 4 Notes</a></li>
+                                <li><a href="javascript:void(0)" onclick="openNotesPopup(5); closeInstMobileMenu();">Semester - 5 Notes</a></li>
+                                <li><a href="javascript:void(0)" onclick="openNotesPopup(6); closeInstMobileMenu();">Semester - 6 Notes</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="javascript:void(0)" onclick="openCodingVaultModal(); closeInstMobileMenu();">Lab Programs</a></li>
+                        <li><a href="javascript:void(0)" onclick="openDirectProgramRequestModal(); closeInstMobileMenu();">Request Code</a></li>
+                        <li><a href="#notice" onclick="closeInstMobileMenu()">Notices</a></li>
+                        <li><a href="#about" onclick="closeInstMobileMenu()">About</a></li>
+                        <li><a href="#about-contact" onclick="closeInstMobileMenu()">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- TIER 4: LIVE SCROLLING ANNOUNCEMENT TICKER -->
+            <div class="inst-ticker-bar">
+                <div class="inst-container inst-ticker-inner">
+                    <span class="inst-ticker-label">LATEST UPDATES</span>
+                    <div class="inst-ticker-track">
+                        <div class="inst-ticker-move">
+                            <span>🎓 Welcome to BCA Study Zone (VBU Academic Hub) — Free Semester 1 to 6 Notes, PYQs &amp; Lab Codes!</span>
+                            <span>•</span>
+                            <span>📢 Special BCA Tuition Classes (Semester 1 to Semester 6 – All Subjects) by Randhir Sir! 📞 Call / WhatsApp: <a href="tel:7004700161" style="color: #fde047; text-decoration: underline;">7004700161</a></span>
+                            <span>•</span>
+                            <span>💻 C, C++, Data Structures &amp; Java Lab Programs with Output now available in Lab Vault!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </header>
+        <!-- ================= 🏛️ NEW 4-TIER INSTITUTIONAL HEADER END ================= -->
         <!-- ------------ end header section ------------------- -->
 
 
@@ -1741,19 +1839,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <hr style="height: 2px; background: #eee; margin-top: 50px;">
 
-        <section class="footer1">
-                <div class="credit" id="contact">
-                        <!-- 🔑 version 5.0.0 पर क्लिक करते ही एडमिन पैनल खुल जाएगा -->
-						<p onclick="openAdminControlPanel()" style="cursor: pointer; display: inline-block;" title="Click for Admin Control">version 5.0.0 ⚙️</p>
-                        <p>Last update: 11-October-2026</p>
-                        BCA Study <span>Zone</span><br>
-                        &#169; copyright 2026 ❤️ All Rights Reserved<br>
-                        Developed by<a href="https://subhamkumar-ray.github.io/bcastudyzone/" target="_blank">
-                                <span> Subham Kumar Ray</span> <i class="fas fa-link"></i></a>
-
+        <!-- ================= 🏛️ NEW 4-COLUMN INSTITUTIONAL FOOTER START ================= -->
+        <footer class="inst-footer">
+            <div class="inst-container inst-footer-grid">
+                
+                <!-- COLUMN 1: BRAND CARD & CONTACT -->
+                <div class="inst-footer-col">
+                    <div class="inst-footer-logo-card">
+                        <img src="Gallary/logo4.png" alt="BCA Study Zone">
+                        <div>
+                            <h3>BCA STUDY ZONE</h3>
+                            <p>VBU Academic Hub • By Subham Kumar Ray</p>
+                        </div>
+                    </div>
+                    <p class="inst-footer-addr">
+                        Hazaribagh, Jharkhand - 825301, INDIA<br>
+                        Complete VBU BCA Notes, PYQs &amp; Coding Solutions.
+                    </p>
+                    <ul class="inst-footer-contact-list">
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:+917061637118">+91 7061637118</a> / <a href="tel:+916207554483">6207554483</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="#about-contact">Send Feedback / Query</a></li>
+                    </ul>
                 </div>
 
-        </section>
+                <!-- COLUMN 2: IMPORTANT STUDY LINKS -->
+                <div class="inst-footer-col">
+                    <h4 class="inst-footer-heading">Important Links</h4>
+                    <ul class="inst-footer-links">
+                        <li><a href="Syllabus/full.html" target="_blank">Full BCA Syllabus (Sem 1–6)</a></li>
+                        <li><a href="#footer" onclick="filterSemesterDashboard(1)">Semester-Wise Master Notes</a></li>
+                        <li><a href="javascript:void(0)" onclick="openPyqPopup(1)">Previous Year Questions (PYQ)</a></li>
+                        <li><a href="javascript:void(0)" onclick="openCodingVaultModal()">Lab Programs &amp; Codes Vault</a></li>
+                        <li><a href="javascript:void(0)" onclick="openDirectProgramRequestModal()">Request Missing Program</a></li>
+                        <li><a href="#notice">VBU Latest Exam Notices</a></li>
+                        <li><a href="https://www.vbu.ac.in/" target="_blank">Vinoba Bhave University (VBU)</a></li>
+                        <li><a href="https://ekalyan.cgg.gov.in/" target="_blank">E-Kalyan Scholarship Portal</a></li>
+                    </ul>
+                </div>
+
+                <!-- COLUMN 3: PORTAL & STUDENT SERVICES -->
+                <div class="inst-footer-col">
+                    <h4 class="inst-footer-heading">Student Portal</h4>
+                    <ul class="inst-footer-links">
+                        <li><a href="#about">About BCA &amp; Study Zone</a></li>
+                        <li><a href="#about-contact">Contact &amp; Support Desk</a></li>
+                        <li><a href="https://www.vbuuniv.in/login" target="_blank">VBU Admit Card &amp; Exam Form</a></li>
+                        <li><a href="https://universities.jharkhand.gov.in/home" target="_blank">Chancellor Portal Jharkhand</a></li>
+                        <li><a href="javascript:void(0)" onclick="toggleProfilePopupModal()">My Student Profile</a></li>
+                        <li><a href="javascript:void(0)" onclick="openStudentReLoginModal()">Student Sign In / Re-Login</a></li>
+                        <li><a href="https://wa.me/917061637118" target="_blank">Direct WhatsApp Help</a></li>
+                    </ul>
+                </div>
+
+                <!-- COLUMN 4: OUR LOCATION MAP -->
+                <div class="inst-footer-col">
+                    <h4 class="inst-footer-heading">Our Location</h4>
+                    <div class="inst-map-box">
+                        <a href="https://maps.google.com/?q=Hazaribagh,Jharkhand+825301" target="_blank" class="inst-map-btn">
+                            Open In Maps <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <iframe 
+                            src="https://www.google.com/maps?q=Hazaribagh,Jharkhand&output=embed" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Hazaribagh Location Map">
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BOTTOM COPYRIGHT & SECRET ADMIN VERSION BAR -->
+            <div class="inst-footer-bottom">
+                <div class="inst-container inst-footer-bottom-inner">
+                    <p>&#169; Copyright 2026 <strong>BCA Study Zone</strong> • All Rights Reserved | Developed by <a href="https://subhamkumar-ray.github.io/bcastudyzone/" target="_blank">Subham Kumar Ray</a></p>
+                    <p class="inst-version-tag" onclick="openAdminControlPanel()" title="Click for Admin Control">
+                        version 5.0.0 ⚙️ | Last update: 21-November-2026
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <!-- ================= 🏛️ NEW 4-COLUMN INSTITUTIONAL FOOTER END ================= -->
 
         <!-- ---------------- Java Script file --------------------------  -->
         <!-- index.html के सबसे नीचे जहाँ स्क्रिप्ट बंद होती हैं -->
@@ -2412,13 +2578,135 @@ function scrollToTopMatrix() {
     </div>
 
     <!-- Actions -->
+    <!-- Actions -->
     <div class="modal-actions-stack">
+        <button type="button" class="modal-btn-idcard" onclick="openStudentIdCardModal()">
+            <i class="fas fa-id-card"></i> View My ID Card (आईडी कार्ड)
+        </button>
         <button type="button" class="modal-btn-edit" onclick="openEditProfileModal()">
             <i class="fas fa-user-edit"></i> Edit Profile (प्रोफ़ाइल बदलें)
         </button>
         <button type="button" class="modal-btn-logout" onclick="handleStudentPortalLogout()">
             <i class="fas fa-sign-out-alt"></i> Logout (लॉगआउट)
         </button>
+    </div>
+</div>
+<!-- ================= 🪪 OFFICIAL DIGITAL STUDENT ID CARD MODAL ================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<div id="studentIdCardOverlay" class="idcard-modal-overlay" onclick="closeStudentIdCardModal(event)">
+    <div class="idcard-modal-wrapper" onclick="event.stopPropagation()">
+        <button type="button" class="idcard-close-btn" onclick="closeStudentIdCardModal()">&times;</button>
+
+        <!-- 🎯 CAPTURE TARGET: OFFICIAL SMART ID CARD -->
+        <div id="printableStudentIdCard" class="bsz-smart-idcard">
+            <!-- Top Institutional Strip -->
+            <div class="idcard-top-band">
+                <div class="idcard-brand-left">
+                    <img src="Gallary/logo4.png" alt="Logo" style="height: 44px; width: 44px; object-fit: contain; background: #ffffff; padding: 3px; border-radius: 8px; display: block;">
+                    <div>
+                        <h3>BCA STUDY ZONE</h3>
+                        <span>VBU Academic Hub • Hazaribagh</span>
+                    </div>
+                </div>
+                <div class="idcard-verified-tag">
+                    <i class="fas fa-shield-alt"></i> VERIFIED
+                </div>
+            </div>
+
+            <!-- Middle Body: Avatar + Student Info + QR -->
+            <div class="idcard-body-grid">
+                <div class="idcard-avatar-col">
+                    <div class="idcard-avatar-ring" style="overflow: hidden;">
+                        <img id="idCardStudentPhoto" src="" alt="Student Photo" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                        <span id="idCardAvatarLetter">S</span>
+                    </div>
+                    <span class="idcard-role-pill">BCA STUDENT</span>
+                </div>
+
+                <div class="idcard-details-col">
+                    <div class="idcard-row">
+                        <span class="idcard-lbl">Student Name</span>
+                        <strong class="idcard-val idcard-name-highlight" id="idCardName">-</strong>
+                    </div>
+                    <div class="idcard-row">
+                        <span class="idcard-lbl">Portal ID</span>
+                        <strong class="idcard-val idcard-uid-text" id="idCardUid">-</strong>
+                    </div>
+                    <div class="idcard-row">
+                        <span class="idcard-lbl">College</span>
+                        <strong class="idcard-val" id="idCardCollege">-</strong>
+                    </div>
+                    <div class="idcard-row">
+                        <span class="idcard-lbl">Semester</span>
+                        <strong class="idcard-val" id="idCardSem">-</strong>
+                    </div>
+					<div class="idcard-row">
+                        <span class="idcard-lbl">Session</span>
+                        <strong class="idcard-val" id="idCardSession">-</strong>
+                    </div>
+                    <div class="idcard-row">
+                        <span class="idcard-lbl">Mobile No.</span>
+                        <strong class="idcard-val" id="idCardMobile">-</strong>
+                    </div>
+                    <div class="idcard-row">
+                        <span class="idcard-lbl">Issued Date</span>
+                        <strong class="idcard-val" id="idCardDate">-</strong>
+                    </div>
+                </div>
+
+                <div class="idcard-qr-col">
+                    <div class="idcard-qr-frame">
+                        <img id="idCardQrImg" src="" alt="QR Verification" crossorigin="anonymous">
+                    </div>
+                    <span class="idcard-qr-caption">Scan to Verify</span>
+                </div>
+            </div>
+
+            <!-- Bottom Authority Strip -->
+            <div class="idcard-bottom-band">
+                <span>Portal: subhamkumar-ray.github.io/bcastudyzone</span>
+                <span>Authorized by: <strong>Subham Kumar Ray</strong></span>
+            </div>
+        </div>
+
+        <!-- Action Buttons Below Card -->
+        <div class="idcard-actions-bar">
+            <button type="button" id="downloadIdCardBtn" class="idcard-btn-download" onclick="downloadStudentIdCardImage()">
+                <i class="fas fa-download"></i> Download ID Card (HD)
+            </button>
+            <a id="shareIdCardWaBtn" href="#" target="_blank" class="idcard-btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp
+            </a>
+        </div>
+    </div>
+</div>
+<!-- ================= ✂️ INTERACTIVE CIRCULAR PHOTO CROPPER MODAL ================= -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+<div id="bszPhotoCropperOverlay" style="position: fixed; inset: 0; background: rgba(3, 7, 18, 0.94); backdrop-filter: blur(8px); z-index: 100000010; display: none; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;">
+    <div style="width: 100%; max-width: 420px; background: #0f172a; border: 2px solid #00f7ff; border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.9); box-sizing: border-box;">
+        <h3 style="color: #00f7ff; font-size: 1.7rem; font-weight: 800; margin: 0 0 6px 0;">✂️ Adjust & Crop Your Photo</h3>
+        <p style="color: #94a3b8; font-size: 1.15rem; margin: 0 0 12px 0;">Photo ko drag aur zoom karke apna face circle ke beech mein set karein</p>
+
+        <!-- Crop Preview Container -->
+        <div style="width: 100%; height: 280px; background: #020617; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1px solid #334155;">
+            <img id="bszCropperTargetImg" src="" alt="Crop Preview" style="max-width: 100%; display: block;">
+        </div>
+
+        <!-- Zoom & Rotate Controls -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px;">
+            <button type="button" onclick="bszCropperZoom(-0.1)" style="padding: 8px 14px; background: #1e293b; color: #fff; border: 1px solid #475569; border-radius: 8px; font-size: 1.2rem; cursor: pointer;"><i class="fas fa-search-minus"></i></button>
+            <button type="button" onclick="bszCropperZoom(0.1)" style="padding: 8px 14px; background: #1e293b; color: #fff; border: 1px solid #475569; border-radius: 8px; font-size: 1.2rem; cursor: pointer;"><i class="fas fa-search-plus"></i></button>
+            <button type="button" onclick="bszCropperRotate()" style="padding: 8px 14px; background: #1e293b; color: #fff; border: 1px solid #475569; border-radius: 8px; font-size: 1.2rem; cursor: pointer;"><i class="fas fa-redo"></i> Rotate</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 10px;">
+            <button type="button" onclick="cancelBszPhotoCrop()" style="flex: 1; padding: 11px; background: #334155; color: #fff; border: none; border-radius: 8px; font-size: 1.25rem; font-weight: 700; cursor: pointer;">Cancel</button>
+            <button type="button" onclick="confirmBszPhotoCrop()" style="flex: 1.4; padding: 11px; background: linear-gradient(135deg, #00f7ff, #10b981); color: #000; border: none; border-radius: 8px; font-size: 1.25rem; font-weight: 800; cursor: pointer;">✔ Crop & Set Photo</button>
+        </div>
     </div>
 </div>
 </body>
