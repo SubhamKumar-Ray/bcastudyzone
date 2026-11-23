@@ -2350,3 +2350,77 @@
 .vault-back-btn:hover {
     background: #475569 !important;
 }
+
+/* =========================================================================
+   📱 MOBILE TOP UTILITY STRIP — CLEAN ONE-SCREEN FIT (NO CUTTING)
+========================================================================= */
+.inst-mobile-top-utility {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .inst-mobile-top-utility {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        width: 100%;
+        background: linear-gradient(90deg, #7f1d1d 0%, #991b1b 60%, #1e2a78 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+        padding: 5px 8px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 8px rgba(127, 29, 29, 0.25);
+    }
+
+    .inst-mobile-utility-scroll {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 3px;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .inst-mobile-utility-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .inst-mobile-utility-scroll a {
+        color: #ffffff !important;
+        font-size: 0.96rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-decoration: none;
+        flex-shrink: 1;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .inst-mobile-utility-scroll a:hover,
+    .inst-mobile-utility-scroll a:active {
+        background: #ffffff;
+        color: #991b1b !important;
+    }
+
+    .inst-mobile-utility-scroll .inst-util-sep {
+        color: #fde047;
+        font-size: 0.9rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .dark-mode .inst-mobile-top-utility {
+        background: linear-gradient(90deg, #6b1414 0%, #7f1d1d 60%, #17205e 100%);
+        border-bottom-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .inst-header {
+        top: 30px;
+    }
+}
