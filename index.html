@@ -48,6 +48,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9801877867978314" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 </head>
 
 <body>
@@ -556,6 +557,20 @@ document.addEventListener("DOMContentLoaded", () => {
         <!-- ------------ end header section ------------------- -->
 		<div id="mainPage" style="display:none;">
         <!-- ================= 🏛️ NEW 4-TIER INSTITUTIONAL HEADER START ================= -->
+		<!-- 📱 MOBILE ONLY TOP UTILITY STRIP (ABOVE RED HEADER) -->
+        <div class="inst-mobile-top-utility" aria-label="Official Portals">
+            <div class="inst-mobile-utility-scroll">
+                <a href="https://www.vbu.ac.in/" target="_blank">VBU Official</a>
+                <span class="inst-util-sep">•</span>
+                <a href="https://www.vbuuniv.in/login" target="_blank">VBU Exam Portal</a>
+                <span class="inst-util-sep">•</span>
+                <a href="https://ekalyan.cgg.gov.in/" target="_blank">eKalyan</a>
+                <span class="inst-util-sep">•</span>
+                <a href="https://universities.jharkhand.gov.in/home" target="_blank">Chancellor Portal</a>
+                <span class="inst-util-sep">•</span>
+                <a href="https://jac.jharkhand.gov.in/" target="_blank">JAC</a>
+            </div>
+        </div>
         <header class="inst-header">
             <!-- TIER 1: TOP UTILITY & SOCIAL BAR -->
             <div class="inst-topbar">
@@ -720,6 +735,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				<h2 class="notice-title">🚨 VBU Latest Updates 🚨</h2>
 					<ul id="noticeList">
 
+						<!-- Notice 8 -->
 						<li class="important new" data-popup="yes" data-date="2026-12-09">
 							<span>BCA Semester-II DateSheet Programme 2025-2028 (Computer Application)</span>
 							<a href="https://www.vbu.ac.in/ftpwebapps/vbu/resources/vbu_web/notice/notice6315.pdf" class="notice-link">Download Date Sheet</a>
@@ -2497,50 +2513,84 @@ function scrollToTopMatrix() {
 
         </div>
 
-        <!-- 3. COMPACT UPDATE FORM -->
-        <div style="background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 10px 12px; text-align: left; margin-bottom: 8px;">
-            <h4 style="color: #00f7ff; font-size: 1.15rem; margin: 0 0 8px 0; font-weight: 700; text-align: center;">✏️ Correct & Update Profile</h4>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 6px; margin-bottom: 8px;">
-                <div>
-                    <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 2px;">Full Name (Real Name):</label>
-                    <input type="text" id="bannedUpdateName" placeholder="Enter Full Name" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 1rem; box-sizing: border-box; outline: none;">
-                </div>
+        <!-- 3. FULL COMPACT UPDATE FORM (PHOTO + MOBILE + SESSION + NAME + COLLEGE + SEM) -->
+<div style="background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 10px 12px; text-align: left; margin-bottom: 8px;">
+    <h4 style="color: #00f7ff; font-size: 1.15rem; margin: 0 0 8px 0; font-weight: 700; text-align: center;">
+        ✏️ Correct &amp; Update Profile (AI Verified)
+    </h4>
 
-                <div>
-                    <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 2px;">College Name:</label>
-                    <select id="bannedUpdateCollege" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 1rem; box-sizing: border-box; outline: none;">
-                        <option value="" disabled selected>Select College</option>
-                        <option value="Annada College, Hazaribag">Annada College, Hazaribag</option>
-                        <option value="St. Columba's College, Hazaribag">St. Columba's College, Hazaribag</option>
-                        <option value="Chatra College, Chatra">Chatra College, Chatra</option>
-                        <option value="Ramgarh College, Ramgarh">Ramgarh College, Ramgarh</option>
-                        <option value="J.J College, Jhumritelaiya, Koderma">J.J College, Jhumritelaiya, Koderma</option>
-                        <option value="K.B. Women's College, Hazaribag">K.B. Women's College, Hazaribag</option>
-                        <option value="Markham College of Commerce, Hazaribag">Markham College of Commerce, Hazaribag</option>
-                        <option value="VBU University Department, Hazaribag">VBU University Department</option>
-                        <option value="Other College">Other College (अन्य कॉलेज)</option>
-                    </select>
-                </div>
-
-                <div style="grid-column: 1 / -1;">
-                    <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 2px;">Current Semester:</label>
-                    <select id="bannedUpdateSem" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 1rem; box-sizing: border-box; outline: none;">
-                        <option value="" disabled selected>Select Semester</option>
-                        <option value="Semester 1">Semester 1</option>
-                        <option value="Semester 2">Semester 2</option>
-                        <option value="Semester 3">Semester 3</option>
-                        <option value="Semester 4">Semester 4</option>
-                        <option value="Semester 5">Semester 5</option>
-                        <option value="Semester 6">Semester 6</option>
-                    </select>
-                </div>
-            </div>
-
-            <button onclick="submitBannedProfileUpdate()" id="bannedUpdateBtn" style="width: 100%; padding: 8px; background: linear-gradient(135deg, #00f7ff, #009dff); color: #000; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: transform 0.2s;">
-                Save & Update Details 💾
-            </button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <div onclick="document.getElementById('bannedUpdatePhotoInput').click()" style="width: 54px; height: 54px; min-width: 54px; border-radius: 50%; border: 2px dashed #00f7ff; background: #1e293b; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer;">
+            <img id="bannedUpdatePhotoPreview" src="" alt="Preview" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+            <span id="bannedUpdatePhotoPh" style="color: #00f7ff; font-size: 0.85rem; font-weight: 700; text-align: center;">📷 Photo</span>
         </div>
+        <div style="flex: 1;">
+            <button type="button" onclick="document.getElementById('bannedUpdatePhotoInput').click()" style="padding: 5px 10px; border-radius: 6px; border: 1px solid #00f7ff; background: rgba(0,247,255,0.1); color: #00f7ff; font-size: 0.9rem; font-weight: 700; cursor: pointer;">
+                Upload &amp; Crop Real Photo
+            </button>
+            <div id="bannedUpdatePhotoStatus" style="color: #94a3b8; font-size: 0.82rem; margin-top: 2px;">
+                Real human face photo required
+            </div>
+        </div>
+        <input type="file" id="bannedUpdatePhotoInput" accept="image/*" style="display: none;" onchange="handleBannedPhotoSelect(this)">
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin-bottom: 8px;">
+        <div>
+            <label style="color: #94a3b8; font-size: 0.82rem; display: block; margin-bottom: 2px;">Full Name (Real Name):</label>
+            <input type="text" id="bannedUpdateName" placeholder="e.g. Subham Kumar Ray" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 0.98rem; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div>
+            <label style="color: #94a3b8; font-size: 0.82rem; display: block; margin-bottom: 2px;">Mobile (10-digit):</label>
+            <input type="tel" id="bannedUpdateMobile" maxlength="10" placeholder="10-digit Mobile" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 0.98rem; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div>
+            <label style="color: #94a3b8; font-size: 0.82rem; display: block; margin-bottom: 2px;">College Name:</label>
+            <select id="bannedUpdateCollege" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 0.98rem; box-sizing: border-box; outline: none;">
+                <option value="" disabled selected>Select College</option>
+                <option value="Annada College, Hazaribag">Annada College, Hazaribag</option>
+                <option value="St. Columba's College, Hazaribag">St. Columba's College, Hazaribag</option>
+                <option value="Chatra College, Chatra">Chatra College, Chatra</option>
+                <option value="Ramgarh College, Ramgarh">Ramgarh College, Ramgarh</option>
+                <option value="J.J College, Jhumritelaiya, Koderma">J.J College, Jhumritelaiya, Koderma</option>
+                <option value="K.B. Women's College, Hazaribag">K.B. Women's College, Hazaribag</option>
+                <option value="Markham College of Commerce, Hazaribag">Markham College of Commerce, Hazaribag</option>
+                <option value="VBU University Department, Hazaribag">VBU University Department</option>
+                <option value="Other College">Other College (अन्य कॉलेज)</option>
+            </select>
+        </div>
+
+        <div>
+            <label style="color: #94a3b8; font-size: 0.82rem; display: block; margin-bottom: 2px;">Current Semester:</label>
+            <select id="bannedUpdateSem" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 0.98rem; box-sizing: border-box; outline: none;">
+                <option value="" disabled selected>Select Semester</option>
+                <option value="Semester 1">Semester 1</option>
+                <option value="Semester 2">Semester 2</option>
+                <option value="Semester 3">Semester 3</option>
+                <option value="Semester 4">Semester 4</option>
+                <option value="Semester 5">Semester 5</option>
+                <option value="Semester 6">Semester 6</option>
+            </select>
+        </div>
+
+        <div style="grid-column: 1 / -1;">
+            <label style="color: #fbbf24; font-size: 0.82rem; display: block; margin-bottom: 2px;">Session:</label>
+            <select id="bannedUpdateSession" style="width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; font-size: 0.98rem; box-sizing: border-box; outline: none;">
+                <option value="" disabled selected>Select Session</option>
+                <option value="2023-2026">2023-2026</option>
+                <option value="2024-2027">2024-2027</option>
+                <option value="2025-2028">2025-2028</option>
+                <option value="2026-2029">2026-2029</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="submitBannedProfileUpdate()" id="bannedUpdateBtn" style="width: 100%; padding: 8px; background: linear-gradient(135deg, #00f7ff, #009dff); color: #000; font-size: 1.05rem; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; transition: transform 0.2s;">
+        Verify with AI &amp; Update Details 💾
+    </button>
+</div>
 
         <!-- 4. WHATSAPP APPEAL BUTTON -->
         <a id="whatsappAppealDynamicLink" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px; background: linear-gradient(135deg, #25d366, #128c7e); color: #fff; font-size: 1.15rem; font-weight: 700; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); box-sizing: border-box;">
