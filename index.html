@@ -245,17 +245,26 @@ document.addEventListener("DOMContentLoaded", () => {
             <span style="color: #64748b; font-size: 1.05rem;">सटीक जानकारी भरकर पोर्टल एक्सेस प्राप्त करें।</span>
         </p>
 		
-		<!-- 1. Student Photo Upload (For ID Card & Telegram) -->
+		<!-- 1. Student Passport Photo Upload (Live Selfie + Gallery) -->
         <div style="margin-bottom: 14px; text-align: center;">
-            <div onclick="document.getElementById('track-student-photo').click()" style="width: 82px; height: 82px; margin: 0 auto 6px auto; border-radius: 50%; border: 2px dashed #00f7ff; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; position: relative;">
-                <img id="track-photo-preview" src="" alt="Preview" style="display: none; width: 100%; height: 100%; object-fit: cover;">
-                <div id="track-photo-placeholder" style="color: #00f7ff; font-size: 1.05rem; font-weight: 700; line-height: 1.2;">
-                    <i class="fas fa-camera" style="font-size: 1.8rem; display: block; margin-bottom: 3px;"></i>
-                    Add Photo
+            <div onclick="document.getElementById('track-student-photo').click()" style="width: 105px; height: 122px; margin: 0 auto 8px auto; border-radius: 14px; border: 2.5px dashed #00f7ff; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; position: relative; box-shadow: 0 6px 18px rgba(0, 247, 255, 0.2);">
+                <img id="track-photo-preview" src="" alt="Passport Photo" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                <div id="track-photo-placeholder" style="color: #00f7ff; font-size: 1.05rem; font-weight: 700; line-height: 1.3; padding: 6px;">
+                    <i class="fas fa-user-tie" style="font-size: 2.4rem; display: block; margin-bottom: 4px;"></i>
+                    Passport Photo
                 </div>
             </div>
-            <span id="track-photo-label" style="font-size: 1.05rem; color: #94a3b8; display: block;">Upload Photo for ID Card (Required)</span>
+            <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 4px;">
+                <button type="button" onclick="document.getElementById('track-student-camera').click()" style="padding: 5px 12px; border-radius: 20px; border: 1px solid #00ff88; background: rgba(0, 255, 136, 0.14); color: #00ff88; font-size: 1.05rem; font-weight: 700; cursor: pointer;">
+                    <i class="fas fa-camera"></i> Live Selfie
+                </button>
+                <button type="button" onclick="document.getElementById('track-student-photo').click()" style="padding: 5px 12px; border-radius: 20px; border: 1px solid #00f7ff; background: rgba(0, 247, 255, 0.14); color: #00f7ff; font-size: 1.05rem; font-weight: 700; cursor: pointer;">
+                    <i class="fas fa-image"></i> Gallery
+                </button>
+            </div>
+            <span id="track-photo-label" style="font-size: 1.05rem; color: #94a3b8; display: block;">Clear Passport Size Face Photo Required</span>
             <input type="file" id="track-student-photo" accept="image/*" style="display: none;" onchange="previewRegistrationPhoto(this)">
+            <input type="file" id="track-student-camera" accept="image/*" capture="user" style="display: none;" onchange="previewRegistrationPhoto(this)">
         </div>
 		
         <!-- 2. Full Name Input (Cyan Accent) -->
@@ -2509,20 +2518,26 @@ function scrollToTopMatrix() {
         ✏️ Correct &amp; Update Profile (AI Verified)
     </h4>
 
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-        <div onclick="document.getElementById('bannedUpdatePhotoInput').click()" style="width: 54px; height: 54px; min-width: 54px; border-radius: 50%; border: 2px dashed #00f7ff; background: #1e293b; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer;">
+	<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <div onclick="document.getElementById('bannedUpdatePhotoInput').click()" style="width: 64px; height: 76px; min-width: 64px; border-radius: 10px; border: 2px dashed #00f7ff; background: #1e293b; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer;">
             <img id="bannedUpdatePhotoPreview" src="" alt="Preview" style="display: none; width: 100%; height: 100%; object-fit: cover;">
-            <span id="bannedUpdatePhotoPh" style="color: #00f7ff; font-size: 0.85rem; font-weight: 700; text-align: center;">📷 Photo</span>
+            <span id="bannedUpdatePhotoPh" style="color: #00f7ff; font-size: 0.85rem; font-weight: 700; text-align: center;">📷 Passport</span>
         </div>
         <div style="flex: 1;">
-            <button type="button" onclick="document.getElementById('bannedUpdatePhotoInput').click()" style="padding: 5px 10px; border-radius: 6px; border: 1px solid #00f7ff; background: rgba(0,247,255,0.1); color: #00f7ff; font-size: 0.9rem; font-weight: 700; cursor: pointer;">
-                Upload &amp; Crop Real Photo
-            </button>
-            <div id="bannedUpdatePhotoStatus" style="color: #94a3b8; font-size: 0.82rem; margin-top: 2px;">
-                Real human face photo required
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button type="button" onclick="document.getElementById('bannedUpdateCameraInput').click()" style="padding: 5px 10px; border-radius: 6px; border: 1px solid #00ff88; background: rgba(0,255,136,0.12); color: #00ff88; font-size: 0.9rem; font-weight: 700; cursor: pointer;">
+                    📷 Live Selfie
+                </button>
+                <button type="button" onclick="document.getElementById('bannedUpdatePhotoInput').click()" style="padding: 5px 10px; border-radius: 6px; border: 1px solid #00f7ff; background: rgba(0,247,255,0.1); color: #00f7ff; font-size: 0.9rem; font-weight: 700; cursor: pointer;">
+                    🖼️ Upload New Photo
+                </button>
+            </div>
+            <div id="bannedUpdatePhotoStatus" style="color: #fbbf24; font-size: 0.85rem; margin-top: 3px; font-weight: 600;">
+                * Real human face photo required
             </div>
         </div>
         <input type="file" id="bannedUpdatePhotoInput" accept="image/*" style="display: none;" onchange="handleBannedPhotoSelect(this)">
+        <input type="file" id="bannedUpdateCameraInput" accept="image/*" capture="user" style="display: none;" onchange="handleBannedPhotoSelect(this)">
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin-bottom: 8px;">
@@ -2656,7 +2671,7 @@ function scrollToTopMatrix() {
             <!-- Middle Body: Avatar + Student Info + QR -->
             <div class="idcard-body-grid">
                 <div class="idcard-avatar-col">
-                    <div class="idcard-avatar-ring" style="overflow: hidden;">
+                    <div class="idcard-avatar-ring" style="width: 96px !important; height: 112px !important; border-radius: 12px !important; overflow: hidden; border: 3px solid #1e2a78 !important; box-shadow: 0 6px 16px rgba(0,0,0,0.25) !important;">
                         <img id="idCardStudentPhoto" src="" alt="Student Photo" style="display: none; width: 100%; height: 100%; object-fit: cover;">
                         <span id="idCardAvatarLetter">S</span>
                     </div>
