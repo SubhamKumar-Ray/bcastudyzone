@@ -970,12 +970,12 @@ const coachingAdsList = [
     },
 
     // 3️⃣ POSTER 1: Official BCA Farewell Celebration
-   /* {
+    {
         id: "bca_farewell_celebration",
         badge: "🎓 BCA FAREWELL • 2023-2026",
         badgeStyle: "badge-gold",
         poster: "Gallary/poster1.jpeg", //[cite: 6]
-        buttons: [
+       /* buttons: [
             {
                 type: "call",
                 text: "Contact Us",
@@ -990,8 +990,8 @@ const coachingAdsList = [
                 link: "https://wa.me/917061637118?text=" + encodeURIComponent("Hello Subham! I saw the BCA Farewell 2023-2026 poster on BCA Study Zone. Best of luck for the future! 🎓"),
                 style: "background: linear-gradient(135deg, #25d366, #128c7e);"
             }
-        ]
-    },*/
+        ]*/
+    },
 
     // 4️⃣ Coaching Ad (Randhir Sir)
     {
@@ -1065,23 +1065,18 @@ function showCoachingAdPopup() {
 
             if (!coachingModal || !posterElem || coachingAdsList.length === 0) return;
 
-            // 1. Pick a random ad
             const randomIndex = Math.floor(Math.random() * coachingAdsList.length);
             const ad = coachingAdsList[randomIndex];
 
-            // 2. Set dynamic badge text & theme color
             if (badgeElem) {
                 badgeElem.innerText = ad.badge || "FEATURED PROMOTION";
                 badgeElem.className = "coaching-ad-badge " + (ad.badgeStyle || "badge-gold");
             }
 
-            // 3. Set dynamic poster
             posterElem.src = ad.poster;
 
-            // 4. Generate dynamic action buttons
             if (actionGrid && Array.isArray(ad.buttons)) {
-                actionGrid.innerHTML = ""; // Purane buttons clear karein
-                
+                actionGrid.innerHTML = "";
                 ad.buttons.forEach(btn => {
                     const btnAnchor = document.createElement("a");
                     btnAnchor.href = btn.link;
@@ -1090,18 +1085,14 @@ function showCoachingAdPopup() {
                     if (btn.link.startsWith("http")) {
                         btnAnchor.target = "_blank";
                     }
-
                     btnAnchor.innerHTML = `<i class="${btn.icon}"></i> ${btn.text}`;
                     actionGrid.appendChild(btnAnchor);
                 });
             }
 
-            // 5. Open Modal
             coachingModal.style.display = "flex";
         })
-        .catch(err => {
-            console.log("Ad sync latency fallback:", err);
-        });
+        .catch(() => {});
 }
 
 function closeCoachingAd() {
@@ -1712,207 +1703,12 @@ window.submitBannedProfileUpdate = function() {
 // -------------------------------------------------------------------------
 // 🎯 4. REAL-TIME WELCOME BACK & GAP CALCULATOR
 // -------------------------------------------------------------------------
-window.initIdentityTrackingVerification = function() {
-    const studentUID = localStorage.getItem("student_portal_uid");
-
-    if (localStorage.getItem("student_verified_profile") === "true" && studentUID) {
-        
-        fetch(`${FIREBASE_USERS_NODE_URL}/${studentUID}.json`)
-        .then(response => response.json())
-        .then(dbData => {
-            if (!dbData) {
-                localStorage.clear();
-                const gatewayScreen = document.getElementById("brand-gateway-screen");
-                if (gatewayScreen) {
-                    gatewayScreen.style.display = "flex";
-                    gatewayScreen.style.opacity = "1";
-                }
-                const trackingPopup = document.getElementById("studentTrackingPopup");
-                if (trackingPopup) trackingPopup.style.display = "flex";
-                return;
-            }
-
-            if (dbData.status === "banned") {
-                window.verifyStudentAccessStatus();
-                return;
-            }
-
-            const savedName = dbData.studentName || "Existing Student";
-            const savedCollege = dbData.collegeName || "Saved College";
-            const savedSem = dbData.currentSemester || "Saved Semester";
-            
-            const currentTimestamp = Date.now();
-            const formattedCurrentDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-
-            let lastVisitTs = parseInt(localStorage.getItem("student_last_visit_timestamp"));
-            if (!lastVisitTs || isNaN(lastVisitTs)) {
-                lastVisitTs = dbData.timestamp || currentTimestamp;
-            }
-
-            const lastVisitTimeStr = localStorage.getItem("student_last_visit_readable") || dbData.entryTime || "Initial Registration";
-
-            const diffInMilliseconds = Math.max(0, currentTimestamp - lastVisitTs);
-            const totalSeconds = Math.floor(diffInMilliseconds / 1000);
-            const totalMinutes = Math.floor(totalSeconds / 60);
-            const totalHours = Math.floor(totalMinutes / 60);
-            const totalDays = Math.floor(totalHours / 24);
-
-            let gapString = "";
-            if (totalDays > 0) gapString += `${totalDays} Days, `;
-            if ((totalHours % 24) > 0 || totalDays > 0) gapString += `${totalHours % 24} Hours, `;
-            if ((totalMinutes % 60) > 0 || totalHours > 0) gapString += `${totalMinutes % 60} Minutes, `;
-            gapString += `${totalSeconds % 60} Seconds`;
-
-            localStorage.setItem("student_last_visit_timestamp", currentTimestamp.toString());
-            localStorage.setItem("student_last_visit_readable", formattedCurrentDate);
-
-            const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; 
-            const chatId = '@bca_dashboard_subham'; 
-            
-            const telegramRevisitMessage = `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
-                                         `👤 *Student Name:* ${savedName}\n` +
-                                         `🏫 *College:* ${savedCollege}\n` +
-                                         `📚 *Semester:* ${savedSem}\n\n` +
-                                         `🕒 *Current Return:* ${formattedCurrentDate}\n` +
-                                         `⏮️ *Last Active Was:* ${lastVisitTimeStr}\n` +
-                                         `⏳ *Total Offline Gap:* _${gapString}_\n\n` +
-                                         `📱 *Device:* ${navigator.platform}`;
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: telegramRevisitMessage, parse_mode: 'Markdown' }) 
-            }).catch(tErr => console.log("Telegram alert bypassed."));
-
-            window.proceedToVoicePopupHandover();
-        })
-        .catch(err => window.proceedToVoicePopupHandover());
-
-    } else {
+// Agar script1.js load nahi hua ho tabhi fallback chale
+if (typeof window.initIdentityTrackingVerification !== "function") {
+    window.initIdentityTrackingVerification = function() {
         const popup = document.getElementById("studentTrackingPopup");
         if (popup) popup.style.display = "flex";
-    }
-};
-
-// =========================================================================
-// 🚀 MASTER REGISTRATION PIPELINE (PHOTO LESS, CLEAN TELEGRAM ALERT)
-// =========================================================================
-window.submitStudentMetadataPipeline = function() {
-    const nameInput = document.getElementById("track-student-name");
-    const collegeSelect = document.getElementById("track-student-college");
-    const semSelect = document.getElementById("track-student-sem");
-    const verifyBtn = document.getElementById("trackVerifyBtn");
-
-    if (!nameInput || !collegeSelect || !semSelect) return;
-
-    const name = nameInput.value.trim();
-    const college = collegeSelect.value;
-    const semester = semSelect.value;
-
-    if (!name || !college || !semester) {
-        alert("⚠️ All fields are required!\n\nकृपया पोर्टल एक्सेस करने के लिए सभी जानकारी भरें।");
-        return;
-    }
-
-    // Name Validation
-    const nameValidation = (typeof validateStudentName === "function")
-        ? validateStudentName(name)
-        : { isValid: true, reason: "" };
-
-    // Semester Active Check
-    const isSemActive = (typeof activeSemestersMap !== "undefined" && activeSemestersMap[semester] !== undefined)
-        ? activeSemestersMap[semester] !== false
-        : true;
-
-    let initialStatus = "active";
-    let autoBanReason = "";
-
-    if (!nameValidation.isValid) {
-        initialStatus = "banned";
-        autoBanReason = `Auto-BAN: ${nameValidation.reason}`;
-    } else if (!isSemActive) {
-        initialStatus = "banned";
-        autoBanReason = `Auto-BAN: Selected Semester (${semester}) is currently inactive/disabled by Admin.`;
-    }
-
-    if (verifyBtn) {
-        verifyBtn.disabled = true;
-        verifyBtn.innerText = "VERIFYING ACCESS... ⏳";
-    }
-
-    const currentTs = Date.now();
-    const currentTimestampStr = currentTs.toString();
-    const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-    const structuredName = name.replace(/\b\w/g, char => char.toUpperCase());
-
-    // Local Storage Save
-    localStorage.setItem("student_tracked_name", structuredName);
-    localStorage.setItem("student_tracked_college", college);
-    localStorage.setItem("student_tracked_sem", semester);
-    localStorage.setItem("student_portal_uid", currentTimestampStr);
-    localStorage.setItem("student_verified_profile", "true");
-    localStorage.setItem("student_last_visit_timestamp", currentTs.toString());
-    localStorage.setItem("student_last_visit_readable", formattedDate);
-    localStorage.setItem("portal_already_entered", "true");
-
-    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
-    const chatId = '@bca_dashboard_subham';
-
-    // 🎯 CLEAN FRESH TELEGRAM MESSAGE (No old comparison)
-    const telegramAlertMessage = 
-        `🎓 *NEW STUDENT REGISTERED* 🎓\n\n` +
-        `👤 *Name:* ${structuredName}\n` +
-        `🏫 *College:* ${college}\n` +
-        `📚 *Semester:* ${semester}\n` +
-        `📊 *Status:* ${initialStatus === "active" ? "🟢 ACTIVE" : "🚫 AUTO-BANNED"}\n` +
-        `🕒 *Time:* ${formattedDate}\n` +
-        `📱 *Device:* ${navigator.platform}`;
-
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: telegramAlertMessage, parse_mode: 'Markdown' }) 
-    }).catch(() => {});
-
-    // Firebase Database Sync
-    fetch(`${FIREBASE_USERS_NODE_URL}/${currentTimestampStr}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            studentName: structuredName,
-            collegeName: college,
-            currentSemester: semester,
-            entryTime: formattedDate,
-            timestamp: currentTs,
-            status: initialStatus,
-            banReason: autoBanReason,
-            platform: navigator.platform
-        })
-    })
-    .then(() => completeStudentEntrySequence(initialStatus))
-    .catch(() => completeStudentEntrySequence(initialStatus));
-};
-
-// ✅ Naya Code:
-function completeStudentEntrySequence(status) {
-    const popup = document.getElementById("studentTrackingPopup");
-    if (popup) popup.style.display = "none";
-
-    // 🟢 Header aur popup profile icon ko naye student ke data se sync karein
-    if (typeof updateStudentHeaderProfile === "function") {
-        updateStudentHeaderProfile();
-    }
-
-    if (status === "banned") {
-        window.verifyStudentAccessStatus();
-    } else {
-        const mainPage = document.getElementById("mainPage");
-        if (mainPage) mainPage.style.display = "block";
-
-        if (typeof triggerVbuNoticePopupMetrics === "function") {
-            triggerVbuNoticePopupMetrics();
-        }
-    }
+    };
 }
 
 // -------------------------------------------------------------------------
@@ -2540,565 +2336,6 @@ function openLanguagePdfList(langKey) {
     });
 }
 
-// 3. Mini Program Request Popup Form
-function openProgramRequestForm(subjectName) {
-    // Student identity details auto-fetch
-    const defaultName = localStorage.getItem("student_tracked_name") || "";
-    const defaultCollege = localStorage.getItem("student_tracked_college") || "Annada College, Hazaribag";
-    const defaultSem = localStorage.getItem("student_tracked_sem") || "Semester 1";
-
-    Swal.fire({
-        title: '📝 Request Missing Program',
-        html: `
-            <p style="font-size: 1.2rem; color: #94a3b8; margin-bottom: 12px;">
-                Subject: <b style="color: #00f7ff;">${subjectName}</b>
-            </p>
-            
-            <div style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
-                <div>
-                    <label style="font-size: 1.1rem; color: #cbd5e1; font-weight: 600;">Student Name:</label>
-                    <input type="text" id="req-student-name" value="${defaultName}" placeholder="Your Full Name" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.25rem; box-sizing: border-box;">
-                </div>
-                
-                <div>
-                    <label style="font-size: 1.1rem; color: #cbd5e1; font-weight: 600;">WhatsApp Number (Solution lene ke liye):</label>
-                    <input type="tel" id="req-student-wa" placeholder="10-digit Mobile Number" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.25rem; box-sizing: border-box;">
-                </div>
-
-                <div>
-                    <label style="font-size: 1.1rem; color: #cbd5e1; font-weight: 600;">Program Topic / Question:</label>
-                    <textarea id="req-student-topic" rows="3" placeholder="Jaise: Write a C program for Tower of Hanoi using Recursion with Output" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.25rem; box-sizing: border-box; resize: none;"></textarea>
-                </div>
-            </div>
-
-            <button onclick="submitProgramRequestTelegram('${subjectName}', '${defaultCollege}', '${defaultSem}')" id="reqSubmitBtn" style="margin-top: 15px; width: 100%; padding: 12px; font-size: 1.35rem; font-weight: 700; color: #000; background: linear-gradient(135deg, #00f7ff, #009dff); border: none; border-radius: 10px; cursor: pointer;">
-                Send Request 🚀
-            </button>
-        `,
-        showConfirmButton: false,
-        showCloseButton: true,
-        background: '#1e293b',
-        color: '#ffffff'
-    });
-}
-
-// 4. Send Request directly to Telegram with 1-Click WhatsApp Reply Link[cite: 6]
-function submitProgramRequestTelegram(subjectName, college, sem) {
-    const nameInput = document.getElementById("req-student-name").value.trim();
-    const waInput = document.getElementById("req-student-wa").value.trim();
-    const topicInput = document.getElementById("req-student-topic").value.trim();
-    const submitBtn = document.getElementById("reqSubmitBtn");
-
-    if (!nameInput || !waInput || !topicInput) {
-        alert("⚠️ Kripya Name, WhatsApp Number aur Program Topic sabhi bharein!");
-        return;
-    }
-
-    const phonePattern = /^[6-9]\d{9}$/;
-    if (!phonePattern.test(waInput)) {
-        alert("⚠️ Kripya 10-digit ka valid mobile number dalein!");
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Sending to Subham...";
-
-    const formattedTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s'; //[cite: 5, 6]
-    const chatId = '@bca_dashboard_subham'; //[cite: 6]
-
-    // Pre-filled WhatsApp reply link for you
-    const waReplyDirectLink = `https://wa.me/91${waInput}?text=` + encodeURIComponent(`Hello ${nameInput}! Main Subham Kumar Ray BCA Study Zone se. Aapne '${topicInput}' ka program request kiya tha. Yeh raha aapka required code solution:`); //
-
-    const telegramReqMessage = 
-        `🚨 *NEW PROGRAM CODE REQUEST* 🚨\n\n` +
-        `👤 *Student Name:* ${nameInput}\n` +
-        `🏫 *College:* ${college}\n` +
-        `📚 *Semester:* ${sem}\n\n` +
-        `💻 *Subject:* ${subjectName}\n` +
-        `📝 *Requested Topic:* \n"${topicInput}"\n\n` +
-        `📱 *Student WhatsApp:* \`+91${waInput}\`\n` +
-        `🕒 *Time:* ${formattedTime}\n\n` +
-        `👉 [Click Here to Send Solution on WhatsApp](${waReplyDirectLink})`;
-
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: chatId,
-            text: telegramReqMessage,
-            parse_mode: 'Markdown'
-        })
-    })
-    .then(() => {
-        Swal.fire({
-            title: 'Request Sent Successfully! 🎉',
-            html: `<p style="font-size:1.3rem; color:#cbd5e1;">Aapki request Subham Kumar Ray ke paas chali gayi hai. Code verify hote hi aapke WhatsApp par solution bhej diya jayega! 📲</p>`,
-            icon: 'success',
-            confirmButtonColor: '#009dff',
-            confirmButtonText: 'Great, Thank You!',
-            background: '#0f172a',
-            color: '#ffffff'
-        });
-    })
-    .catch(() => {
-        alert("⚠️ Connection error. Kripya dobara try karein.");
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Send Request 🚀";
-    });
-}
-
-
-
-// =========================================================================
-// 🚀 AUTO-FETCH PROGRAM REQUEST ENGINE (ONLY WHATSAPP, TOPIC & PHOTO)
-// =========================================================================
-
-function openDirectProgramRequestModal() {
-    // 🧠 Student ka pehle se saved data automatically fetch karein
-    const studentName = localStorage.getItem("student_tracked_name") || "Student";
-    const studentCollege = localStorage.getItem("student_tracked_college") || "VBU BCA College";
-    const studentSem = localStorage.getItem("student_tracked_sem") || "Semester 1";
-
-    Swal.fire({
-        title: '<span style="font-size:1.55rem; font-weight:800; color:#ffffff !important;">📸 Request BCA Program</span>',
-        html: `
-            <!-- Auto-detected Verified Student Badge -->
-            <div style="background: rgba(0, 247, 255, 0.08); border: 1px solid rgba(0, 247, 255, 0.25); border-radius: 8px; padding: 6px 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; text-align: left;">
-                <span style="font-size: 1.1rem; color: #00f7ff; font-weight: 700;">
-                    <i class="fas fa-user-check"></i> ${studentName}
-                </span>
-                <span style="font-size: 1.0rem; color: #94a3b8; font-weight: 600;">
-                    ${studentCollege} | ${studentSem}
-                </span>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 8px; text-align: left;">
-                
-                <!-- 1. WhatsApp Number (Mandatory) -->
-                <div>
-                    <label style="font-size: 1.05rem; color: #cbd5e1; font-weight: 600; display: block; margin-bottom: 3px;">
-                        WhatsApp Number <span style="color: #ff3366;">* (जरूरी है)</span>:
-                    </label>
-                    <input type="tel" id="direct-req-wa" maxlength="10" placeholder="10-digit WhatsApp Number" class="vault-compact-input" style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.25rem; box-sizing: border-box; outline: none;">
-                </div>
-
-                <!-- 2. Question Topic (Agar Photo Nahi Hai) -->
-                <div>
-                    <label style="font-size: 1.05rem; color: #cbd5e1; font-weight: 600; display: block; margin-bottom: 3px;">
-                        Question Topic (Agar photo nahi hai):
-                    </label>
-                    <input type="text" id="direct-req-topic" placeholder="Jaise: Pascal Triangle using malloc" class="vault-compact-input" style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.2rem; box-sizing: border-box; outline: none;">
-                </div>
-
-                <!-- 3. Question Paper Photo Upload (Optional) -->
-                <div style="margin-top: 2px;">
-                    <label style="font-size: 1.05rem; color: #00f7ff; font-weight: 600; display: block; margin-bottom: 4px;">
-                        📷 Question Paper Photo (Optional):
-                    </label>
-                    
-                    <div class="vault-slim-upload-box" onclick="document.getElementById('direct-req-file').click()" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border: 1.5px dashed rgba(0, 247, 255, 0.6); border-radius: 8px; background: rgba(0, 247, 255, 0.05); cursor: pointer;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-camera" style="color: #00f7ff; font-size: 1.3rem;"></i>
-                            <span id="vaultUploadStatusText" style="color: #ffffff !important; font-weight: 600; font-size: 1.1rem;">Choose or Capture Photo</span>
-                        </div>
-                        <span style="font-size: 0.95rem; color: #64748b;">(Max 5MB)</span>
-                        <input type="file" id="direct-req-file" accept="image/*" style="display: none;" onchange="handleQuestionPhotoSelection(this)">
-                    </div>
-
-                    <!-- Mini Compact Image Preview -->
-                    <div id="vaultPhotoPreviewWrap" class="vault-mini-preview" style="display: none; align-items: center; justify-content: space-between; margin-top: 6px; padding: 4px 8px; background: rgba(15, 23, 42, 0.8); border-radius: 6px; border: 1px solid #00f7ff;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <img id="vaultPhotoPreviewImg" src="" alt="Thumb" style="height: 38px; width: 38px; object-fit: cover; border-radius: 4px;">
-                            <span id="vaultPhotoName" style="color: #00ff88; font-size: 0.95rem; font-weight: 600; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-                        </div>
-                        <button type="button" onclick="clearSelectedPhoto()" style="background: none; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer;">✕</button>
-                    </div>
-                </div>
-            </div>
-
-            <button onclick="submitDirectProgramRequest('${studentName}', '${studentCollege}', '${studentSem}')" id="directReqSubmitBtn" style="margin-top: 14px; width: 100%; padding: 11px; font-size: 1.3rem; font-weight: 800; color: #000; background: linear-gradient(135deg, #00f7ff, #009dff); border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;">
-                Send to Subham 🚀
-            </button>
-        `,
-        showConfirmButton: false,
-        showCloseButton: true,
-        width: '440px',
-        padding: '16px',
-        background: '#1e293b',
-        color: '#ffffff'
-    });
-}
-
-// 🚀 Request Submission Engine
-function submitDirectProgramRequest(studentName, studentCollege, studentSem) {
-    const wa = document.getElementById("direct-req-wa").value.trim();
-    let topic = document.getElementById("direct-req-topic").value.trim();
-    const fileInput = document.getElementById("direct-req-file");
-    const submitBtn = document.getElementById("directReqSubmitBtn");
-
-    const hasPhoto = fileInput && fileInput.files && fileInput.files.length > 0;
-
-    // 1. Mandatory WhatsApp Number Check
-    if (!wa) {
-        alert("⚠️ Solution paane ke liye WhatsApp Number daalna zaroori hai!");
-        return;
-    }
-
-    const phonePattern = /^[6-9]\d{9}$/;
-    if (!phonePattern.test(wa)) {
-        alert("⚠️ Kripya 10-digit ka valid WhatsApp number dalein jo 6, 7, 8 ya 9 se shuru hota ho!");
-        return;
-    }
-
-    // 2. Either Topic or Photo Mandatory
-    if (!topic && !hasPhoto) {
-        alert("⚠️ Kripya ya toh Question Topic likhein ya Question ki Photo upload karein!");
-        return;
-    }
-
-    // 3. Format Topic
-    if (topic) {
-        topic = topic.replace(/\b\w/g, c => c.toUpperCase());
-    } else {
-        topic = "Question Attached in Uploaded Photo 📸";
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Transmitting to Telegram...";
-
-    const formattedTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
-    const chatId = '@bca_dashboard_subham';
-
-    // 1-Click WhatsApp direct solution chat link
-    const waReplyDirectLink = `https://wa.me/91${wa}?text=` + encodeURIComponent(`Hello ${studentName}! Main Subham Kumar Ray BCA Study Zone se. Aapne '${topic}' ka program manga tha. Yeh raha aapka required code solution:`);
-
-    if (hasPhoto) {
-        // 📸 CASE A: TELEGRAM PHOTO
-        const photoFile = fileInput.files[0];
-        const captionText = 
-            `📸 *NEW CODING QUESTION PHOTO* 🚨\n\n` +
-            `👤 *Student Name:* ${studentName}\n` +
-            `🏫 *College:* ${studentCollege}\n` +
-            `📚 *Semester:* ${studentSem}\n\n` +
-            `📝 *Topic / Note:* \n"${topic}"\n\n` +
-            `📱 *WhatsApp:* \`+91${wa}\`\n` +
-            `🕒 *Time:* ${formattedTime}\n\n` +
-            `👉 [Send Solution on WhatsApp](${waReplyDirectLink})`;
-
-        const formData = new FormData();
-        formData.append("chat_id", chatId);
-        formData.append("photo", photoFile);
-        formData.append("caption", captionText);
-        formData.append("parse_mode", "Markdown");
-
-        fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.ok) {
-                showSuccessAlert();
-            } else {
-                throw new Error("Telegram API rejection");
-            }
-        })
-        .catch(() => {
-            alert("⚠️ Photo upload failed. Kripya image dobara try karein.");
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Send to Subham 🚀";
-        });
-
-    } else {
-        // 📝 CASE B: TELEGRAM TEXT
-        const textMessage = 
-            `🚨 *NEW PROGRAM CODE REQUEST* 🚨\n\n` +
-            `👤 *Student Name:* ${studentName}\n` +
-            `🏫 *College:* ${studentCollege}\n` +
-            `📚 *Semester:* ${studentSem}\n\n` +
-            `📝 *Requested Topic:* \n"${topic}"\n\n` +
-            `📱 *WhatsApp:* \`+91${wa}\`\n` +
-            `🕒 *Time:* ${formattedTime}\n\n` +
-            `👉 [Send Solution on WhatsApp](${waReplyDirectLink})`;
-
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: textMessage,
-                parse_mode: 'Markdown'
-            })
-        })
-        .then(() => showSuccessAlert())
-        .catch(() => {
-            alert("⚠️ Connection error. Kripya dobara try karein.");
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Send to Subham 🚀";
-        });
-    }
-
-    function showSuccessAlert() {
-        Swal.fire({
-            title: 'Request Sent! 🎉',
-            html: `<p style="font-size:1.25rem; color:#cbd5e1;">Aapka question Shubham Kumar Ray ke paas chala gaya hai. Solution verify hote hi aapke WhatsApp par bhej diya jayega! 📲</p>`,
-            icon: 'success',
-            confirmButtonColor: '#009dff',
-            confirmButtonText: 'OK',
-            background: '#0f172a',
-            color: '#ffffff'
-        });
-    }
-}
-
-
-// =========================================================================
-// 📸 DEDICATED PROGRAM CODE REQUEST ENGINE (PHOTO UPLOAD + TELEGRAM SENDPHOTO)
-// =========================================================================
-
-function openDirectProgramRequestModal() {
-    const defaultName = localStorage.getItem("student_tracked_name") || "";
-    const defaultCollege = localStorage.getItem("student_tracked_college") || "Annada College, Hazaribag";
-    const defaultSem = localStorage.getItem("student_tracked_sem") || "Semester 1";
-
-    Swal.fire({
-        title: '<span style="font-size:1.6rem; font-weight:800;">📸 Request BCA Program</span>',
-        html: `
-            <p style="font-size: 1.1rem; color: #94a3b8; margin: -5px 0 12px 0;">
-                Topic likhein ya assignment paper ki photo upload karein 📥
-            </p>
-            
-            <div style="display: flex; flex-direction: column; gap: 0px;">
-                <!-- Row 1: Subject Selection (Full Width) -->
-                <div class="vault-compact-field">
-                    <label class="vault-compact-label">Subject / Language:</label>
-                    <select id="direct-req-subject" class="vault-compact-input">
-                        <option value="C Programming">C Programming (C1005)</option>
-                        <option value="C++ & OOP">C++ & OOP (C2004)</option>
-                        <option value="Data Structures in C">Data Structures in C (C3001)</option>
-                        <option value="Java Programming">Java Programming (C3002)</option>
-                        <option value="Web Design (HTML/CSS/JS)">Web Design (HTML/CSS/JS)</option>
-                        <option value="Python / Linux">Python / Linux Shell</option>
-                        <option value="Other Subject">Other Subject / Topic</option>
-                    </select>
-                </div>
-
-                <!-- Row 2: Name & WhatsApp (2-Column Rectangle Grid) -->
-                <div class="vault-compact-grid">
-                    <div class="vault-compact-field">
-                        <label class="vault-compact-label">Full Name:</label>
-                        <input type="text" id="direct-req-name" value="${defaultName}" placeholder="Your Name" class="vault-compact-input">
-                    </div>
-                    <div class="vault-compact-field">
-                        <label class="vault-compact-label">WhatsApp Number:(Answer lene ke liye)</label>
-                        <input type="tel" id="direct-req-wa" maxlength="10" placeholder="10-digit Number" class="vault-compact-input">
-                    </div>
-                </div>
-
-                <!-- Row 3: Question Topic (Single Line / Compact) -->
-                <div class="vault-compact-field">
-                    <label class="vault-compact-label">Question Topic (Agar photo nahi hai):</label>
-                    <input type="text" id="direct-req-topic" placeholder="Hint: Write a program of two number using C( Any Question)" class="vault-compact-input">
-                </div>
-
-                <!-- Row 4: Slim Rectangular Photo Upload Strip -->
-                <div class="vault-compact-field" style="margin-top: 2px;">
-                    <label class="vault-compact-label" style="color: #00f7ff;">📷 Question Paper Photo (Optional):</label>
-                    <div class="vault-slim-upload-box" onclick="document.getElementById('direct-req-file').click()">
-                        <div class="vault-slim-upload-left">
-                            <i class="fas fa-camera" style="color: #00f7ff; font-size: 1.3rem;"></i>
-                            <span id="vaultUploadStatusText">Choose or Capture Photo</span>
-                        </div>
-                        <span style="font-size: 0.95rem; color: #64748b;">(Max 5MB)</span>
-                        <input type="file" id="direct-req-file" accept="image/*" style="display: none;" onchange="handleQuestionPhotoSelection(this)">
-                    </div>
-
-                    <!-- Mini Compact Image Preview -->
-                    <div id="vaultPhotoPreviewWrap" class="vault-mini-preview">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <img id="vaultPhotoPreviewImg" src="" alt="Thumb">
-                            <span id="vaultPhotoName" style="color: #00ff88; font-size: 0.95rem; font-weight: 600; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-                        </div>
-                        <button type="button" onclick="clearSelectedPhoto()" style="background: none; border: none; color: #ef4444; font-size: 1.1rem; cursor: pointer;">✕</button>
-                    </div>
-                </div>
-            </div>
-
-            <button onclick="submitDirectProgramRequest('${defaultCollege}', '${defaultSem}')" id="directReqSubmitBtn" style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1.25rem; font-weight: 800; color: #000; background: linear-gradient(135deg, #00f7ff, #009dff); border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;">
-                Send to Subham 🚀
-            </button>
-        `,
-        showConfirmButton: false,
-        showCloseButton: true,
-        width: '460px', // 🎯 Perfect Clean Rectangular Width
-        padding: '16px',
-        background: '#1e293b',
-        color: '#ffffff'
-    });
-}
-
-// 🖼️ Slim Thumbnail Preview & Reset Functions
-function handleQuestionPhotoSelection(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        if (file.size > 5 * 1024 * 1024) {
-            alert("⚠️ File size 5MB se chhota hona chahiye!");
-            input.value = "";
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById("vaultPhotoPreviewImg").src = e.target.result;
-            document.getElementById("vaultPhotoName").innerText = file.name;
-            document.getElementById("vaultPhotoPreviewWrap").style.display = "flex";
-            document.getElementById("vaultUploadStatusText").innerText = "✓ Photo Attached";
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function clearSelectedPhoto() {
-    const fileInput = document.getElementById('direct-req-file');
-    if (fileInput) fileInput.value = "";
-    document.getElementById("vaultPhotoPreviewWrap").style.display = "none";
-    document.getElementById("vaultUploadStatusText").innerText = "Choose or Capture Photo";
-}
-
-// 🚀 Request Submission Engine (Handles both Image & Text)
-function submitDirectProgramRequest(college, sem) {
-    const subject = document.getElementById("direct-req-subject").value;
-    let name = document.getElementById("direct-req-name").value.trim();
-    const wa = document.getElementById("direct-req-wa").value.trim();
-    let topic = document.getElementById("direct-req-topic").value.trim();
-    const fileInput = document.getElementById("direct-req-file");
-    const submitBtn = document.getElementById("directReqSubmitBtn");
-
-    const hasPhoto = fileInput && fileInput.files && fileInput.files.length > 0;
-
-    // 1. Mandatory Input Validation
-    if (!name || !wa) {
-        alert("⚠️ Kripya Name aur WhatsApp Number zaroor bharein!");
-        return;
-    }
-
-    if (!topic && !hasPhoto) {
-        alert("⚠️ Kripya ya toh Topic likhein ya Question ki Photo upload karein!");
-        return;
-    }
-
-    // 2. Strict Indian Mobile Number Validation
-    const phonePattern = /^[6-9]\d{9}$/;
-    if (!phonePattern.test(wa)) {
-        alert("⚠️ Kripya 10-digit ka valid WhatsApp number dalein jo 6, 7, 8, ya 9 se shuru hota ho!");
-        return;
-    }
-
-    // 3. Auto-Capitalization Formatter[cite: 5]
-    name = name.replace(/\b\w/g, c => c.toUpperCase());
-    if (topic) {
-        topic = topic.replace(/\b\w/g, c => c.toUpperCase());
-    } else {
-        topic = "Question Attached in Uploaded Photo 📸";
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Transmitting to Telegram...";
-
-    const formattedTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-    const botToken = '8877155299:AAEkOtDEv2jc2A5Elyt7tkHSy1cJEEMKR8s';
-    const chatId = '@bca_dashboard_subham';
-
-    // 1-Click WhatsApp direct solution chat link
-    const waReplyDirectLink = `https://wa.me/91${wa}?text=` + encodeURIComponent(`Hello ${name}! Main Subham Kumar Ray BCA Study Zone se. Aapne '${subject}' ke topic '${topic}' ka program manga tha. Yeh raha aapka required code solution:`);
-
-    if (hasPhoto) {
-        // ==========================================
-        // 📸 CASE A: TELEGRAM SENDPHOTO (IMAGE + DATA)
-        // ==========================================
-        const photoFile = fileInput.files[0];
-        const captionText = 
-            `📸 *NEW CODING QUESTION PHOTO RECEIVED!* 🚨\n\n` +
-            `👤 *Student Name:* ${name}\n` +
-            `🏫 *College:* ${college}\n` +
-            `📚 *Semester:* ${sem}\n` +
-            `💻 *Subject:* ${subject}\n\n` +
-            `📝 *Topic / Note:* \n"${topic}"\n\n` +
-            `📱 *WhatsApp:* \`+91${wa}\`\n` +
-            `🕒 *Time:* ${formattedTime}\n\n` +
-            `👉 [Send Solution on WhatsApp](${waReplyDirectLink})`;
-
-        const formData = new FormData();
-        formData.append("chat_id", chatId);
-        formData.append("photo", photoFile);
-        formData.append("caption", captionText);
-        formData.append("parse_mode", "Markdown");
-
-        fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.ok) {
-                showSuccessAlert();
-            } else {
-                throw new Error("Telegram API rejection");
-            }
-        })
-        .catch(() => {
-            alert("⚠️ Photo upload failed. Kripya image size chhota karke dobara try karein.");
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Send to Subham 🚀";
-        });
-
-    } else {
-        // ==========================================
-        // 📝 CASE B: TELEGRAM SENDMESSAGE (TEXT ONLY)
-        // ==========================================
-        const textMessage = 
-            `🚨 *NEW PROGRAM CODE REQUEST* 🚨\n\n` +
-            `👤 *Student Name:* ${name}\n` +
-            `🏫 *College:* ${college}\n` +
-            `📚 *Semester:* ${sem}\n` +
-            `💻 *Subject:* ${subject}\n\n` +
-            `📝 *Requested Topic:* \n"${topic}"\n\n` +
-            `📱 *WhatsApp:* \`+91${wa}\`\n` +
-            `🕒 *Time:* ${formattedTime}\n\n` +
-            `👉 [Send Solution on WhatsApp](${waReplyDirectLink})`;
-
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: textMessage,
-                parse_mode: 'Markdown'
-            })
-        })
-        .then(() => showSuccessAlert())
-        .catch(() => {
-            alert("⚠️ Connection error. Kripya dobara try karein.");
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Send to Subham 🚀";
-        });
-    }
-
-    function showSuccessAlert() {
-        Swal.fire({
-            title: 'Request Transmitted! 🎉',
-            html: `<p style="font-size:1.3rem; color:#cbd5e1;">Aapka program question Shubham Kumar Ray ke paas successfully deliver ho gaya hai. Solution verify hote hi aapke WhatsApp par send kar diya jayega! 📲</p>`,
-            icon: 'success',
-            confirmButtonColor: '#009dff',
-            confirmButtonText: 'Great, Thank You!',
-            background: '#0f172a',
-            color: '#ffffff'
-        });
-    }
-}
-
 // =========================================================================
 // 🔍 PORTAL ID (BCA-XXXX-XXX) & SESSION LOOKUP IN ADMIN STUDENT DIRECTORY
 // =========================================================================
@@ -3704,3 +2941,91 @@ function submitDirectProgramRequest(college, sem) {
         .catch(() => alert("❌ Network Error! Unable to update student status."));
     };
 })();
+
+// =========================================================================
+// 📖 IN-PAGE RESOURCE READER ENGINE (BACK BUTTON + ZERO REFRESH)
+// =========================================================================
+window.openBszResourceReader = function(url, title) {
+    const overlay = document.getElementById("bszResourceReaderOverlay");
+    const frame = document.getElementById("bszResourceReaderFrame");
+    const titleEl = document.getElementById("bszReaderTitle");
+    const extLink = document.getElementById("bszReaderExternalLink");
+    const loader = document.getElementById("bszReaderLoader");
+
+    if (!overlay || !frame) {
+        window.open(url, "_blank");
+        return;
+    }
+
+    if (titleEl) titleEl.innerText = title || "BCA Study Zone";
+    if (extLink) extLink.href = url;
+    if (loader) loader.style.display = "block";
+
+    frame.onload = function() {
+        if (loader) loader.style.display = "none";
+    };
+
+    frame.src = url;
+    overlay.style.display = "flex";
+    document.body.style.overflow = "hidden";
+
+    // SweetAlert popup agar khula ho toh band karein
+    if (typeof Swal !== "undefined" && Swal.isVisible()) {
+        Swal.close();
+    }
+
+    // Mobile Back button support ke liye history state add karein
+    try {
+        window.history.pushState({ bszReaderOpen: true }, "", "#reader");
+    } catch (e) {}
+};
+
+window.closeBszResourceReader = function(fromPopState) {
+    const overlay = document.getElementById("bszResourceReaderOverlay");
+    const frame = document.getElementById("bszResourceReaderFrame");
+
+    if (overlay) overlay.style.display = "none";
+    if (frame) frame.src = "";
+    document.body.style.overflow = "auto";
+
+    if (!fromPopState && window.location.hash === "#reader") {
+        try {
+            window.history.back();
+        } catch (e) {}
+    }
+};
+
+// Mobile hardware Back button dabane par bhi portal band hone ke bajay Reader close hoga
+window.addEventListener("popstate", function() {
+    const overlay = document.getElementById("bszResourceReaderOverlay");
+    if (overlay && overlay.style.display === "flex") {
+        window.closeBszResourceReader(true);
+    }
+});
+
+// Sabhi local Syllabus, PYQ aur Notes links ko automatically Reader Modal mein kholein
+document.addEventListener("click", function(e) {
+    const anchor = e.target.closest("a");
+    if (!anchor) return;
+
+    const href = anchor.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("javascript:") || href.startsWith("tel:") || href.startsWith("mailto:")) {
+        return;
+    }
+
+    // WhatsApp share buttons ya Reader ke andar ke external button ko chhod dein
+    if (anchor.classList.contains("swal-share-wa-btn") || anchor.id === "bszReaderExternalLink") {
+        return;
+    }
+
+    // Sirf apni website ke Syllabus, PYQ aur Notes HTML pages ko In-Page Reader mein kholein
+    const isInternalStudyPage =
+        !href.startsWith("http") &&
+        (href.startsWith("Syllabus/") || href.startsWith("PYQ/") || href.startsWith("Notes/"));
+
+    if (isInternalStudyPage) {
+        e.preventDefault();
+        const cleanTitle = anchor.innerText.replace("✓", "").trim() || "Study Material";
+        window.openBszResourceReader(href, cleanTitle);
+    }
+}, true);
