@@ -2506,7 +2506,7 @@ function openLanguagePdfList(langKey) {
 
 
 // =========================================================================
-// 🤖 AI PHOTO VERIFICATION + ID IN ALERTS + QUICK BAN REASON SELECTOR
+// 🤖 STRICT AI PHOTO VERIFICATION (LANDMARKS + EXPRESSION + HINDI ALERTS)
 // =========================================================================
 (function bszAiAutoModerationMaster() {
     const USERS_URL = "https://bca-study-zone-4458d-default-rtdb.asia-southeast1.firebasedatabase.app/activePortalUsers";
@@ -2534,7 +2534,11 @@ function openLanguagePdfList(langKey) {
         if (faceModelsReady) return true;
         if (typeof faceapi === "undefined") return false;
         try {
-            await faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL);
+            await Promise.all([
+                faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL),
+                faceapi.nets.faceLandmark68Net.loadFromUri(FACE_MODEL_URL),
+                faceapi.nets.faceExpressionNet.loadFromUri(FACE_MODEL_URL)
+            ]);
             faceModelsReady = true;
             return true;
         } catch (e) {
@@ -2542,12 +2546,14 @@ function openLanguagePdfList(langKey) {
         }
     }
 
+    // Har photo condition ke hisaab se automatic Hindi + English reason
     window.verifyPhotoWithAI = async function(imageDataUrl) {
         if (!imageDataUrl || !imageDataUrl.startsWith("data:image")) {
             return {
                 isOriginal: false,
                 score: 0,
-                reason: "AI Photo Check Failed: Original/real photo is missing."
+                reason: "AI Photo Check Failed: Passport photo is missing.",
+                hindiReason: "आपने अभी तक फोटो अपलोड नहीं की है। कृपया अपनी पासपोर्ट साइज फोटो अपलोड करें।"
             };
         }
 
@@ -2555,15 +2561,18 @@ function openLanguagePdfList(langKey) {
             const img = new Image();
             img.crossOrigin = "anonymous";
             img.onload = async function() {
-                if (img.width < 120 || img.height < 120) {
+                // 1. Resolution Check
+                if (img.width < 180 || img.height < 180) {
                     resolve({
                         isOriginal: false,
                         score: 15,
-                        reason: "AI Photo Check Failed: Photo resolution too low (upload a clear original photo)."
+                        reason: "AI Photo Check Failed: Photo resolution is too small/blurry.",
+                        hindiReason: "यह फोटो बहुत छोटी या धुंधली है। कृपया साफ और बड़ी पासपोर्ट साइज फोटो लगाएं।"
                     });
                     return;
                 }
 
+                // 2. Blank / Solid / Over-bright Check
                 const tempCanvas = document.createElement("canvas");
                 tempCanvas.width = 64;
                 tempCanvas.height = 64;
@@ -2571,18 +2580,32 @@ function openLanguagePdfList(langKey) {
                 tctx.drawImage(img, 0, 0, 64, 64);
                 const pixels = tctx.getImageData(0, 0, 64, 64).data;
 
-                let minLum = 255, maxLum = 0;
+                let minLum = 255, maxLum = 0, sumLum = 0;
+                const totalPx = pixels.length / 4;
                 for (let i = 0; i < pixels.length; i += 4) {
                     const lum = 0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2];
                     if (lum < minLum) minLum = lum;
                     if (lum > maxLum) maxLum = lum;
+                    sumLum += lum;
                 }
+                const avgLum = sumLum / totalPx;
 
-                if ((maxLum - minLum) < 22) {
+                if ((maxLum - minLum) < 28) {
                     resolve({
                         isOriginal: false,
                         score: 10,
-                        reason: "AI Photo Check Failed: Blank or single-color image detected."
+                        reason: "AI Photo Check Failed: Blank or single-color image detected.",
+                        hindiReason: "यह खाली या एक ही रंग की फोटो है। कृपया अपना असली चेहरा दिखने वाली फोटो लगाएं।"
+                    });
+                    return;
+                }
+
+                if (avgLum < 38) {
+                    resolve({
+                        isOriginal: false,
+                        score: 18,
+                        reason: "AI Photo Check Failed: Photo is too dark.",
+                        hindiReason: "फोटो में बहुत अंधेरा है। कृपया अच्छी रोशनी (Light) में खींची गई साफ फोटो लगाएं।"
                     });
                     return;
                 }
@@ -2590,25 +2613,110 @@ function openLanguagePdfList(langKey) {
                 const loaded = await ensureFaceApiLoaded();
                 if (loaded && typeof faceapi !== "undefined") {
                     try {
-                        const detections = await faceapi.detectAllFaces(
-                            img,
-                            new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.45 })
-                        );
+                        const detections = await faceapi
+                            .detectAllFaces(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.55 }))
+                            .withFaceLandmarks()
+                            .withFaceExpressions();
 
+                        // 3. No Human Face (Cartoon, Object, Scenery, Text)
                         if (!detections || detections.length === 0) {
                             resolve({
                                 isOriginal: false,
-                                score: 20,
-                                reason: "AI Photo Check Failed: No real human face detected (upload your original photo)."
+                                score: 15,
+                                reason: "AI Photo Check Failed: No real human face detected.",
+                                hindiReason: "इस फोटो में किसी असली इंसान का चेहरा नहीं दिख रहा है (कार्टून, फूल-पत्ती या स्क्रीनशॉट मान्य नहीं है)। कृपया अपनी असली पासपोर्ट फोटो लगाएं।"
                             });
                             return;
                         }
 
-                        const bestScore = Math.round((detections[0].score || 0.7) * 100);
+                        // 4. Multiple Faces (Group Photo Reject)
+                        if (detections.length > 1) {
+                            resolve({
+                                isOriginal: false,
+                                score: 30,
+                                reason: "AI Photo Check Failed: Multiple people detected in photo.",
+                                hindiReason: "इस फोटो में एक से ज़्यादा लोग दिख रहे हैं। आईडी कार्ड के लिए केवल अपनी अकेले की सिंगल पासपोर्ट फोटो लगाएं।"
+                            });
+                            return;
+                        }
+
+                        const person = detections[0];
+                        const confScore = Math.round((person.detection.score || 0) * 100);
+
+                        // 5. High Confidence Check (Catches heavy AI/cartoon distortion)
+                        if (confScore < 72) {
+                            resolve({
+                                isOriginal: false,
+                                score: confScore,
+                                reason: `AI Photo Check Failed: Low real-face clarity (${confScore}%).`,
+                                hindiReason: "चेहरा साफ नहीं दिख रहा है या फोटो में एडिटिंग/फ़िल्टर लगा है। कृपया बिना फ़िल्टर की असली और साफ फोटो अपलोड करें।"
+                            });
+                            return;
+                        }
+
+                        // 6. Face Size Check (Door se khinchi hui chhoti photo reject)
+                        const box = person.detection.box;
+                        const faceAreaRatio = (box.width * box.height) / (img.width * img.height);
+                        if (faceAreaRatio < 0.12) {
+                            resolve({
+                                isOriginal: false,
+                                score: 40,
+                                reason: "AI Photo Check Failed: Face is too far/small in frame.",
+                                hindiReason: "फोटो में आपका चेहरा बहुत दूर और छोटा दिख रहा है। कृपया ज़ूम करके पासपोर्ट साइज (चेहरा पास से) सेट करें।"
+                            });
+                            return;
+                        }
+
+                        // 7. Landmark Symmetry & Frontal Check (Tedha / Ulta / Meme Face Reject)
+                        const lm = person.landmarks;
+                        const leftEye = lm.getLeftEye();
+                        const rightEye = lm.getRightEye();
+                        const nose = lm.getNose();
+
+                        const leftEyeCenterX = leftEye.reduce((s, p) => s + p.x, 0) / leftEye.length;
+                        const rightEyeCenterX = rightEye.reduce((s, p) => s + p.x, 0) / rightEye.length;
+                        const leftEyeCenterY = leftEye.reduce((s, p) => s + p.y, 0) / leftEye.length;
+                        const rightEyeCenterY = rightEye.reduce((s, p) => s + p.y, 0) / rightEye.length;
+                        const noseTipX = nose[3].x;
+
+                        const eyeDist = Math.abs(rightEyeCenterX - leftEyeCenterX);
+                        const eyeTilt = Math.abs(rightEyeCenterY - leftEyeCenterY) / (eyeDist || 1);
+                        const noseOffset = Math.abs(noseTipX - (leftEyeCenterX + rightEyeCenterX) / 2) / (eyeDist || 1);
+
+                        if (eyeTilt > 0.28 || noseOffset > 0.35) {
+                            resolve({
+                                isOriginal: false,
+                                score: 45,
+                                reason: "AI Photo Check Failed: Face is tilted or sideways.",
+                                hindiReason: "फोटो में आपका चेहरा तिरछा या साइड की तरफ मुड़ा हुआ है। कृपया कैमरे की तरफ सीधा देखकर खींची गई फोटो लगाएं।"
+                            });
+                            return;
+                        }
+
+                        // 8. Meme / Vampire / Abnormal Expression Filter Check
+                        const expr = person.expressions || {};
+                        const abnormalScore = Math.max(
+                            expr.disgusted || 0,
+                            expr.fearful || 0,
+                            expr.angry || 0,
+                            expr.surprised || 0
+                        );
+
+                        if (abnormalScore > 0.65) {
+                            resolve({
+                                isOriginal: false,
+                                score: 35,
+                                reason: "AI Photo Check Failed: Funny/Meme/Abnormal facial expression detected.",
+                                hindiReason: "फोटो में अजीब मुंह/मीम (Meme) या फ़िल्टर वाला एक्सप्रेशन दिख रहा है। आईडी कार्ड के लिए कृपया सामान्य (Normal) पासपोर्ट साइज फोटो लगाएं।"
+                            });
+                            return;
+                        }
+
                         resolve({
                             isOriginal: true,
-                            score: bestScore,
-                            reason: `Verified Real Face (${bestScore}%)`
+                            score: confScore,
+                            reason: `Verified Original Passport Photo (${confScore}%)`,
+                            hindiReason: "असली पासपोर्ट फोटो सत्यापित हो गई है।"
                         });
                         return;
                     } catch (err) {
@@ -2619,14 +2727,16 @@ function openLanguagePdfList(langKey) {
                 resolve({
                     isOriginal: true,
                     score: 75,
-                    reason: "Verified Photo Structure (Fallback Mode)"
+                    reason: "Verified Photo Structure",
+                    hindiReason: "फोटो सत्यापित हो गई है।"
                 });
             };
             img.onerror = function() {
                 resolve({
                     isOriginal: false,
                     score: 0,
-                    reason: "AI Photo Check Failed: Unable to read image file."
+                    reason: "AI Photo Check Failed: Corrupted image file.",
+                    hindiReason: "यह फोटो फाइल खराब है। कृपया दूसरी साफ फोटो चुनें।"
                 });
             };
             img.src = imageDataUrl;
@@ -2644,7 +2754,7 @@ function openLanguagePdfList(langKey) {
             const st = document.getElementById("bannedUpdatePhotoStatus");
             if (prev) { prev.src = dataUrl; prev.style.display = "block"; }
             if (ph) ph.style.display = "none";
-            if (st) { st.innerText = "✓ Photo ready for AI check"; st.style.color = "#00ff88"; }
+            if (st) { st.innerText = "✓ Nayi photo crop ho gayi hai (AI check ke liye ready)"; st.style.color = "#00ff88"; }
         };
 
         if (typeof window.openBszPhotoCropper === "function") {
@@ -2702,6 +2812,7 @@ function openLanguagePdfList(langKey) {
         waLinkElem.href = `https://wa.me/917061637118?text=${encodeURIComponent(waText)}`;
     };
 
+    // BANNED USER UPDATE: NAYA PHOTO + SAARE 6 FIELDS 100% REQUIRED
     window.submitBannedProfileUpdate = async function() {
         const uid = localStorage.getItem("student_portal_uid");
         const nameEl = document.getElementById("bannedUpdateName");
@@ -2718,19 +2829,85 @@ function openLanguagePdfList(langKey) {
         const newCol = colEl.value;
         const newSem = semEl.value;
         const newSes = sesEl.value;
-        const photoToVerify = bannedCroppedPhotoData || localStorage.getItem("student_profile_photo_data") || "";
 
+        // 1. Naya Photo Upload Mandatory (Purani banned photo nahi chalegi)
+        if (!bannedCroppedPhotoData) {
+            if (typeof Swal !== "undefined") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '📷 नई फोटो जरूरी है!',
+                    html: '<p style="color:#fff; font-size:1.25rem;">अकाउंट अनब्लॉक करने के लिए कृपया अपनी <b>नई और असली पासपोर्ट साइज फोटो</b> अपलोड व क्रॉप करें। पुरानी फोटो मान्य नहीं होगी।</p>',
+                    confirmButtonColor: '#009dff',
+                    background: '#0b1329',
+                    color: '#ffffff'
+                });
+            } else {
+                alert("⚠️ Nayi asli passport-size photo upload aur crop karna zaroori hai!");
+            }
+            return;
+        }
+
+        // 2. Baaki Sabhi 5 Fields Mandatory
         if (!newName || !newMob || !newCol || !newSem || !newSes) {
-            alert("⚠️ Kripya Name, Mobile, College, Semester aur Session sabhi bharein!");
+            alert("⚠️ सभी जानकारी जरूरी है!\n\nकृपया Full Name, Mobile Number, College, Semester और Session सभी सही-सही भरें।");
+            return;
+        }
+
+        if (!/^[6-9]\d{9}$/.test(newMob)) {
+            alert("⚠️ गलत मोबाइल नंबर!\n\nकृपया 6, 7, 8 या 9 से शुरू होने वाला 10 अंकों का सही मोबाइल नंबर डालें।");
+            mobEl.focus();
+            return;
+        }
+
+        const nameCheck = (typeof validateStudentName === "function")
+            ? validateStudentName(newName)
+            : { isValid: true, reason: "" };
+
+        if (!nameCheck.isValid) {
+            alert("⚠️ गलत नाम (Invalid Name):\n\nकृपया अपना पूरा असली नाम (First Name + Last Name) लिखें।");
+            nameEl.focus();
+            return;
+        }
+
+        const semActive = (typeof activeSemestersMap !== "undefined" && activeSemestersMap[newSem] !== undefined)
+            ? activeSemestersMap[newSem] !== false
+            : true;
+
+        if (!semActive) {
+            alert(`⚠️ ${newSem} अभी Admin द्वारा बंद (Inactive) है। कृपया सही सेमेस्टर चुनें।`);
+            semEl.focus();
             return;
         }
 
         if (btn) {
             btn.disabled = true;
-            btn.innerText = "🤖 AI Checking Photo & Details...";
+            btn.innerText = "🤖 AI फोटो और जानकारी की जांच कर रहा है...";
         }
 
         try {
+            // 3. Strict AI Photo Check with Automatic Hindi Reason
+            const aiResult = await window.verifyPhotoWithAI(bannedCroppedPhotoData);
+            if (!aiResult.isOriginal) {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Verify with AI & Update Details 💾";
+                }
+                if (typeof Swal !== "undefined") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '<span style="color:#ff3838; font-size:1.55rem;">❌ फोटो अस्वीकृत (AI Check Failed)</span>',
+                        html: `<p style="color:#ffffff; font-size:1.3rem; line-height:1.6; font-weight:600;">${aiResult.hindiReason || aiResult.reason}</p>`,
+                        confirmButtonText: 'दूसरी असली फोटो लगाएं 📷',
+                        confirmButtonColor: '#ff3838',
+                        background: '#0b1329',
+                        color: '#ffffff'
+                    });
+                } else {
+                    alert("❌ " + (aiResult.hindiReason || aiResult.reason));
+                }
+                return; // Jab tak sahi photo nahi aayegi, update/unblock nahi hoga
+            }
+
             const res = await fetch(`${USERS_URL}/${uid}.json`);
             const oldData = await res.json() || {};
             const studentId = resolveStudentDisplayId(oldData, uid);
@@ -2754,34 +2931,6 @@ function openLanguagePdfList(langKey) {
                 sessionYear: newSes
             };
 
-            const nameCheck = (typeof validateStudentName === "function")
-                ? validateStudentName(newName)
-                : { isValid: true, reason: "" };
-
-            const mobValid = /^[6-9]\d{9}$/.test(newMob);
-            const semActive = (typeof activeSemestersMap !== "undefined" && activeSemestersMap[newSem] !== undefined)
-                ? activeSemestersMap[newSem] !== false
-                : true;
-
-            const aiResult = await window.verifyPhotoWithAI(photoToVerify);
-
-            let newStatus = "active";
-            let banReason = "";
-
-            if (!nameCheck.isValid) {
-                newStatus = "banned";
-                banReason = `Auto-BAN: ${nameCheck.reason}`;
-            } else if (!mobValid) {
-                newStatus = "banned";
-                banReason = "Auto-BAN: Invalid 10-digit Indian mobile number.";
-            } else if (!semActive) {
-                newStatus = "banned";
-                banReason = `Auto-BAN: ${newSem} is currently inactive/disabled by Admin.`;
-            } else if (!aiResult.isOriginal) {
-                newStatus = "banned";
-                banReason = aiResult.reason;
-            }
-
             const payload = {
                 studentName: formattedName,
                 mobileNumber: newMob,
@@ -2789,7 +2938,7 @@ function openLanguagePdfList(langKey) {
                 currentSemester: newSem,
                 sessionYear: newSes,
                 portalStudentId: studentId,
-                photoData: photoToVerify,
+                photoData: bannedCroppedPhotoData,
                 aiPhotoStatus: aiResult.reason,
                 previousSnapshot: prevSnapshot,
                 originalName: prevSnapshot.studentName,
@@ -2798,8 +2947,8 @@ function openLanguagePdfList(langKey) {
                 originalSem: prevSnapshot.currentSemester,
                 originalSession: prevSnapshot.sessionYear,
                 isProfileUpdated: true,
-                status: newStatus,
-                banReason: banReason,
+                status: "active",
+                banReason: "",
                 lastUpdatedTime: updateTime
             };
 
@@ -2815,19 +2964,20 @@ function openLanguagePdfList(langKey) {
             localStorage.setItem("student_tracked_sem", newSem);
             localStorage.setItem("student_tracked_session", newSes);
             localStorage.setItem("student_portal_student_id", studentId);
-            if (photoToVerify) localStorage.setItem("student_profile_photo_data", photoToVerify);
+            localStorage.setItem("student_profile_photo_data", bannedCroppedPhotoData);
+            bannedCroppedPhotoData = "";
+
             if (typeof updateStudentHeaderProfile === "function") updateStudentHeaderProfile();
 
             const logText =
-                `🔄 *BANNED PROFILE RE-CHECK (AI + FIELDS)* 🔄\n\n` +
+                `🔄 *BANNED PROFILE VERIFIED & AUTO-UNBLOCKED* 🔄\n\n` +
                 `🪪 *Student ID:* \`${studentId}\`\n` +
                 `🆔 *UID:* \`${uid}\`\n` +
-                `📊 *Result:* ${newStatus === "active" ? "🟢 AUTO-UNBLOCKED" : "🚫 AUTO-BANNED"}\n` +
+                `📊 *Result:* 🟢 AUTO-UNBLOCKED\n` +
                 `🤖 *AI Photo:* ${aiResult.reason}\n` +
                 `🕒 *Time:* ${updateTime}\n\n` +
                 `❌ *OLD:* ${formatSnapshotLine(prevSnapshot)}\n` +
-                `✅ *NEW:* ${formatSnapshotLine(newSnapshot)}\n` +
-                `📌 *Note:* ${banReason || "All checks passed & unblocked"}`;
+                `✅ *NEW:* ${formatSnapshotLine(newSnapshot)}`;
 
             fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -2835,11 +2985,7 @@ function openLanguagePdfList(langKey) {
                 body: JSON.stringify({ chat_id: TG_CHAT, text: logText, parse_mode: 'Markdown' })
             }).catch(() => {});
 
-            if (newStatus === "active") {
-                alert(`🎉 Sabhi details aur AI Photo check pass ho gaye! ID (${studentId}) apne aap UNBLOCK ho gaya hai.`);
-            } else {
-                alert(`⚠️ ID (${studentId}) abhi UNBLOCK nahi hua (Auto-BAN):\n\n${banReason}`);
-            }
+            alert(`🎉 बधाई हो! आपकी नई पासपोर्ट फोटो और सभी विवरण सत्यापित हो गए हैं। आपका ID (${studentId}) अनब्लॉक कर दिया गया है।`);
 
             if (btn) {
                 btn.disabled = false;
@@ -2850,7 +2996,7 @@ function openLanguagePdfList(langKey) {
                 window.verifyStudentAccessStatus();
             }
         } catch (err) {
-            alert("❌ Update karte waqt network error aaya.");
+            alert("❌ नेटवर्क समस्या! कृपया इंटरनेट चेक करके पुनः प्रयास करें।");
             if (btn) {
                 btn.disabled = false;
                 btn.innerText = "Verify with AI & Update Details 💾";
@@ -2858,14 +3004,14 @@ function openLanguagePdfList(langKey) {
         }
     };
 
-    // Selectable Ban Reason Picker (No typing needed, custom option also available)
+    // Selectable Ban Reason Picker (Photo Ban hone par purani photo bhi reset hogi)
     window.toggleUserBanStatus = async function(targetUID, newStatus) {
         let banReason = "";
 
         if (newStatus === "banned") {
             const presetReasons = [
-                "Fake / Junk / Single Name (Galat Naam)",
                 "Non-Original / Cartoon / Fake Photo (AI Check Fail)",
+                "Fake / Junk / Single Name (Galat Naam)",
                 "Invalid Mobile Number (Galat Mobile)",
                 "Wrong College / Semester / Session (Galat Academic Info)",
                 "Spam / Policy Violation on Portal"
@@ -2924,14 +3070,21 @@ function openLanguagePdfList(langKey) {
         const actionLabel = newStatus === "banned" ? "BAN" : "UNBLOCK";
         if (!confirm(`Are you sure you want to ${actionLabel} Student UID: ${targetUID}?`)) return;
 
+        const patchBody = {
+            status: newStatus,
+            banReason: banReason,
+            updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+        };
+
+        // Agar photo ki wajah se Ban kiya hai toh purani galat photo clear kar dein
+        if (newStatus === "banned" && banReason.toLowerCase().includes("photo")) {
+            patchBody.photoData = "";
+        }
+
         fetch(`${USERS_URL}/${targetUID}.json`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                status: newStatus,
-                banReason: banReason,
-                updatedAt: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-            })
+            body: JSON.stringify(patchBody)
         })
         .then(() => {
             alert(`✅ Student [${targetUID}] is now ${newStatus === "banned" ? "BANNED" : "ACTIVE"}!`);
