@@ -686,7 +686,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         </li>
 
                         <li><a href="javascript:void(0)" onclick="openCodingVaultModal(); closeInstMobileMenu();">Lab Programs</a></li>
-                        <li><a href="javascript:void(0)" onclick="openDirectProgramRequestModal(); closeInstMobileMenu();">Request Code</a></li>
                         <li><a href="#notice" onclick="closeInstMobileMenu()">Notices</a></li>
                         <li><a href="#about" onclick="closeInstMobileMenu()">About</a></li>
                         <li><a href="#about-contact" onclick="closeInstMobileMenu()">Contact</a></li>
@@ -820,14 +819,6 @@ document.addEventListener("DOMContentLoaded", () => {
     <h3>Lab Programs With Solution💻</h3>
     <p>Download Code PDFs</p>
     <span class="open-btn">View Codes <i class="fas fa-arrow-right"></i></span>
-</a>
-
-<!-- ❓ 8. DEDICATED REQUEST MISSING CODE CARD -->
-<a href="javascript:void(0)" onclick="openDirectProgramRequestModal()" class="quick-card req-code-card">
-    <div class="icon-box"><i class="fas fa-camera-retro card-orange"></i></div>
-    <h3>Request Code 📸</h3>
-    <p>Ask Question or Upload Photo</p>
-    <span class="open-btn">Request Now <i class="fas fa-arrow-right"></i></span>
 </a>
 
 	</div>
@@ -1885,7 +1876,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         <li><a href="#footer" onclick="filterSemesterDashboard(1)">Semester-Wise Master Notes</a></li>
                         <li><a href="javascript:void(0)" onclick="openPyqPopup(1)">Previous Year Questions (PYQ)</a></li>
                         <li><a href="javascript:void(0)" onclick="openCodingVaultModal()">Lab Programs &amp; Codes Vault</a></li>
-                        <li><a href="javascript:void(0)" onclick="openDirectProgramRequestModal()">Request Missing Program</a></li>
                         <li><a href="#notice">VBU Latest Exam Notices</a></li>
                         <li><a href="https://www.vbu.ac.in/" target="_blank">Vinoba Bhave University (VBU)</a></li>
                         <li><a href="https://ekalyan.cgg.gov.in/" target="_blank">E-Kalyan Scholarship Portal</a></li>
@@ -2757,6 +2747,37 @@ function scrollToTopMatrix() {
             <button type="button" onclick="confirmBszPhotoCrop()" style="flex: 1.4; padding: 11px; background: linear-gradient(135deg, #00f7ff, #10b981); color: #000; border: none; border-radius: 8px; font-size: 1.25rem; font-weight: 800; cursor: pointer;">✔ Crop & Set Photo</button>
         </div>
     </div>
+</div>
+
+<!-- ================= 📖 IN-PAGE RESOURCE READER MODAL (WITH BACK BUTTON) ================= -->
+<div id="bszResourceReaderOverlay" style="position: fixed; inset: 0; background: #0b1329; z-index: 100000020; display: none; flex-direction: column; width: 100%; height: 100dvh; box-sizing: border-box;">
+    
+    <!-- Top Sticky Control Bar -->
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; background: linear-gradient(90deg, #1e2a78, #b91c1c); border-bottom: 2px solid #00f7ff; color: #ffffff; flex-shrink: 0;">
+        
+        <!-- Clear Back Button -->
+        <button type="button" onclick="closeBszResourceReader()" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; background: #ffffff; color: #1e2a78; border: none; border-radius: 8px; font-size: 1.35rem; font-weight: 800; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); white-space: nowrap;">
+            <i class="fas fa-arrow-left"></i> Back to Portal
+        </button>
+
+        <!-- File Title -->
+        <div id="bszReaderTitle" style="flex: 1; text-align: center; font-size: 1.35rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px;">
+            Study Resource
+        </div>
+
+        <!-- External / New Tab Option -->
+        <a id="bszReaderExternalLink" href="#" target="_blank" title="Open Full Screen in Browser" style="display: inline-flex; align-items: center; gap: 5px; padding: 8px 12px; background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; font-size: 1.2rem; font-weight: 600; text-decoration: none; white-space: nowrap;">
+            <i class="fas fa-external-link-alt"></i>
+        </a>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="bszReaderLoader" style="padding: 12px; text-align: center; background: #0f172a; color: #00f7ff; font-size: 1.3rem; font-weight: 600; display: none;">
+        ⏳ Loading Study Material... Please wait...
+    </div>
+
+    <!-- Embedded File Frame -->
+    <iframe id="bszResourceReaderFrame" src="" style="flex: 1; width: 100%; height: 100%; border: none; background: #ffffff;"></iframe>
 </div>
 </body>
 </html>
