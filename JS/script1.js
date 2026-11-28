@@ -80,7 +80,7 @@ function closeProfilePopupModal() {
 }
 
 // -------------------------------------------------------------------------
-// 3. INTERACTIVE CIRCULAR PHOTO CROPPER
+// 3. INTERACTIVE HD PASSPORT PHOTO CROPPER (400x480 - LARGE & CLEAR)
 // -------------------------------------------------------------------------
 window.openBszPhotoCropper = function(file, onCropComplete) {
     if (!file) return;
@@ -101,12 +101,12 @@ window.openBszPhotoCropper = function(file, onCropComplete) {
 
         if (typeof Cropper !== "undefined") {
             bszCropperInstance = new Cropper(targetImg, {
-                aspectRatio: 1,
+                aspectRatio: 5 / 6, // Standard Passport Size Ratio
                 viewMode: 1,
                 dragMode: 'move',
-                autoCropArea: 0.88,
+                autoCropArea: 0.90,
                 restore: false,
-                guides: false,
+                guides: true,
                 center: true,
                 highlight: false,
                 cropBoxMovable: false,
@@ -138,20 +138,22 @@ window.cancelBszPhotoCrop = function() {
 window.confirmBszPhotoCrop = function() {
     if (!bszCropperInstance) return;
 
+    // Bada HD Passport Size Output (400 x 480 px)
     const croppedCanvas = bszCropperInstance.getCroppedCanvas({
-        width: 300,
-        height: 300,
+        width: 400,
+        height: 480,
+        imageSmoothingEnabled: true,
         imageSmoothingQuality: 'high'
     });
 
-    const dataUrl = croppedCanvas.toDataURL("image/jpeg", 0.88);
+    const dataUrl = croppedCanvas.toDataURL("image/jpeg", 0.92);
     croppedCanvas.toBlob(function(blob) {
-        const croppedFile = new File([blob], "student_profile.jpg", { type: "image/jpeg" });
+        const croppedFile = new File([blob], "student_passport_photo.jpg", { type: "image/jpeg" });
         cancelBszPhotoCrop();
         if (typeof bszCropCallback === "function") {
             bszCropCallback(dataUrl, croppedFile);
         }
-    }, "image/jpeg", 0.88);
+    }, "image/jpeg", 0.92);
 };
 
 window.previewRegistrationPhoto = function(input) {
@@ -648,12 +650,25 @@ window.submitStudentMetadataPipeline = async function() {
     if (typeof window.verifyPhotoWithAI === "function") {
         const aiCheck = await window.verifyPhotoWithAI(selectedRegistrationPhotoDataUrl);
         if (!aiCheck.isOriginal) {
-            alert("❌ " + aiCheck.reason + "\n\nKripya apni saaf aur original face wali photo upload karein.");
             if (verifyBtn) {
                 verifyBtn.disabled = false;
                 verifyBtn.innerText = "VERIFY & ENTER PORTAL 🚀";
             }
-            return; // Portal open nahi hoga
+            if (typeof Swal !== "undefined") {
+                Swal.fire({
+                    icon: 'error',
+                    title: '<span style="color:#ff3838; font-size:1.6rem;">❌ फोटो अस्वीकृत (AI Photo Rejected)</span>',
+                    html: `<p style="color:#ffffff; font-size:1.35rem; line-height:1.6; font-weight:600;">${aiCheck.hindiReason || aiCheck.reason}</p>
+                           <p style="color:#94a3b8; font-size:1.1rem; margin-top:8px;">(${aiCheck.reason})</p>`,
+                    confirmButtonText: 'ठीक है, सही फोटो लगाऊंगा 📷',
+                    confirmButtonColor: '#ff3838',
+                    background: '#0b1329',
+                    color: '#ffffff'
+                });
+            } else {
+                alert("❌ " + (aiCheck.hindiReason || aiCheck.reason));
+            }
+            return;
         }
     }
 
@@ -1047,10 +1062,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const oldName = localStorage.getItem("student_tracked_name") || "";
         const oldCollege = localStorage.getItem("student_tracked_college") || "";
         const oldSem = localStorage.getItem("student_tracked_sem") || "";
-        const oldSession = "";
+        const prevSavedSession = localStorage.getItem("student_tracked_session") || "N/A";
+        const oldSession = ""; // Dropdown default "Select Session" rakhne ke liye
         const oldMob = localStorage.getItem("student_tracked_mobile") || "";
         const oldPhoto = localStorage.getItem("student_profile_photo_data") || "";
         const studentUID = localStorage.getItem("student_portal_uid");
+        const currentPortalId = localStorage.getItem("student_portal_student_id") || (studentUID ? "BSZ-" + studentUID.slice(-6) : "N/A");
 
         let editedPhotoDataUrl = oldPhoto;
         let editedPhotoFile = null;
@@ -1165,6 +1182,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (result.isConfirmed) {
                 const d = result.value;
                 const updateTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+                const updatedPortalId = localStorage.getItem("student_portal_student_id") || currentPortalId;
 
                 localStorage.setItem("student_tracked_name", d.name);
                 localStorage.setItem("student_tracked_mobile", d.mobile);
@@ -1183,7 +1201,14 @@ document.addEventListener("DOMContentLoaded", function() {
                             collegeName: d.college,
                             currentSemester: d.sem,
                             sessionYear: d.session,
+                            portalStudentId: updatedPortalId,
                             photoData: d.photo,
+                            originalName: oldName || "N/A",
+                            originalMobile: oldMob || "N/A",
+                            originalCollege: oldCollege || "N/A",
+                            originalSem: oldSem || "N/A",
+                            originalSession: prevSavedSession || "N/A",
+                            isProfileUpdated: true,
                             lastUpdatedTime: updateTime
                         })
                     }).catch(() => {});
@@ -1191,12 +1216,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 const telegramCaption =
                     `✏️ *STUDENT PROFILE UPDATED* ✏️\n\n` +
-                    `👤 *Name:* ${d.name}\n` +
-                    `🏫 *College:* ${d.college}\n` +
-                    `📚 *Semester:* ${d.sem}\n` +
-                    `📅 *Session:* ${d.session}\n` +
-                    `📱 *Mobile:* \`+91${d.mobile}\`\n` +
-                    `🕒 *Time:* ${updateTime}\n` +
+                    `🆔 *Portal ID:* \`${updatedPortalId}\`\n` +
+                    `🕒 *Time:* ${updateTime}\n\n` +
+                    `❌ *OLD RECORD:*\n` +
+                    `• *Name:* ${oldName || "N/A"}\n` +
+                    `• *College:* ${oldCollege || "N/A"}\n` +
+                    `• *Semester:* ${oldSem || "N/A"}\n` +
+                    `• *Session:* ${prevSavedSession || "N/A"}\n` +
+                    `• *Mobile:* \`+91${oldMob || "N/A"}\`\n\n` +
+                    `✅ *NEW RECORD:*\n` +
+                    `• *Name:* ${d.name}\n` +
+                    `• *College:* ${d.college}\n` +
+                    `• *Semester:* ${d.sem}\n` +
+                    `• *Session:* ${d.session}\n` +
+                    `• *Mobile:* \`+91${d.mobile}\`\n\n` +
                     `💻 *Device:* ${navigator.platform}`;
 
                 if (editedPhotoFile) {
