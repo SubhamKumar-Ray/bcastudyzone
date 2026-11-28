@@ -1693,7 +1693,7 @@
 ========================================================================= */
 #bszPhotoCropperOverlay .cropper-view-box,
 #bszPhotoCropperOverlay .cropper-face {
-    border-radius: 50% !important;
+    border-radius: 10% !important;
 }
 
 #bszPhotoCropperOverlay .cropper-view-box {
