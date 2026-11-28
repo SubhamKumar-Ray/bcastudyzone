@@ -570,43 +570,94 @@ function sendStudentRegistrationToTelegram(name, college, sem, mobile, uid, time
     }
 }
 
-window.submitStudentMetadataPipeline = function() {
+window.submitStudentMetadataPipeline = async function() {
     const nameInput = document.getElementById("track-student-name");
     const collegeSelect = document.getElementById("track-student-college");
     const semSelect = document.getElementById("track-student-sem");
+    const sessionSelect = document.getElementById("track-student-session");
     const mobInput = document.getElementById("track-student-mobile");
     const verifyBtn = document.getElementById("trackVerifyBtn");
 
-    if (!nameInput || !collegeSelect || !semSelect || !mobInput) return;
+    if (!nameInput || !collegeSelect || !semSelect || !sessionSelect || !mobInput) return;
 
     const name = nameInput.value.trim();
     const college = collegeSelect.value;
     const semester = semSelect.value;
+    const session = sessionSelect.value;
     const mobile = mobInput.value.trim();
 
+    // 1. Sabhi 6 fields 100% Required Check
     if (!selectedRegistrationPhotoDataUrl) {
-        alert("⚠️ Please upload & crop your Photo first (ID Card ke liye photo zaroori hai)!");
+        alert("⚠️ Photo Required: ID Card ke liye apni original photo upload aur crop karein!");
         return;
     }
-    if (!name || !college || !semester || !mobile) {
-        alert("⚠️ Please fill Name, College, Semester and 10-digit Mobile Number!");
+    if (!name) {
+        alert("⚠️ Full Name Required: Apna poora naam (First + Last Name) likhein!");
+        nameInput.focus();
+        return;
+    }
+    if (!college) {
+        alert("⚠️ College Required: Kripya apna college select karein!");
+        collegeSelect.focus();
+        return;
+    }
+    if (!semester) {
+        alert("⚠️ Semester Required: Kripya apna current semester select karein!");
+        semSelect.focus();
+        return;
+    }
+    if (!session) {
+        alert("⚠️ Session Required: Kripya apna academic session select karein!");
+        sessionSelect.focus();
+        return;
+    }
+    if (!mobile) {
+        alert("⚠️ Mobile Number Required: Apna 10-digit WhatsApp/Mobile number likhein!");
+        mobInput.focus();
         return;
     }
     if (!/^[6-9]\d{9}$/.test(mobile)) {
-        alert("⚠️ Please enter a valid 10-digit Indian Mobile Number!");
+        alert("⚠️ Invalid Mobile Number: 6, 7, 8 ya 9 se shuru hone wala 10-digit number dalein!");
+        mobInput.focus();
         return;
     }
 
+    // 2. Real Name Format Validation
     if (typeof validateStudentName === "function") {
         const check = validateStudentName(name);
         if (!check.isValid) {
             alert("⚠️ " + check.reason);
+            nameInput.focus();
             return;
         }
     }
 
+    // 3. Active Semester Validation
+    if (typeof activeSemestersMap !== "undefined" && activeSemestersMap[semester] === false) {
+        alert(`⚠️ ${semester} abhi Admin dwara inactive/disabled hai. Kripya sahi semester chunein.`);
+        semSelect.focus();
+        return;
+    }
+
+    // 4. AI Face Detection Check (Jab tak original photo detect na ho, portal open nahi hoga)
     if (verifyBtn) {
         verifyBtn.disabled = true;
+        verifyBtn.innerText = "🤖 AI SCANNING PHOTO... ⏳";
+    }
+
+    if (typeof window.verifyPhotoWithAI === "function") {
+        const aiCheck = await window.verifyPhotoWithAI(selectedRegistrationPhotoDataUrl);
+        if (!aiCheck.isOriginal) {
+            alert("❌ " + aiCheck.reason + "\n\nKripya apni saaf aur original face wali photo upload karein.");
+            if (verifyBtn) {
+                verifyBtn.disabled = false;
+                verifyBtn.innerText = "VERIFY & ENTER PORTAL 🚀";
+            }
+            return; // Portal open nahi hoga
+        }
+    }
+
+    if (verifyBtn) {
         verifyBtn.innerText = "CREATING ID & VERIFYING... ⏳";
     }
 
@@ -615,16 +666,28 @@ window.submitStudentMetadataPipeline = function() {
     const formattedDate = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
     const structuredName = name.replace(/\b\w/g, c => c.toUpperCase());
 
+    // Sequential Session ID generate karein (e.g. BCA-2629-001)
+    let assignedPortalId = localStorage.getItem("student_portal_student_id") || "";
+    if (!assignedPortalId.startsWith("BCA-") && typeof window.generateNextSessionStudentId === "function") {
+        assignedPortalId = await window.generateNextSessionStudentId(session);
+    } else if (!assignedPortalId.startsWith("BCA-")) {
+        const code = (typeof window.getSessionShortCode === "function") ? window.getSessionShortCode(session) : "2629";
+        assignedPortalId = `BCA-${code}-001`;
+    }
+
     localStorage.setItem("student_tracked_name", structuredName);
     localStorage.setItem("student_tracked_college", college);
     localStorage.setItem("student_tracked_sem", semester);
+    localStorage.setItem("student_tracked_session", session);
     localStorage.setItem("student_tracked_mobile", mobile);
     localStorage.setItem("student_profile_photo_data", selectedRegistrationPhotoDataUrl);
     localStorage.setItem("student_portal_uid", uidStr);
+    localStorage.setItem("student_portal_student_id", assignedPortalId);
     localStorage.setItem("student_verified_profile", "true");
     localStorage.setItem("student_last_visit_timestamp", uidStr);
     localStorage.setItem("student_last_visit_readable", formattedDate);
     localStorage.setItem("portal_already_entered", "true");
+    localStorage.setItem("bsz_idcard_shown_once", "true"); // Mark: ID card 1 baar dikh chuka hai
 
     fetch(`${FIREBASE_ACTIVE_USERS_URL}/${uidStr}.json`, {
         method: 'PUT',
@@ -633,8 +696,11 @@ window.submitStudentMetadataPipeline = function() {
             studentName: structuredName,
             collegeName: college,
             currentSemester: semester,
+            sessionYear: session,
             mobileNumber: mobile,
+            portalStudentId: assignedPortalId,
             photoData: selectedRegistrationPhotoDataUrl,
+            aiPhotoStatus: "Verified Real Face (Registration)",
             entryTime: formattedDate,
             timestamp: currentTs,
             status: "active",
@@ -652,6 +718,8 @@ window.submitStudentMetadataPipeline = function() {
         if (mainPage) mainPage.style.display = "block";
 
         updateStudentHeaderProfile();
+
+        // Sirf New Registration par 1 baar ID Card dikhega
         openStudentIdCardModal();
     }, 500);
 };
@@ -687,11 +755,15 @@ window.initIdentityTrackingVerification = function() {
             const savedName = dbData.studentName || localStorage.getItem("student_tracked_name") || "Student";
             const savedCollege = dbData.collegeName || localStorage.getItem("student_tracked_college") || "Annada College, Hazaribag";
             const savedSem = dbData.currentSemester || localStorage.getItem("student_tracked_sem") || "Semester 1";
+            const savedSession = dbData.sessionYear || localStorage.getItem("student_tracked_session") || "";
             const savedMob = dbData.mobileNumber || localStorage.getItem("student_tracked_mobile") || "";
             const savedPhoto = dbData.photoData || localStorage.getItem("student_profile_photo_data") || "";
+            const savedPortalId = dbData.portalStudentId || localStorage.getItem("student_portal_student_id") || `BSZ-${studentUID.slice(-6)}`;
 
             if (savedMob) localStorage.setItem("student_tracked_mobile", savedMob);
             if (savedPhoto) localStorage.setItem("student_profile_photo_data", savedPhoto);
+            if (savedSession) localStorage.setItem("student_tracked_session", savedSession);
+            if (savedPortalId) localStorage.setItem("student_portal_student_id", savedPortalId);
             updateStudentHeaderProfile();
 
             const nowTs = Date.now();
@@ -707,6 +779,7 @@ window.initIdentityTrackingVerification = function() {
                 window.proceedToVoicePopupHandover();
             }
 
+            // Agar purane user ke paas photo ya mobile nahi hai tabhi complete karwayein
             if (!savedMob || !savedPhoto) {
                 promptOldUserForPhotoAndMobile(studentUID, savedName, savedCollege, savedSem, savedMob, savedPhoto, nowStr);
                 return;
@@ -714,10 +787,11 @@ window.initIdentityTrackingVerification = function() {
 
             const singleReturnMsg =
                 `🔄 *STUDENT RETURNED (WELCOME BACK)* 🔄\n\n` +
-                `🆔 *Portal ID:* \`BSZ-${studentUID.slice(-6)}\`\n` +
+                `🆔 *Portal ID:* \`${savedPortalId}\`\n` +
                 `👤 *Student Name:* ${savedName}\n` +
                 `🏫 *College:* ${savedCollege}\n` +
                 `📚 *Semester:* ${savedSem}\n` +
+                (savedSession ? `📅 *Session:* ${savedSession}\n` : ``) +
                 `📱 *Mobile:* \`+91${savedMob}\`\n\n` +
                 `🕒 *Current Return:* ${nowStr}\n` +
                 `⏮️ *Last Active Was:* ${lastReadable}\n` +
@@ -734,17 +808,13 @@ window.initIdentityTrackingVerification = function() {
                 })
             }).catch(() => {});
 
-            setTimeout(() => {
-                openStudentIdCardModal();
-            }, 600);
+            // ❌ Yahan se auto openStudentIdCardModal() hata diya gaya hai taaki dobara popup na aaye
         })
         .catch(() => {
             if (typeof window.proceedToVoicePopupHandover === "function") {
                 window.proceedToVoicePopupHandover();
             }
-            setTimeout(() => {
-                openStudentIdCardModal();
-            }, 600);
+            // ❌ Offline fallback me bhi dobara ID Card popup nahi khulega
         });
 };
 
@@ -937,8 +1007,18 @@ window.toggleInstDropdown = function(anchorElem, e) {
     }
     if (window.innerWidth <= 768 && anchorElem) {
         const parentLi = anchorElem.parentElement;
-        if (parentLi) {
-            parentLi.classList.toggle("inst-drop-open");
+        if (!parentLi) return;
+
+        const alreadyOpen = parentLi.classList.contains("inst-drop-open");
+
+        // Pehle baaki sabhi open sub-menus ko band karein taaki overlap na ho
+        document.querySelectorAll(".inst-has-drop.inst-drop-open").forEach(item => {
+            item.classList.remove("inst-drop-open");
+        });
+
+        // Agar pehle se khula nahi tha, toh ab bagal mein khol dein
+        if (!alreadyOpen) {
+            parentLi.classList.add("inst-drop-open");
         }
     }
 };
